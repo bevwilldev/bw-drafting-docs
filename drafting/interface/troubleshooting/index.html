@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting — BW Drafting Docs</title>
+<meta name="description" content="Fixing a missing ribbon tab or a command that won't run.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Troubleshooting</h1>
+    <p class="lede">Most problems are a ribbon that didn't load or a component that wasn't
+    installed. Work through these in order.</p>
+
+    <h2>A ribbon tab is missing</h2>
+    <p>First, restart BricsCAD — the ribbons load at startup and a tab can be missed if BricsCAD
+    was busy. If it's still missing, reset the customisation:</p>
+    <ol>
+      <li>Run <code class="cmd">CUSTOMIZE</code>.</li>
+      <li>Open the <strong>Manage Your Customizations</strong> panel.</li>
+      <li>Revert to defaults, then restart BricsCAD.</li>
+    </ol>
+    <figure><img src="../../../assets/img/customize.png" alt="Customize dialog"></figure>
+    <figure><img src="../../../assets/img/manage-customizations.png" alt="Manage customizations"></figure>
+
+    <h2>A command says "unknown command"</h2>
+    <p>That component probably isn't installed. Commands are grouped by plugin, and each is
+    optional at install time:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>If this fails</th><th>You need</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">OPENCHECKLIST</code></td><td>The Drawing Checklist component</td></tr>
+        <tr><td><code class="cmd">NSWLOTS</code></td><td>The NSW Lot Loader component</td></tr>
+        <tr><td><code class="cmd">PCDIG</code></td><td>The Point Cloud Digitizer component</td></tr>
+        <tr><td><code>OUTLINE</code> / <code>VPO</code></td><td>The Community LISP tools component</td></tr>
+        <tr><td>Engineering or WAE commands</td><td>The matching ribbon component</td></tr>
+      </tbody>
+    </table></div>
+    <p>Re-run the installer and tick the missing component.</p>
+
+    <h2>Lines look wrong — fences and easements draw solid</h2>
+    <p>The linetype file didn't resolve. You'll see a message on the command line saying so. Re-run
+    the installer to restore the Support files.</p>
+
+    <h2>Plot commands don't produce a PDF</h2>
+    <p>The plot device isn't installed. The engineering and WAE plot commands need the BW plot
+    configurations, which ship with those components — re-run the installer.</p>
+
+    <h2>Text is the wrong size</h2>
+    <p>Text height is the drawing's <code>TEXTSIZE</code> divided by the current annotation scale.
+    If text comes out too large or small, check the annotation scale is set correctly before
+    placing it.</p>
+
+    <h2>Still stuck</h2>
+    <p>Contact the CAD team lead with the drawing, the command you ran and the exact message from
+    the command line.</p>
+    <nav class="page-nav">
+      <a href="../using/"><div class="dir">Previous</div><div class="ttl">Using the Ribbon</div></a>
+      <a class="next" href="../../standards/"><div class="dir">Next</div><div class="ttl">Drafting Standards</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

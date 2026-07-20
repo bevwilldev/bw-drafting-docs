@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text & Leaders — BW Drafting Docs</title>
+<meta name="description" content="BW standard annotation text and matching multileaders.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="engineering"></aside>
+
+  <main class="content" id="main">
+    <h1>Text &amp; Leaders</h1>
+    <p class="lede">Annotation at the BW standard heights, with leaders that match.</p>
+
+    <h2>Text</h2>
+    <p>Four commands, one per standard height. Select text first to reformat it, or run with
+    nothing selected to place new text — you'll be prompted for a point and the editor opens there,
+    looping until Esc.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>Height</th><th>Layer</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">BW25</code></td><td>2.5 mm</td><td>T25</td></tr>
+        <tr><td><code class="cmd">BW35</code></td><td>3.5 mm</td><td>T35</td></tr>
+        <tr><td><code class="cmd">BW50</code></td><td>5 mm</td><td>T50</td></tr>
+        <tr><td><code class="cmd">BW70</code></td><td>7 mm</td><td>T70</td></tr>
+      </tbody>
+    </table></div>
+    <p>All use the <strong>BW_AN</strong> text style and are created annotative, so the plotted size
+    follows the annotation scale.</p>
+
+    <h2>Multileaders</h2>
+    <p><code class="cmd">BWML25</code>, <code class="cmd">BWML35</code>,
+    <code class="cmd">BWML50</code> and <code class="cmd">BWML70</code> set the matching leader
+    style and layer, then hand over to the normal multileader command.</p>
+
+    <div class="note"><strong>Note</strong> — layers are created on demand, so you don't need a
+    particular template for these to work.</div>
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Engineering</div></a>
+      <a class="next" href="../dimensions/"><div class="dir">Next</div><div class="ttl">Dimensions</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

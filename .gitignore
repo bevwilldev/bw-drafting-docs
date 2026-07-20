@@ -1,0 +1,15 @@
+# Never commit these — the old site leaked server paths and client job data
+# through exactly these kinds of files.
+error_log
+*.log
+*.zip
+*.arg
+
+# OS / editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WSY Drafting Standards — BW Drafting Docs</title>
+<meta name="description" content="The concrete WSY standard: colours, line weights, text styles and page setup.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>WSY Drafting Standards</h1>
+    <p class="lede">The specific standard used by the Western Sydney drafting team.</p>
+
+    <h2>Colour and line weight</h2>
+    <p>Line weight is driven by colour through the plot style table. Set objects ByLayer and let
+    the layer's colour determine the plotted weight.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Colour</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><td>1 — Red</td><td>Road names and emphasis</td></tr>
+        <tr><td>2 — Yellow</td><td>Subject lot numbers, areas</td></tr>
+        <tr><td>3 — Green</td><td>Easements</td></tr>
+        <tr><td>4 — Cyan</td><td>Subject boundaries</td></tr>
+        <tr><td>6 — Magenta</td><td>Labels, survey marks, occupations</td></tr>
+        <tr><td>7 — White / Black</td><td>Adjoining boundaries and general linework</td></tr>
+        <tr><td>8 — Grey</td><td>Dimensions and bearings</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Text styles</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Style</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td>LARGE LABEL</td><td>Subject lot numbers, road names</td></tr>
+        <tr><td>MEDIUM LABEL</td><td>Areas</td></tr>
+        <tr><td>SMALL LABEL</td><td>Dimensions, bearings, ties, SSM and traverse text</td></tr>
+        <tr><td>THIN LABEL</td><td>Road and easement labels, reference text</td></tr>
+        <tr><td>ADJOINING LABEL</td><td>Adjoining lot numbers</td></tr>
+      </tbody>
+    </table></div>
+    <p>Text height is always <code>TEXTSIZE ÷ annotation scale</code>, and text is created
+    annotative.</p>
+
+    <h2>Layer management</h2>
+    <p>Layers are created on demand by the commands — you shouldn't need to make them by hand.
+    Before issuing a drawing, run <code>DWGHEALTH</code> and <code>PURGE</code> to clear unused
+    definitions.</p>
+
+    <h2>Page setup</h2>
+    <figure><img src="../../../assets/img/page-setup.png" alt="Page setup"></figure>
+    <p>Sheets plot through the BW plot configurations with the BW plot style tables. The
+    engineering and WAE plot commands apply these automatically.</p>
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Drafting Standards</div></a>
+      <a class="next" href="../../commands/"><div class="dir">Next</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

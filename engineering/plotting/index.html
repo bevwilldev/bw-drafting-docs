@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plotting — BW Drafting Docs</title>
+<meta name="description" content="PDF and print shortcuts, and opening the job folder.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="engineering"></aside>
+
+  <main class="content" id="main">
+    <h1>Plotting</h1>
+    <p class="lede">One-click plotting for the standard sheet sizes, plus shortcuts to the job
+    folder and drawing register.</p>
+
+    <div class="note"><strong>Paper space only</strong> — the plot commands work on the current
+    layout. In model space they'll tell you so and stop.</div>
+
+    <h2>Plot commands</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">BWPDFA1</code></td><td>A1 PDF at 1:1</td></tr>
+        <tr><td><code class="cmd">BWPDFA3</code></td><td>A3 PDF at 1:2</td></tr>
+        <tr><td><code class="cmd">BWPRINTA3</code></td><td>A3 print to the survey room printer</td></tr>
+      </tbody>
+    </table></div>
+    <p>PDFs are written to your Documents folder, named after the drawing and layout, and opened
+    when finished.</p>
+
+    <div class="note"><strong>Note</strong> — these need the BW plot configurations, which install
+    with the engineering and WAE components. If the device is missing the command says so and stops
+    rather than half-plotting.</div>
+
+    <h2>Folder shortcuts</h2>
+    <ul>
+      <li><code class="cmd">DIROPEN</code> — opens the current drawing's folder in Explorer.</li>
+      <li><code class="cmd">EXCELREG</code> — opens the job's drawing register spreadsheet.</li>
+    </ul>
+    <p>Both need the drawing to have been saved.</p>
+
+    <h2>Shared toolbox</h2>
+    <p>The Toolbox panel also carries <code class="cmd">UPDATE</code> (title-block attributes from a
+    CSV), <code class="cmd">ATC</code>, <code class="cmd">OB2WO</code>,
+    <code class="cmd">SMT</code> and <code class="cmd">TADD</code> — the same commands documented
+    under <a href="../../drafting/commands/">the drafting command reference</a>.</p>
+    <nav class="page-nav">
+      <a href="../standards/"><div class="dir">Previous</div><div class="ttl">Styles & Scales</div></a>
+      <a class="next" href="../../quality/"><div class="dir">Next</div><div class="ttl">Quality</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

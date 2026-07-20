@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculate Grade — BW Drafting Docs</title>
+<meta name="description" content="Working out and placing a grade percentage.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="survey"></aside>
+
+  <main class="content" id="main">
+    <h1>Calculate Grade</h1>
+    <p class="lede">Computes the grade between two levels over a chainage and places it as a
+    labelled percentage.</p>
+
+    <h2>Using it</h2>
+    <p>Run <code class="cmd">CALCGRADE</code>. For each grade:</p>
+    <ol>
+      <li><code>Select first level or press Enter to input manually:</code> — pick a level text and
+        the number is read out of it, or press Enter to type a value.</li>
+      <li>The same for the second level.</li>
+      <li><code>Choose chainage method [Direct/Calculate]:</code> — <strong>Direct</strong> to type
+        the chainage, or <strong>Calculate</strong> to enter two lengths and use the difference.</li>
+      <li><code>Specify point to place &lt;grade&gt; grade text:</code> — the computed value is
+        already shown in the prompt.</li>
+    </ol>
+    <p>It loops so you can do several in a row; Esc finishes.</p>
+
+    <h2>What you get</h2>
+    <p>The grade as a percentage to one decimal place, placed as WAE label text — for example
+    <code>1.5%</code>. The calculation is the level difference divided by the chainage.</p>
+
+    <div class="note"><strong>Note</strong> — a chainage of zero is rejected and the command
+    starts again rather than failing.</div>
+    <nav class="page-nav">
+      <a href="../text/"><div class="dir">Previous</div><div class="ttl">Horizontal & Vertical Text</div></a>
+      <a class="next" href="../add-comment/"><div class="dir">Next</div><div class="ttl">Add Comment</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

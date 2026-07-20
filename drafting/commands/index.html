@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Command Reference — BW Drafting Docs</title>
+<meta name="description" content="Every command in the BW BricsCAD Tools drafting suite, by ribbon panel and alphabetically.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Command Reference</h1>
+    <p class="lede">
+      Every command in the WSY Drafting toolset — what it does, what it asks you,
+      what it draws and where, and anything worth knowing before you run it.
+    </p>
+
+    <h2>By ribbon panel</h2>
+    <div class="index-list">
+      <a href="cadastre/"><span class="t">Cadastre</span><span class="d">Boundaries, lot numbers, areas, bearings, easements and roads.</span></a>
+      <a href="survey/"><span class="t">Survey</span><span class="d">Pegs, reference marks, SSMs, ties and traverse lines.</span></a>
+      <a href="text/"><span class="t">Text &amp; Labels</span><span class="d">Text styles, leaders, brackets, masks and curve-aligned labels.</span></a>
+      <a href="annotation/"><span class="t">Annotation &amp; Scales</span><span class="d">Creating annotation scales and cycling through them.</span></a>
+      <a href="sheeting/"><span class="t">Sheeting</span><span class="d">North points, sheet sets and per-lot sales layouts.</span></a>
+      <a href="dimensions/"><span class="t">Dimensions &amp; Curve Tables</span><span class="d">Automatic boundary dimensioning and curve schedules.</span></a>
+      <a href="topography/"><span class="t">Topography &amp; Earthworks</span><span class="d">Batters, contour labels, levels and fill plans.</span></a>
+      <a href="utilities/"><span class="t">Utilities</span><span class="d">Offsets, copying to vertices, pipes, LandXML and text tools.</span></a>
+    </div>
+
+    <h2>How to read these pages</h2>
+    <p>
+      Commands are shown as you'd type them, like <code class="cmd">AUTODIM</code>.
+      Where a command accepts a <strong>pre-selection</strong>, you can select
+      objects <em>before</em> running it and it will use that selection instead of
+      prompting.
+    </p>
+    <p>
+      Prompts are quoted as they appear on the command line, with the default shown
+      in angle brackets — pressing <kbd>Enter</kbd> accepts it.
+    </p>
+
+    <h2>Commands without a ribbon button</h2>
+    <div class="note">
+      <strong>Note</strong> — a large part of the toolset is command-line only,
+      including the whole boundary dimensioning workflow. If you only use the
+      ribbon you're likely missing tools; the panel pages below list them alongside
+      the buttoned commands.
+    </div>
+
+    <h2>Alphabetical index</h2>
+    <p>Jump straight to a command:</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Does</th><th>Where</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">ADDNORTH</code></td><td>North point matched to a viewport's twist</td><td><a href="sheeting/">Sheeting</a></td></tr>
+        <tr><td><code class="cmd">ALAB</code></td><td>Label lots with their area</td><td><a href="dimensions/">Dimensions</a></td></tr>
+        <tr><td><code class="cmd">ALIGNA</code></td><td>Stack text under anchor text</td><td><a href="cadastre/">Cadastre</a></td></tr>
+        <tr><td><code class="cmd">ANNONEXT</code> / <code class="cmd">ANNOPREV</code></td><td>Step through annotation scales</td><td><a href="annotation/">Annotation</a></td></tr>
+        <tr><td><code class="cmd">ANNOTOG</code></td><td>Show/hide annotative objects at all scales</td><td><a href="annotation/">Annotation</a></td></tr>
+        <tr><td><code class="cmd">ATC</code></td><td>Align text along a curve</td><td><a href="text/">Text</a></td></tr>
+        <tr><td><code class="cmd">AUTODIM</code></td><td>Dimension every boundary segment</td><td><a href="dimensions/">Dimensions</a></td></tr>
+        <tr><td><code class="cmd">BATTER</code></td><td>Batter ticks between top and toe lines</td><td><a href="topography/">Topography</a></td></tr>
+        <tr><td><code class="cmd">CLABEL</code></td><td>Drag words onto curves in turn</td><td><a href="text/">Text</a></td></tr>
+        <tr><td><code class="cmd">CONTLAB</code></td><td>Label contours with their elevation</td><td><a href="topography/">Topography</a></td></tr>
+        <tr><td><code class="cmd">CSCALE</code></td><td>Create annotation scales</td><td><a href="annotation/">Annotation</a></td></tr>
+        <tr><td><code class="cmd">CURVETABLE</code></td><td>Build a curve schedule</td><td><a href="dimensions/">Dimensions</a></td></tr>
+        <tr><td><code class="cmd">DIMLAB</code> / <code class="cmd">DIMRENUM</code></td><td>Numbered curve label bubbles</td><td><a href="dimensions/">Dimensions</a></td></tr>
+        <tr><td><code class="cmd">FILL1</code>–<code class="cmd">FILL11</code></td><td>Earthworks depth-band hatching</td><td><a href="topography/">Topography</a></td></tr>
+        <tr><td><code class="cmd">INCBLOCK</code></td><td>Per-lot annotative blocks</td><td><a href="sheeting/">Sheeting</a></td></tr>
+        <tr><td><code class="cmd">LANDXML</code></td><td>Import an ePlan / LandXML file</td><td><a href="utilities/">Utilities</a></td></tr>
+        <tr><td><code class="cmd">LEVTOTXT</code></td><td>Write surface levels into text</td><td><a href="utilities/">Utilities</a></td></tr>
+        <tr><td><code class="cmd">MOFFSET</code></td><td>Offset a whole selection at once</td><td><a href="utilities/">Utilities</a></td></tr>
+        <tr><td><code class="cmd">MTC</code></td><td>Centre labels inside their lots</td><td><a href="text/">Text</a></td></tr>
+        <tr><td><code class="cmd">PEG</code></td><td>Peg symbols, or one per vertex</td><td><a href="survey/">Survey</a></td></tr>
+        <tr><td><code class="cmd">PIPEL</code></td><td>Associative pipe assemblies</td><td><a href="utilities/">Utilities</a></td></tr>
+        <tr><td><code class="cmd">SETLAYOUT</code></td><td>Per-lot sales layouts</td><td><a href="sheeting/">Sheeting</a></td></tr>
+        <tr><td><code class="cmd">SSLOAD</code></td><td>Open or create the sheet set</td><td><a href="sheeting/">Sheeting</a></td></tr>
+        <tr><td><code class="cmd">TADD</code></td><td>Add a prefix or suffix to text</td><td><a href="text/">Text</a></td></tr>
+        <tr><td><code class="cmd">TBG</code></td><td>Toggle background masks</td><td><a href="text/">Text</a></td></tr>
+        <tr><td><code class="cmd">TBRK</code></td><td>Toggle brackets around text</td><td><a href="text/">Text</a></td></tr>
+        <tr><td><code class="cmd">TRUNC</code> / <code class="cmd">RROUND</code></td><td>Truncate or round numbers in text</td><td><a href="utilities/">Utilities</a></td></tr>
+        <tr><td><code class="cmd">UPDATE</code></td><td>Title-block attributes from a CSV</td><td><a href="utilities/">Utilities</a></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <nav class="page-nav">
+      <a href="../standards/wsy/"><div class="dir">Previous</div><div class="ttl">WSY Drafting Standards</div></a>
+      <a class="next" href="cadastre/"><div class="dir">Next</div><div class="ttl">Cadastre</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

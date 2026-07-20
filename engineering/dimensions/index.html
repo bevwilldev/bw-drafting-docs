@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dimensions — BW Drafting Docs</title>
+<meta name="description" content="The BW dimension commands.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="engineering"></aside>
+
+  <main class="content" id="main">
+    <h1>Dimensions</h1>
+    <p class="lede">Wrappers around the standard dimension commands that set the BW dimension
+    style and layer first.</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>Draws</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">BWDIMLIN</code></td><td>Horizontal or vertical dimension</td></tr>
+        <tr><td><code class="cmd">BWDIMALI</code></td><td>Aligned to the two points</td></tr>
+        <tr><td><code class="cmd">BWDIMANG</code></td><td>Angular</td></tr>
+        <tr><td><code class="cmd">BWDIMARC</code></td><td>Arc length</td></tr>
+        <tr><td><code class="cmd">BWDIMRAD</code></td><td>Radius</td></tr>
+        <tr><td><code class="cmd">BWDIMDIA</code></td><td>Diameter</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>What they set</h2>
+    <p>All six place on the <strong>DIMS</strong> layer using the <strong>BWAN_DIM25</strong>
+    style — 2.5 mm text in BW_AN, closed filled arrows, two decimal places, text above the
+    dimension line, and annotative. After that, the normal dimension prompts apply.</p>
+    <nav class="page-nav">
+      <a href="../text/"><div class="dir">Previous</div><div class="ttl">Text & Leaders</div></a>
+      <a class="next" href="../standards/"><div class="dir">Next</div><div class="ttl">Styles & Scales</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drawing Checklist — BW Drafting Docs</title>
+<meta name="description" content="The QA checklist panel: revisions, automatic checks and sign-off.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="quality"></aside>
+
+  <main class="content" id="main">
+    <h1>Drawing Checklist</h1>
+    <p class="lede">A QA panel over the office checklist spreadsheet. It tracks one pass per
+    drawing revision, and can check and fix a few drawing settings directly.</p>
+
+    <h2>Opening it</h2>
+    <p>Run <code class="cmd">OPENCHECKLIST</code>, or use the <strong>Checklist</strong> button on
+    the WSY Drafting ribbon's QA panel. The drawing must be saved — the checklist lives with the
+    project, and its location is worked out from the drawing's folder.</p>
+    <p>If the project doesn't have a checklist yet, one is created from the office master template.</p>
+
+    <h2>Filling it in</h2>
+    <ul>
+      <li>Job details at the top fill themselves in from the drawing name where they can.</li>
+      <li>Tick <strong>Done</strong> or <strong>N/A</strong> for each task — they're mutually
+        exclusive, and completed tasks grey out.</li>
+      <li><kbd>Space</kbd> toggles the focused task.</li>
+      <li>Right-click for bulk actions: complete a section, complete everything remaining, or clear
+        all.</li>
+      <li>Category rows have their own tick boxes that set every task beneath them.</li>
+    </ul>
+
+    <h2>Revisions</h2>
+    <p>Each drawing revision gets its own QA pass. Use the <strong>Revision</strong> dropdown to
+    switch between them, and <strong>+ Add revision</strong> to start a new one.</p>
+    <div class="note"><strong>Note</strong> — a new revision only exists in memory until you press
+    <strong>Save</strong>. If you switch revisions with unticked changes you'll be asked whether to
+    keep them.</div>
+
+    <h2>Automatic checks</h2>
+    <p>A few items check the drawing themselves and offer to fix it:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Item</th><th>Checks</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>UCS orientation</td><td>The UCS is World and the view isn't twisted</td>
+          <td><strong>Set to World</strong> — resets the UCS, straightens the view and zooms to the
+          drawing</td></tr>
+        <tr><td>Drawing units</td><td>Units are metres</td><td><strong>Set metres</strong></td></tr>
+        <tr><td>North point</td><td>Every layout has a north point</td>
+          <td><strong>Go to layout</strong> — jumps to the first sheet missing one</td></tr>
+      </tbody>
+    </table></div>
+    <p>The first two are authoritative: their ticks follow the drawing, so they can't be ticked by
+    hand and then drift out of true. The north point check is advisory — some sheets genuinely
+    don't need one — so you can still tick it yourself. Checks re-run whenever the window regains
+    focus, so fixing something in the drawing updates the panel straight away.</p>
+
+    <h2>Saving</h2>
+    <p><strong>Save checklist</strong> writes back to the spreadsheet and records who checked it and
+    when. The panel stays open. If the file is open in Excel you'll be asked to close it and retry.</p>
+
+    <div class="note"><strong>Closing a drawing</strong> — if the project has a checklist, you'll be
+    asked whether to complete it before the drawing closes.</div>
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Quality</div></a>
+      <a class="next" href="../../onboarding/"><div class="dir">Next</div><div class="ttl">Onboarding</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

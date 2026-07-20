@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drafting Standards — BW Drafting Docs</title>
+<meta name="description" content="The principles behind our drafting standards.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Drafting Standards</h1>
+    <p class="lede">Why we draw the way we do — the conventions that make our drawings consistent,
+    legible and plottable.</p>
+
+    <h2>Line weights</h2>
+    <p>Line weight carries meaning: boundaries read heavier than annotation, and easements read
+    lighter still. We drive weight from colour through the plot style table rather than setting it
+    per object, so weight stays consistent no matter who drew the object.</p>
+
+    <h2>Text styles</h2>
+    <p>A small set of named styles covers everything, each sized for a role — large for lot
+    numbers, medium for areas, small for dimensions and bearings, thin for labels. Using the named
+    styles rather than ad-hoc heights is what keeps a drawing coherent.</p>
+
+    <h2>Layers</h2>
+    <p>Every object belongs on a layer that describes what it <em>is</em>, not what it looks like.
+    The ribbon commands create and set the correct layer for you. Keep drawings tidy with
+    <code>DWGHEALTH</code> and <code>PURGE</code> before issuing.</p>
+
+    <h2>Annotative entities</h2>
+    <p>Nearly all our text and symbols are annotative: they're defined once and displayed at the
+    correct size for whatever annotation scale a viewport uses. This is what lets one model space
+    serve sheets at different scales.</p>
+    <div class="note"><strong>Note</strong> — set the annotation scale <em>before</em> placing
+    annotative objects. Objects only display at the scales attached to them.</div>
+
+    <h2>Plotting</h2>
+    <p>Plot styles map colour to line weight. Page setups are configured per sheet size, and the
+    plot commands apply the correct device and style table for you.</p>
+
+    <h2>Rotated views</h2>
+    <p>Where a plan is rotated in a viewport, annotation should read horizontally on the sheet.
+    Commands that place text account for the viewport twist and the current UCS.</p>
+    <nav class="page-nav">
+      <a href="../interface/troubleshooting/"><div class="dir">Previous</div><div class="ttl">Troubleshooting</div></a>
+      <a class="next" href="wsy/"><div class="dir">Next</div><div class="ttl">WSY Drafting Standards</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

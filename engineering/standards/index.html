@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Styles & Scales — BW Drafting Docs</title>
+<meta name="description" content="Importing the BW style set and managing annotation scales.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="engineering"></aside>
+
+  <main class="content" id="main">
+    <h1>Styles &amp; Scales</h1>
+    <p class="lede">Setting a drawing up with the BW styles and the standard scale list.</p>
+
+    <h2>Commands</h2>
+    <h3 id="bwstyleimport"><code class="cmd">BWSTYLEIMPORT</code></h3>
+    <p>Creates the full BW style set without disturbing what's currently active.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Standards → Import Styles</p>
+    <h4>How to use it</h4>
+    <p>No prompts.</p>
+    <h4>What it produces</h4>
+    <p>The BW_AN text style family and the BWAN_DIM25 / BWAN_DIM35 dimension styles. Your active text and dimension styles are restored afterwards.</p>
+    <h3 id="cscale"><code class="cmd">CSCALE</code></h3>
+    <p>Creates annotation scales, working out the ratio for you.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Standards → Add New Scale</p>
+    <h4>How to use it</h4>
+    <p>Opens a dialog — enter the drawing units and a name. Sequence tokens like <code>{1-5}</code> create a run of scales at once.</p>
+    <div class="note"><strong>Note</strong> — This is the same tool as on the WSY Drafting ribbon. The older BWCSCALE has been retired — use CSCALE.</div>
+    <h3 id="bwscales"><code class="cmd">BWSCALES</code></h3>
+    <p>Rebuilds the drawing's annotation scale list to the engineering standard set.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Standards → Reset Scale List</p>
+    <h4>How to use it</h4>
+    <p>No prompts and no confirmation — it runs immediately and reports how many scales were removed and added.</p>
+    <h4>What it produces</h4>
+    <p>The standard engineering scale list, from 1:10000 down to 1:10 plus the named layout scales.</p>
+    <div class="note warn"><strong>Watch out</strong> — This <strong>wipes the existing scale list</strong> before rebuilding it. Scales still in use by annotative objects survive, but anything else you'd added is removed. It's deliberately a manual command — it never runs on its own.</div>    <nav class="page-nav">
+      <a href="../dimensions/"><div class="dir">Previous</div><div class="ttl">Dimensions</div></a>
+      <a class="next" href="../plotting/"><div class="dir">Next</div><div class="ttl">Plotting</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

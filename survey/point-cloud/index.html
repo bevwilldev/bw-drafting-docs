@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Point Cloud Digitizer — BW Drafting Docs</title>
+<meta name="description" content="Tracing features off a point cloud at a fixed step, and exporting to 12d.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="survey"></aside>
+
+  <main class="content" id="main">
+    <h1>Point Cloud Digitizer</h1>
+    <p class="lede">Traces features off a point cloud at a controlled step — you pick a direction
+    and the next vertex lands exactly that distance along, snapped to the cloud, numbered and
+    coded as you go.</p>
+
+    <h2>Opening it</h2>
+    <p>Run <code class="cmd">PCDIG</code>, or use the button on the <strong>WSY Tools</strong>
+    ribbon tab. Each drawing gets its own panel.</p>
+
+    <h2>Setting up</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td>Segment distance</td><td>How far each new point lands from the last. Read live —
+          change it mid-string and the next segment uses the new value.</td></tr>
+        <tr><td>Enable point creation</td><td>Places a survey point at each vertex as well as the
+          line. Uses Civil points where available.</td></tr>
+        <tr><td>Start number</td><td>The first point number. Auto-fills past anything already used;
+          the <strong>↻</strong> button finds the lowest free number.</td></tr>
+        <tr><td>Point code</td><td>The feature code written onto the points and string.</td></tr>
+        <tr><td>Layer</td><td>Set manually, or automatically from the code library.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Using a code library</h2>
+    <p>Browse to a Trimble <code>.fxl</code> feature library with the <strong>…</strong> button.
+    Once loaded, the point code becomes a searchable picker, and the layer and colour come from the
+    selected feature automatically. The <strong>✕</strong> button unloads it.</p>
+    <div class="note"><strong>Note</strong> — the library isn't remembered between sessions; browse
+    to it again when you reopen the drawing.</div>
+
+    <h2>Digitising</h2>
+    <ul>
+      <li><strong>Add Line</strong> — pick a start point, then pick a direction for each following
+        point. A guide circle shows the fixed distance. <strong>Undo</strong> steps back a point;
+        Esc finishes the string.</li>
+      <li><strong>Add Point</strong> — places standalone points without a line.</li>
+      <li><strong>Extend</strong> — select an existing 3D polyline near the end you want to
+        continue from.</li>
+    </ul>
+    <p>While digitising, 2D snaps are turned off and point-cloud snapping is turned on, then
+    restored when you finish.</p>
+
+    <h2>Exporting to 12d</h2>
+    <p><strong>Export to 12da…</strong> writes every digitised string and point to a 12d Model ASCII
+    file. Points sitting on a string vertex aren't duplicated. Colours come from the code library
+    where one is loaded.</p>
+    <div class="note"><strong>Note</strong> — the export scans model space only, and can't run
+    while a digitising run is active.</div>
+    <nav class="page-nav">
+      <a href="../lot-loader/"><div class="dir">Previous</div><div class="ttl">NSW Lot Loader</div></a>
+      <a class="next" href="../../engineering/"><div class="dir">Next</div><div class="ttl">Engineering</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

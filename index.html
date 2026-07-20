@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drafting Documentation — Beveridge Williams Western Sydney</title>
+<meta name="description" content="Documentation for the BW Western Sydney drafting and survey toolset: BricsCAD command reference, drafting standards, and onboarding.">
+<link rel="icon" href="assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro). Adobe Fonts kits are domain-locked: this kit
+     must list every domain the site is served from, or the wordmark silently
+     falls back to Inter. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<script>
+  /* Apply the saved theme before first paint so there's no flash. */
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="home"></aside>
+
+  <main class="content" id="main">
+    <h1>Drafting Documentation</h1>
+    <p class="lede">
+      Reference and guidance for the Western Sydney drafting and survey toolset —
+      the BricsCAD plugin suite, our drafting standards, and how we work.
+    </p>
+
+    <h2>Start here</h2>
+    <div class="index-list">
+      <a href="drafting/"><span class="t">Drafting</span><span class="d">The WSY Drafting ribbon, our drafting standards, and the full command reference.</span></a>
+      <a href="survey/"><span class="t">Survey</span><span class="d">Works-As-Executed tools, the NSW Lot Loader and the Point Cloud Digitizer.</span></a>
+      <a href="engineering/"><span class="t">Engineering</span><span class="d">The BW Engineering ribbon: text, leaders, dimensions, scales and plotting.</span></a>
+      <a href="onboarding/"><span class="t">Onboarding</span><span class="d">New to the team? Start with BricsCAD, then the spatial data resources we use.</span></a>
+      <a href="quality/"><span class="t">Quality</span><span class="d">The drawing QA checklist and how a drawing gets signed off.</span></a>
+    </div>
+
+    <h2>What this site covers</h2>
+    <p>
+      Every command in the BW BricsCAD Tools suite is documented here — what it does,
+      what it prompts for, what it draws and on which layer, and the things worth
+      knowing before you run it. The command pages are generated from the shipping
+      plugin source, so they describe the tools as they actually behave.
+    </p>
+    <p>
+      If you reached this site from a <strong>Help</strong> button on one of the
+      ribbons, use the section navigation on the left to find the tool you were
+      using.
+    </p>
+
+    <h2>Finding a command</h2>
+    <p>
+      If you know the command name, the
+      <a href="drafting/commands/">command reference</a> lists everything
+      alphabetically and by ribbon panel. Commands are shown the way you'd type
+      them, like <code class="cmd">AUTODIM</code> or <code class="cmd">IMPORTSHEET</code>.
+    </p>
+    <div class="note">
+      <strong>Note</strong> — a number of commands have no ribbon button and are
+      typed at the command line. Those are listed in the command reference too, so
+      it's worth a browse even if you only use the ribbon.
+    </div>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

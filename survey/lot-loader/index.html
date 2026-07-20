@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NSW Lot Loader — BW Drafting Docs</title>
+<meta name="description" content="Fetching NSW cadastral lot boundaries, labels and road names into a drawing.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="survey"></aside>
+
+  <main class="content" id="main">
+    <h1>NSW Cadastral Lot Loader</h1>
+    <p class="lede">Pulls lot boundaries, labels and road names straight from NSW Spatial into
+    model space — by lot and plan number, by a point, or by an extent.</p>
+
+    <h2>Opening it</h2>
+    <p>Run <code class="cmd">NSWLOTS</code>, or use the button on the <strong>WSY Tools</strong>
+    ribbon tab. The panel stays open while you work.</p>
+
+    <h2>Import options</h2>
+    <p>These apply to whichever search you use:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Option</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Subject Lot Labels</td><td>Labels the lots you asked for.</td></tr>
+        <tr><td>Adjoining Lot Labels</td><td>Labels neighbouring lots. <em>Adjacent only</em> labels
+          just those sharing a boundary; <em>All</em> also labels the surrounding buffer.</td></tr>
+        <tr><td>Road Names</td><td>Places road name text along each centreline.</td></tr>
+        <tr><td>Road Centrelines</td><td>Also draws the centreline geometry.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Three ways to search</h2>
+    <h3>By Lot ID</h3>
+    <p>Enter the plan number (required) and optionally the lot and section, choosing DP or SP. Add
+    more rows with <strong>+</strong> for multiple lots. The <strong>Buffer</strong> is how far
+    around each lot to fetch surrounding lots — set 0 for adjoining only.</p>
+    <h3>By Point</h3>
+    <p>Click <strong>Pick Point</strong>, pick in the drawing, and every lot within the buffer
+    radius is fetched.</p>
+    <h3>By Extent</h3>
+    <p>Use the current view, or draw a rectangle.</p>
+
+    <h2>What you get</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Layer</th><th>Contents</th></tr></thead>
+      <tbody>
+        <tr><td>SUB BDY</td><td>Subject lot boundaries</td></tr>
+        <tr><td>SUB DP</td><td>Subject lot labels</td></tr>
+        <tr><td>ADJ BDY</td><td>Adjoining and surrounding boundaries</td></tr>
+        <tr><td>ADJ DP</td><td>Adjoining labels</td></tr>
+        <tr><td>ROAD NAME</td><td>Road name text, rotated along the centreline</td></tr>
+        <tr><td>ROAD CL</td><td>Road centrelines</td></tr>
+      </tbody>
+    </table></div>
+    <p>Re-running never doubles up — lots already loaded are skipped. Your entries and settings are
+    remembered for next time.</p>
+
+    <h2>Labelling loaded lots</h2>
+    <p><code class="cmd">NSWLABELLOTS</code> labels lots that were loaded earlier — select the
+    boundaries and it reads the plan details stored on them.</p>
+
+    <div class="note warn"><strong>Watch out</strong> — the tool works out the MGA zone from the
+    data it fetches. If it can't determine the zone it assumes Zone 56 and says so in the status
+    bar. On a Zone 55 job that warning matters, so check the result lands where you expect.</div>
+
+    <h2>If it fails</h2>
+    <p>The tool needs internet access to the NSW Spatial service. Transient errors are retried
+    automatically; a persistent failure is reported in the status bar. Large extents can take a
+    while — the Cancel button stops a fetch cleanly.</p>
+    <nav class="page-nav">
+      <a href="../wae/modify-text/"><div class="dir">Previous</div><div class="ttl">Modify & Flip Text</div></a>
+      <a class="next" href="../point-cloud/"><div class="dir">Next</div><div class="ttl">Point Cloud Digitizer</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>

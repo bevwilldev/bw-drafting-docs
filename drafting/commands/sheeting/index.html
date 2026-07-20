@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheeting Commands — BW Drafting Docs</title>
+<meta name="description" content="North points, sheet sets and per-lot sales layouts.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Sheeting</h1>
+    <p class="lede">North points, sheet sets, and building per-lot sales layouts.</p>
+
+    <h2>Commands</h2>
+    <h3 id="addnorth"><code class="cmd">ADDNORTH</code></h3>
+    <p>Drops a north point already rotated to match a viewport's twist.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Sheeting → North Point</p>
+    <h4>How to use it</h4>
+    <p><code>Select viewport:</code> — then the symbol follows your cursor; click to place. Esc cancels.</p>
+    <h4>What it produces</h4>
+    <p>A North Point block on layer <strong>NORTH</strong>, annotative, rotated to the viewport's twist angle.</p>
+    <div class="note"><strong>Note</strong> — You can pick the viewport's clip boundary instead of its edge — it resolves to the owning viewport either way.</div>
+    <h3 id="ssload"><code class="cmd">SSLOAD</code></h3>
+    <p>Opens this drawing's sheet set, or offers to build one if it doesn't exist.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Sheeting → Sheet Set</p>
+    <h4>How to use it</h4>
+    <p>If a matching <code>.dst</code> sits beside the drawing it opens and saves. Otherwise:
+        <code>No sheet set found for this drawing (name.dst). Create one? [Yes/No] &lt;Yes&gt;:</code>
+        — on Yes it picks a template, adds every paper layout as a sheet, and opens the result.</p>
+    <h4>What it produces</h4>
+    <p>A sheet set named after the drawing, in the drawing's folder.</p>
+    <div class="note"><strong>Note</strong> — Requires a saved drawing with at least one paper layout. The template is chosen from the drawing's filename suffix — DP/SP/CP/PP use the plan form template, SET/ID/FW/PEG the setout template, SAL/LOT the lot template, anything else the detail template.</div>
+    <h3 id="setlayout"><code class="cmd">SETLAYOUT</code></h3>
+    <p>Builds a complete set of per-lot sales layouts — one sheet per lot, each centred and scaled to its own lot.</p>
+    <h4>How to use it</h4>
+    <p><code>Select the viewport in your MAIN sales layout:</code> → <code>Enter plot scale denominator &lt;200&gt;:</code>. Everything else is automatic.</p>
+    <h4>What it produces</h4>
+    <p>One annotation scale and one layout per lot, each viewport centred on its lot. Tabs are sorted into lot order.</p>
+    <div class="note"><strong>Note</strong> — Lot numbers are read as text on the <strong>SUB DP</strong> layer — so a missing or mis-layered lot number simply won't get a sheet, which makes this a useful QA pass. Pair with INCBLOCK. No ribbon button.</div>
+    <h3 id="incblock"><code class="cmd">INCBLOCK</code></h3>
+    <p>Turns each lot into a numbered annotative block that's only visible at its own scale.</p>
+    <h4>How to use it</h4>
+    <p><code>Enter starting block number:</code> then loop: <code>Select lot to block as "N":</code>. The annotation scale advances after each lot.</p>
+    <h4>What it produces</h4>
+    <p>A block named after each number containing a copy of the lot, referenced on <strong>SUB BDY</strong>.</p>
+    <div class="note"><strong>Note</strong> — The original lot is never consumed — a copy becomes the block content. This is the trick that makes each sales sheet show only its own lot. Create the named per-lot scales first with CSCALE. No ribbon button.</div>
+    <nav class="page-nav">
+      <a href="../annotation/"><div class="dir">Previous</div><div class="ttl">Annotation & Scales</div></a>
+      <a class="next" href="../dimensions/"><div class="dir">Next</div><div class="ttl">Dimensions & Curve Tables</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

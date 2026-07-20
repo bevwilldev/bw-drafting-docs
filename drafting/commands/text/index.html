@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text & Label Commands — BW Drafting Docs</title>
+<meta name="description" content="Text styles, leaders, curve-aligned labels, brackets and background masks.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Text &amp; Labels</h1>
+    <p class="lede">Text styles, leaders, and the tools for placing and tidying labels.</p>
+
+    <h2>Text styles</h2>
+    <p>Pre-select text to restyle it, or run with nothing selected to place new text in a loop.
+    All four place on the <strong>TEXT</strong> layer.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>Style</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">THINTXT</code></td><td>THIN LABEL</td></tr>
+        <tr><td><code class="cmd">SMALLTXT</code></td><td>SMALL LABEL</td></tr>
+        <tr><td><code class="cmd">MEDTXT</code></td><td>MEDIUM LABEL</td></tr>
+        <tr><td><code class="cmd">LRGTXT</code></td><td>LARGE LABEL</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Leaders</h2>
+    <h3 id="straightleader / curveleader"><code class="cmd">STRAIGHTLEADER / CURVELEADER</code></h3>
+    <p>Label leaders — straight-segment or spline — whose text matches your current style.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Text → Straight Leader / Curved Leader</p>
+    <h4>How to use it</h4>
+    <p>Both run the native <code>MLEADER</code> command.</p>
+    <h4>What it produces</h4>
+    <p>The leader takes your current text style and height, so it matches surrounding annotation.</p>
+
+    <h2>Placing and aligning</h2>
+    <h3 id="atc"><code class="cmd">ATC</code></h3>
+    <p>Aligns text along a curve with a live drag preview.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Text → Align Text to Curve</p>
+    <h4>How to use it</h4>
+    <p><code>Select text to align [New/Settings] &lt;Exit&gt;:</code> — pick existing text,
+        type <strong>New</strong> to type fresh text, or <strong>Settings</strong> to open the options
+        dialog. Then pick the curve or multileader to align to, and drag into position.</p>
+        <p>While dragging: <kbd>+</kbd>/<kbd>-</kbd> step the offset, <kbd>&lt;</kbd>/<kbd>&gt;</kbd>
+        rotate, <kbd>Y</kbd> toggles readability, <kbd>B</kbd> toggles the background mask,
+        <kbd>O</kbd> and <kbd>R</kbd> prompt for exact values.</p>
+    <h4>What it produces</h4>
+    <p>Aligns the picked text, or creates new text using the layer and style set in Settings.</p>
+    <div class="note"><strong>Note</strong> — Settings has a <em>Multiple</em> mode that keeps placing copies down a line, and a <em>Copy</em> mode that leaves the original in place. Settings persist between sessions and are shared with CLABEL.</div>
+    <h3 id="clabel"><code class="cmd">CLABEL</code></h3>
+    <p>Type a phrase and drag each word onto a curve in turn.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Text → Align Custom Label</p>
+    <h4>How to use it</h4>
+    <p><code>Enter label words (space-separated):</code> then drag each word onto a curve. The word list wraps, so you can keep going along a fence line.</p>
+    <h4>What it produces</h4>
+    <p>Text created with the shared ATC settings.</p>
+    <h3 id="mtc"><code class="cmd">MTC</code></h3>
+    <p>Drops each selected label into the middle of its lot.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Text → Move to Center</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select closed polylines and text:</code>. Each label is moved to an interior point of the nearest unused closed polyline.</p>
+    <h4>What it produces</h4>
+    <p>Moves existing mtext; creates nothing.</p>
+    <div class="note"><strong>Note</strong> — Works on concave lots — the interior point is genuinely inside the polygon, not just the centroid.</div>
+
+    <h2>Tidying text</h2>
+    <h3 id="tbrk"><code class="cmd">TBRK</code></h3>
+    <p>Adds or removes brackets around selected text.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Text → Toggle Brackets</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or select text, mtext, leaders or dimensions. Each is toggled individually.</p>
+    <div class="note"><strong>Note</strong> — Dimensions keep their live measured value — the brackets are applied as a text override around the measurement, not baked in.</div>
+    <h3 id="tbg"><code class="cmd">TBG</code></h3>
+    <p>Turns background masks on or off behind selected text.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Text → Toggle Background Mask</p>
+    <h4>How to use it</h4>
+    <p>Pre-select to toggle immediately, or run and use the <strong>Settings</strong> keyword to set the mask scale and colour first.</p>
+    <div class="note"><strong>Note</strong> — Settings offers the drawing background, a chosen colour, or <em>Auto</em>, which samples the colour of whatever hatch sits beneath the text. Changing settings forces the mask on rather than toggling.</div>
+    <h3 id="tadd"><code class="cmd">TADD</code></h3>
+    <p>Adds a prefix or suffix to selected text.</p>
+    <h4>How to use it</h4>
+    <p><code>Add text as [Prefix/Suffix] &lt;Suffix&gt;:</code> → <code>Text to add:</code>. Pre-select, or you'll be asked to select afterwards.</p>
+    <div class="note"><strong>Note</strong> — Dimensions keep their live measurement, as with TBRK.</div>
+    <nav class="page-nav">
+      <a href="../survey/"><div class="dir">Previous</div><div class="ttl">Survey</div></a>
+      <a class="next" href="../annotation/"><div class="dir">Next</div><div class="ttl">Annotation & Scales</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

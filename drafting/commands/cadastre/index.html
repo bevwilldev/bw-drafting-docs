@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadastre Commands — BW Drafting Docs</title>
+<meta name="description" content="Boundary, lot text, bearing, easement and road commands in the WSY Drafting toolset.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Cadastre</h1>
+    <p class="lede">
+      Boundaries, lot numbers, areas, dimensions, bearings, easements and roads —
+      the core deposited-plan drafting commands.
+    </p>
+
+    <h2>Boundaries</h2>
+    <h3 id="subbdy"><code class="cmd">SUBBDY</code></h3>
+    <p>Puts lot boundary lines on the subject-boundary layer, or traces a new boundary.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Subject Boundary</p>
+    <h4>How to use it</h4>
+    <p>Select the lines first, then run the command — they're moved immediately with no prompts. With nothing selected it hands off to the native <code>-BOUNDARY</code> command so you can pick internal points.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>SUB BDY</strong> (cyan). Lines are replaced by two-vertex polylines; existing polylines are kept. Colour, linetype and lineweight are forced ByLayer.</p>
+    <div class="note"><strong>Note</strong> — Only lines and polylines are touched — anything else in the selection is skipped. Because lines are recreated rather than modified, their object handles change.</div>
+    <h3 id="adjbdy"><code class="cmd">ADJBDY</code></h3>
+    <p>The same thing for adjoining lots.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Adjoining Boundary</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>ADJ BDY</strong> (white).</p>
+    <h3 id="easea"><code class="cmd">EASEA</code></h3>
+    <p>Draws or converts easement outlines on the dashed easement layer.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Area</p>
+    <h4>How to use it</h4>
+    <p>Pre-select to convert, or run with nothing selected to trace with <code>-BOUNDARY</code>.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>EASEMENT</strong> (green, DASHED). Linetype scale is set to 0.25 so the dashes read at plan scale.</p>
+    <div class="note"><strong>Note</strong> — Needs the DASHED linetype to be available in the drawing.</div>
+    <h3 id="easel"><code class="cmd">EASEL</code></h3>
+    <p>Draws easement boundary lines by hand.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Lines</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>PLINE</code> command on the easement layer — draw as normal.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>EASEMENT</strong>, with the condensed linetype scale applied while drawing.</p>
+    <h3 id="easearrow"><code class="cmd">EASEARROW</code></h3>
+    <p>Places an easement dimension arrow between two snapped points.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Arrow</p>
+    <h4>How to use it</h4>
+    <p>Runs <code>DIMALIGNED</code> with intersection and insertion snaps forced on for the duration.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>EASEMENT LABEL</strong> using the <strong>EASEMENT LABEL</strong> dimension style.</p>
+    <div class="note"><strong>Note</strong> — Your running object snaps are overridden while the command runs, then restored.</div>
+    <h3 id="easep"><code class="cmd">EASEP</code></h3>
+    <p>Easement label leader — a spline leader with a dot arrowhead.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Marker</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>MLEADER</code> command.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>EASEMENT LABEL</strong>, text style THIN LABEL. The leader takes your current text style and height.</p>
+
+    <h2>Lot text</h2>
+    <p>
+      These all work the same way. <strong>Select text first</strong> and it's restyled
+      in place — single-line text is converted to MText. <strong>Run with nothing
+      selected</strong> and it loops, prompting
+      <code>Text insertion point [ESC to exit]:</code> and opening the text editor at
+      each point until you press Esc.
+    </p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Places</th><th>Text style</th><th>Layer</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">SUBLN</code></td><td>Subject lot number</td><td>LARGE LABEL</td><td>SUB DP</td></tr>
+        <tr><td><code class="cmd">SUBA</code></td><td>Subject lot area</td><td>MEDIUM LABEL</td><td>SUB AREA</td></tr>
+        <tr><td><code class="cmd">SUBD</code></td><td>Lot dimension text</td><td>SMALL LABEL</td><td>SUB DIMENSIONS</td></tr>
+        <tr><td><code class="cmd">SUBB</code></td><td>Bearing and distance</td><td>SMALL LABEL</td><td>SUB BEARINGS</td></tr>
+        <tr><td><code class="cmd">ADJLN</code></td><td>Adjoining lot number</td><td>ADJOINING LABEL</td><td>ADJ DP</td></tr>
+        <tr><td><code class="cmd">ROADN</code></td><td>Road name</td><td>LARGE LABEL</td><td>ROAD NAME</td></tr>
+        <tr><td><code class="cmd">ROADL</code></td><td>Road label</td><td>THIN LABEL</td><td>ROAD LABEL</td></tr>
+        <tr><td><code class="cmd">EASET</code></td><td>Easement text</td><td>THIN LABEL</td><td>EASEMENT LABEL</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note">
+      <strong>Note</strong> — text height is the drawing's <code>TEXTSIZE</code> divided
+      by the current annotation scale, and everything is created annotative. Set the
+      right annotation scale before you place text.
+    </div>
+
+    <h2>Bearings</h2>
+    <h3 id="aligna"><code class="cmd">ALIGNA</code></h3>
+    <p>Stacks one text neatly under another at a fixed gap — typically an area under a lot number.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Align Area</p>
+    <h4>How to use it</h4>
+    <p>Prompts <code>Enter offset value &lt;2.0&gt;:</code> (the last value you used), then loops: <code>Select the anchor text:</code> → <code>Select text to align with anchor:</code>. The second text is moved below the first. Esc exits.</p>
+    <h4>What it produces</h4>
+    <p>Moves existing text; creates nothing. The gap accounts for both text heights plus your offset, scaled by the annotation scale.</p>
+    <div class="note"><strong>Note</strong> — Only text and mtext are accepted. The offset value is remembered for the rest of the session.</div>
+    <h3 id="stretchb"><code class="cmd">STRETCHB</code></h3>
+    <p>Splits a bearing into three separate texts — degrees, minutes and seconds — so each can sit over its own boundary segment.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Stretch Bearing</p>
+    <h4>How to use it</h4>
+    <p>Prompts <code>Enter input method [Manual/Select]:</code>.</p>
+    <ul>
+      <li><strong>Manual</strong> — asks for degrees, minutes and seconds in turn.</li>
+      <li><strong>Select</strong> — pick an existing bearing text; it's parsed and <em>erased</em>.</li>
+    </ul>
+    <p>You then drag-align each piece onto a curve in turn: degrees, then minutes, then seconds.</p>
+    <h4>What it produces</h4>
+    <p>Three MText labels, style SMALL LABEL on layer <strong>SUB BEARINGS</strong>.</p>
+    <div class="note"><strong>Note</strong> — The whole run is a single undo step — one <kbd>U</kbd> reverts all three labels and the erase.</div>
+    <h3 id="csubb"><code class="cmd">CSUBB</code></h3>
+    <p>The reverse of STRETCHB — merges three split bearing texts back into one label on a curve.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Condense Bearing</p>
+    <h4>How to use it</h4>
+    <p>Prompts for the degrees, minutes and seconds texts in turn. All three are erased and their contents joined, then you drag-align the combined label onto a curve.</p>
+    <h4>What it produces</h4>
+    <p>One MText, style SMALL LABEL on <strong>SUB BEARINGS</strong>.</p>
+    <div class="note warn"><strong>Watch out</strong> — If you cancel the drag, the three source texts have already been erased — press <kbd>U</kbd> once to get them back.</div>
+    <h3 id="roadlm"><code class="cmd">ROADLM</code></h3>
+    <p>Measures a road width between two points and writes <code>(X.XX WIDE)</code> at the midpoint.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Road Label (Measured)</p>
+    <h4>How to use it</h4>
+    <p><code>First point:</code> → <code>Second point:</code>, with perpendicular and nearest snaps forced on.</p>
+    <h4>What it produces</h4>
+    <p>MText on layer <strong>ROAD LABEL</strong>, rotated perpendicular to the measured line and flipped if needed to stay readable.</p>
+    <div class="note"><strong>Note</strong> — Single shot — it doesn't loop. The text runs across the road, not along it.</div>
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+      <a class="next" href="../survey/"><div class="dir">Next</div><div class="ttl">Survey</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

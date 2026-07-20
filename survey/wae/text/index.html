@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horizontal & Vertical Text — BW Drafting Docs</title>
+<meta name="description" content="Placing WAE text at fixed rotations.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="survey"></aside>
+
+  <main class="content" id="main">
+    <h1>Horizontal &amp; Vertical Text</h1>
+    <p class="lede">Quick WAE text at a fixed rotation, for annotating rotated sheets without
+    fighting the UCS.</p>
+
+    <h2>Commands</h2>
+    <ul>
+      <li><code class="cmd">HTXT</code> — text at 0°, reading horizontally.</li>
+      <li><code class="cmd">VTXT</code> — text at 270°, reading up the sheet.</li>
+    </ul>
+
+    <h2>Using them</h2>
+    <p>Run the command, then <code>Text insertion point:</code>. The text editor opens at that
+    point — type the content and finish as normal. Because the WAE label style has a fixed height
+    you're not asked for one.</p>
+
+    <div class="note"><strong>Note</strong> — both temporarily set the drawing's angle base to
+    zero so the rotation is absolute, then restore it. If you interrupt the command, the setting is
+    still restored.</div>
+    <nav class="page-nav">
+      <a href="../labels/"><div class="dir">Previous</div><div class="ttl">Preset Labels</div></a>
+      <a class="next" href="../calculate-grade/"><div class="dir">Next</div><div class="ttl">Calculate Grade</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

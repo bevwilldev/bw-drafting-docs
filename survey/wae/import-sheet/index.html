@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Import Sheet — BW Drafting Docs</title>
+<meta name="description" content="Bringing raster design sheets in as scaled layouts.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="survey"></aside>
+
+  <main class="content" id="main">
+    <h1>Import Sheet</h1>
+    <p class="lede">Turns a folder of scanned or exported design sheets into one layout each,
+    with the image stretched to the paper and the page set up ready to plot.</p>
+
+    <h2>Using it</h2>
+    <ol>
+      <li>Run <code class="cmd">IMPORTSHEET</code>.</li>
+      <li><code>Specify sheet size [A4/A3/A2/A1] &lt;A1&gt;:</code> — press Enter for A1.</li>
+      <li>Pick the images in the file dialog. You can select many at once. It opens in the
+        drawing's <em>Rasters</em> folder if there is one.</li>
+      <li>If some sheets already have layouts you'll be asked once:
+        <code>N of the selected sheet(s) already have layouts [Replace/Skip] &lt;Skip&gt;:</code>.</li>
+    </ol>
+
+    <h2>What you get</h2>
+    <p>One layout per image, named after the file, with the image filling the sheet on the
+    <strong>SHEET</strong> layer. Each layout is set up to plot as a PDF at the chosen size,
+    rotated to landscape, centred, using the BW plot styles. The default viewport is removed so
+    nothing from model space shows through, and each tab opens framed on its sheet.</p>
+
+    <div class="note"><strong>Tip</strong> — the whole import is a single undo step. If it isn't
+    what you wanted, one <kbd>U</kbd> removes every layout it made.</div>
+
+    <h2>If something goes wrong</h2>
+    <ul>
+      <li>Sheets import but aren't set up to plot — the BW plot device isn't installed. Re-run the
+        suite installer with the WAE component ticked.</li>
+      <li>A file is skipped — its name couldn't be used as a layout name, or a layout with that
+        name already exists and you chose Skip. Both are reported per file.</li>
+    </ul>
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Works-As-Executed</div></a>
+      <a class="next" href="../labels/"><div class="dir">Next</div><div class="ttl">Preset Labels</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

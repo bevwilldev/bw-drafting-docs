@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Utility Commands — BW Drafting Docs</title>
+<meta name="description" content="Offsets, vertex copying, pipes, LandXML import and text tools.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Utilities</h1>
+    <p class="lede">Offsetting, copying to vertices, pipes, imports and text number tools. Mostly
+    command-line only.</p>
+
+    <h2>Drawing tools</h2>
+    <h3 id="moffset"><code class="cmd">MOFFSET</code></h3>
+    <p>Offsets a whole selection at once, with a live preview, repeating until you stop.</p>
+    <h4>How to use it</h4>
+    <p><code>Specify offset distance or [Through/Erase]:</code> — <strong>Erase</strong>
+        asks whether to delete the sources, <strong>Through</strong> takes the distance from the cursor.
+        Then select objects and drag to choose the side.</p>
+    <div class="note"><strong>Note</strong> — The curve nearest your cursor decides the side, and other closed shapes follow the same sense — so a batch of lots all shrink or all grow together rather than splitting. You can type an exact distance mid-drag.</div>
+    <h3 id="vcopy"><code class="cmd">VCOPY</code></h3>
+    <p>Copies blocks or text to every vertex of the chosen polylines.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select the objects to copy, or you'll be asked. Then <code>Base point:</code> → <code>Select target polylines:</code>.</p>
+    <h3 id="pipel"><code class="cmd">PIPEL</code></h3>
+    <p>Turns polylines into pipes — a styled centreline with two wall lines that follow it when you edit.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select polylines to convert to pipes:</code> → <code>Enter pipe size:</code>.</p>
+    <div class="note"><strong>Note</strong> — The walls stay associated with the centreline: edit the centreline and they follow. They're deliberately locked so they can't be dragged off. The last size is remembered between sessions.</div>
+
+    <h2>Import</h2>
+    <h3 id="landxml"><code class="cmd">LANDXML</code></h3>
+    <p>Imports an NSW ePlan / LandXML file — lot boundaries, lot numbers with areas, and monument labels.</p>
+    <h4>How to use it</h4>
+    <p>Opens a file dialog, then <code>Import CgPoints as point entities? [Yes/No] &lt;No&gt;:</code>.</p>
+    <h4>What it produces</h4>
+    <p>Boundaries on the subject or adjoining layers by parcel class, with labels on the matching text layers. Arcs are preserved.</p>
+    <div class="note"><strong>Note</strong> — Two data-quality guards: a curve whose geometry is inconsistent degrades to a straight chord rather than a wild arc, and arcs sweeping over 180° are redrawn as the minor arc and reported so you can check them against the plan.</div>
+
+    <h2>Text numbers</h2>
+    <h3 id="trunc"><code class="cmd">TRUNC</code></h3>
+    <p>Chops decimals off the number in selected text — cutting, not rounding.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, then <code>Decimal places &lt;2&gt;:</code>.</p>
+    <div class="note"><strong>Note</strong> — Only the first number in the text is affected.</div>
+    <h3 id="rround"><code class="cmd">RROUND</code></h3>
+    <p>Rounds the number in selected text — up, down or to nearest.</p>
+    <h4>How to use it</h4>
+    <p><code>Rounding mode [Nearest/Up/Down]:</code> → <code>Decimal places &lt;2&gt;:</code>.</p>
+
+    <h2>Title blocks</h2>
+    <h3 id="update"><code class="cmd">UPDATE</code></h3>
+    <p>Fills in title-block attributes across all layouts from a central CSV register.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — it runs from files.</p>
+    <div class="note"><strong>Note</strong> — Needs a <code>_DWGLISTCSV.TXT</code> file beside the drawing whose first line names the CSV register. The CSV has the drawing name in the first column, layout name in the second, and attribute tags as the remaining headers.</div>
+    <h3 id="ob2wo"><code class="cmd">OB2WO</code></h3>
+    <p>Turns closed shapes into wipeouts.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select or select circles, ellipses and polylines, then <code>Do you want to keep the original entities? [Yes/No] &lt;Yes&gt;:</code>.</p>
+    <h3 id="smt / stripmtext"><code class="cmd">SMT / STRIPMTEXT</code></h3>
+    <p>Strips all inline formatting out of text, leaving the plain words.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or select mtext, leaders, dimensions or blocks with attributes.</p>
+    <div class="note"><strong>Note</strong> — Line breaks are kept — they're content, not formatting. Background masks aren't touched; use TBG for those.</div>
+    <h3 id="wsyupdate"><code class="cmd">WSYUPDATE</code></h3>
+    <p>Checks for a newer release of the suite and launches the installer.</p>
+    <h4>How to use it</h4>
+    <p>If an update exists: <code>Update to vX? BricsCAD will need to close to finish. [Yes/No] &lt;Yes&gt;:</code>.</p>
+    <nav class="page-nav">
+      <a href="../topography/"><div class="dir">Previous</div><div class="ttl">Topography & Earthworks</div></a>
+      <a class="next" href="../../../survey/"><div class="dir">Next</div><div class="ttl">Survey</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

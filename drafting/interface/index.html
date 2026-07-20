@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom CAD Interface — BW Drafting Docs</title>
+<meta name="description" content="What the WSY Drafting ribbon is and why it exists.">
+<link rel="icon" href="../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="drafting"></aside>
+
+  <main class="content" id="main">
+    <h1>Custom CAD Interface</h1>
+    <p class="lede">A BricsCAD ribbon built around how we actually draft — so the standards are
+    applied by the tool rather than remembered by the drafter.</p>
+
+    <h2>Why it exists</h2>
+    <p>Drawing to a standard by hand means remembering a layer, a text style, a height and an
+    annotation scale for every object you place. The ribbon collapses that into one button: run
+    <code class="cmd">SUBLN</code> and the text lands on the right layer, in the right style, at the
+    right height for the current scale.</p>
+    <p>Three things follow from that:</p>
+    <ul>
+      <li><strong>Consistency</strong> — every drafter's output matches, so drawings are
+        interchangeable between jobs and people.</li>
+      <li><strong>Speed</strong> — the repetitive setup disappears.</li>
+      <li><strong>Automation</strong> — larger jobs like boundary dimensioning, curve schedules
+        and per-lot sales layouts are single commands rather than afternoons.</li>
+    </ul>
+
+    <h2>What's included</h2>
+    <p>The suite installs several independent plugins. You may have some or all depending on what
+    was selected at install:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Plugin</th><th>Ribbon tab</th><th>For</th></tr></thead>
+      <tbody>
+        <tr><td>WSY Drafting</td><td>WSY Drafting</td><td>Deposited, detail and sales plans</td></tr>
+        <tr><td>BW Engineering</td><td>BW Engineering</td><td>Engineering plans</td></tr>
+        <tr><td>BW WAE</td><td>WAE Tools</td><td>Works-As-Executed plans</td></tr>
+        <tr><td>NSW Lot Loader</td><td>WSY Tools</td><td>Cadastre from NSW Spatial</td></tr>
+        <tr><td>Point Cloud Digitizer</td><td>WSY Tools</td><td>Digitising off point clouds</td></tr>
+        <tr><td>Drawing Checklist</td><td>WSY Drafting → QA</td><td>Drawing sign-off</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Getting it</h2>
+    <p>The suite is installed from the BW BricsCAD Tools installer. See
+    <a href="installation/">Installation</a>.</p>
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Drafting</div></a>
+      <a class="next" href="installation/"><div class="dir">Next</div><div class="ttl">Installation</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../assets/js/site.js"></script>
+</body>
+</html>
