@@ -46,15 +46,14 @@ write("survey/index.html", "survey", "Survey",
       "Works-As-Executed tools, the NSW Cadastral Lot Loader and the Point Cloud Digitizer.",
       """    <h1>Survey</h1>
     <p class="lede">
-      Tools for survey work: Works-As-Executed plans, pulling NSW cadastre straight
-      into a drawing, and digitising off point clouds.
+      Works-As-Executed plans — bringing design sheets in, marking them up, and the
+      standard WAE annotations.
     </p>
 
     <h2 id="in-this-section">In this section</h2>
     <div class="card-grid">
       <a href="wae/"><span class="t">Works-As-Executed</span><span class="d">The WAE ribbon: sheet import, preset labels, grade calculation and annotations.</span></a>
-      <a href="lot-loader/"><span class="t">NSW Lot Loader</span><span class="d">Fetch cadastral lot boundaries, labels and road names from NSW Spatial.</span></a>
-      <a href="point-cloud/"><span class="t">Point Cloud Digitizer</span><span class="d">Trace features off a point cloud at a fixed step, then export to 12d.</span></a>
+      <a href="../tools/"><span class="t">Office Tools</span><span class="d">The NSW Lot Loader and Point Cloud Digitizer have their own section under Tools.</span></a>
     </div>
 
     <h2 id="getting-started">Getting started</h2>
@@ -138,3 +137,29 @@ write("onboarding/index.html", "onboarding", "Onboarding",
 """ + page_nav(nxt=("bricscad/", "Introduction to BricsCAD")))
 
 print("Section indexes written.")
+
+# ---------------------------------------------------------------- Tools
+write("tools/index.html", "tools", "Office Tools",
+      "Internal office tools: the NSW Lot Loader and the Point Cloud Digitizer.",
+      """    <h1>Office Tools</h1>
+    <p class="lede">
+      Internal tools used at the desk rather than on a plan — they live on the
+      <strong>WSY Tools</strong> ribbon tab, separate from the drafting and survey ribbons.
+    </p>
+
+    <h2>In this section</h2>
+    <div class="index-list">
+      <a href="lot-loader/"><span class="t">NSW Lot Loader</span><span class="d">Fetch cadastral lot boundaries, labels and road names from NSW Spatial into a drawing.</span></a>
+      <a href="point-cloud/"><span class="t">Point Cloud Digitizer</span><span class="d">Trace features off a point cloud at a fixed step, then export to 12d.</span></a>
+    </div>
+
+    <h2>Where they fit</h2>
+    <p>
+      Both are data utilities that feed drafting and survey work: the Lot Loader pulls
+      the cadastre a plan is drawn against, and the Point Cloud Digitizer turns scan
+      data into strings and points ready for processing. Each has its own built-in
+      help as well — the <strong>?</strong> button in its panel works offline.
+    </p>
+""" + page_nav(prev=("../survey/wae/modify-text/", "Modify & Flip Text"), nxt=("lot-loader/", "NSW Lot Loader")))
+
+print("Tools section written.")

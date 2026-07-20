@@ -179,10 +179,10 @@ W("survey/wae/modify-text/index.html", "survey", "Modify & Flip Text",
 
     <div class="note"><strong>Note</strong> — flipping changes the text's justification to middle
     centre permanently, so flipping twice doesn't restore the original justification.</div>
-""" + page_nav(prev=("../add-comment/", "Add Comment"), nxt=("../../lot-loader/", "NSW Lot Loader")))
+""" + page_nav(prev=("../add-comment/", "Add Comment"), nxt=("../../../tools/", "Office Tools")))
 
 # =============================================================== SURVEY / TOOLS
-W("survey/lot-loader/index.html", "survey", "NSW Lot Loader",
+W("tools/lot-loader/index.html", "tools", "NSW Lot Loader",
   "Fetching NSW cadastral lot boundaries, labels and road names into a drawing.",
   """    <h1>NSW Cadastral Lot Loader</h1>
     <p class="lede">Pulls lot boundaries, labels and road names straight from NSW Spatial into
@@ -243,9 +243,9 @@ W("survey/lot-loader/index.html", "survey", "NSW Lot Loader",
     <p>The tool needs internet access to the NSW Spatial service. Transient errors are retried
     automatically; a persistent failure is reported in the status bar. Large extents can take a
     while — the Cancel button stops a fetch cleanly.</p>
-""" + page_nav(prev=("../wae/modify-text/", "Modify & Flip Text"), nxt=("../point-cloud/", "Point Cloud Digitizer")))
+""" + page_nav(prev=("../", "Office Tools"), nxt=("../point-cloud/", "Point Cloud Digitizer")))
 
-W("survey/point-cloud/index.html", "survey", "Point Cloud Digitizer",
+W("tools/point-cloud/index.html", "tools", "Point Cloud Digitizer",
   "Tracing features off a point cloud at a fixed step, and exporting to 12d.",
   """    <h1>Point Cloud Digitizer</h1>
     <p class="lede">Traces features off a point cloud at a controlled step — you pick a direction

@@ -68,12 +68,15 @@
             { href: '/survey/wae/modify-text/', text: 'Modify &amp; Flip Text' }
           ]
         },
-        {
-          group: 'Field Tools', items: [
-            { href: '/survey/lot-loader/', text: 'NSW Lot Loader' },
-            { href: '/survey/point-cloud/', text: 'Point Cloud Digitizer' }
-          ]
-        }
+        { href: '/tools/', text: 'Office Tools' }
+      ]
+    },
+    tools: {
+      title: 'Office Tools',
+      items: [
+        { href: '/tools/', text: 'Overview' },
+        { href: '/tools/lot-loader/', text: 'NSW Lot Loader' },
+        { href: '/tools/point-cloud/', text: 'Point Cloud Digitizer' }
       ]
     },
     engineering: {
@@ -114,6 +117,7 @@
     { href: '/drafting/', text: 'Drafting' },
     { href: '/survey/', text: 'Survey' },
     { href: '/engineering/', text: 'Engineering' },
+    { href: '/tools/', text: 'Tools' },
     { href: '/quality/', text: 'Quality' }
   ];
 
