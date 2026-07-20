@@ -118,7 +118,7 @@
   };
 
   var TOP_NAV = [
-    { href: '/getting-started/', text: 'Getting Started' },
+    { href: '/getting-started/', text: 'Getting Started', cta: true },
     { href: '/onboarding/', text: 'Onboarding' },
     { href: '/drafting/', text: 'Drafting' },
     { href: '/survey/', text: 'Survey' },
@@ -204,6 +204,7 @@
     var nav = el('nav', { class: 'nav', 'aria-label': 'Sections' });
     TOP_NAV.forEach(function (item) {
       var a = el('a', { href: url(item.href), html: item.text });
+      if (item.cta) a.className = 'nav-cta';   // stands out as the entry point
       // Mark the section active for any page beneath it.
       if (HERE.indexOf(normalise(url(item.href))) === 0) a.setAttribute('aria-current', 'page');
       nav.appendChild(a);

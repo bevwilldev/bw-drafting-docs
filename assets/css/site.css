@@ -233,6 +233,19 @@ kbd {
 .nav a[aria-current="page"]::after { transform: scaleX(1); background: var(--ink-faint); }
 .nav a[aria-current="page"]:hover::after { background: var(--brand); }
 
+/* Entry-point CTA — an outlined brand pill that fills when hovered or current,
+   so "Getting Started" reads as the place to begin rather than a plain link. */
+.nav a.nav-cta {
+  color: var(--brand); font-weight: 550; margin-left: 4px;
+  border: 1px solid color-mix(in srgb, var(--brand) 45%, transparent);
+  transition: color .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+}
+.nav a.nav-cta::after { display: none; }        /* no underline; it's a pill */
+.nav a.nav-cta:hover,
+.nav a.nav-cta[aria-current="page"] {
+  color: var(--brand-ink); background: var(--brand); border-color: var(--brand);
+}
+
 .icon-btn {
   display: grid; place-items: center;
   width: 30px; height: 30px; padding: 0;
