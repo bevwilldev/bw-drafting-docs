@@ -13,14 +13,14 @@ write("drafting/index.html", "drafting", "Drafting",
       ribbon, the standards we draw to, and a reference for every command in the toolset.
     </p>
 
-    <h2>In this section</h2>
-    <div class="index-list">
+    <h2 id="in-this-section">In this section</h2>
+    <div class="card-grid">
       <a href="interface/"><span class="t">Custom CAD Interface</span><span class="d">What the ribbon is for, how to install it, and what each panel does.</span></a>
       <a href="standards/"><span class="t">Drafting Standards</span><span class="d">Line weights, text styles, layers, plotting and annotative entities.</span></a>
       <a href="commands/"><span class="t">Command Reference</span><span class="d">Every command in the suite — prompts, output layers and gotchas.</span></a>
     </div>
 
-    <h2>New to the toolset?</h2>
+    <h2 id="new-to-the-toolset">New to the toolset?</h2>
     <p>
       Start with the <a href="interface/">introduction to the interface</a>, then
       <a href="interface/installation/">install it</a>. Once the ribbon is loaded,
@@ -31,7 +31,7 @@ write("drafting/index.html", "drafting", "Drafting",
       <a href="commands/">command reference</a>.
     </p>
 
-    <h2>Worth knowing</h2>
+    <h2 id="worth-knowing">Worth knowing</h2>
     <div class="note">
       <strong>Note</strong> — a substantial part of the toolset has no ribbon button
       and is typed at the command line. The boundary dimensioning and curve table
@@ -50,14 +50,14 @@ write("survey/index.html", "survey", "Survey",
       into a drawing, and digitising off point clouds.
     </p>
 
-    <h2>In this section</h2>
-    <div class="index-list">
+    <h2 id="in-this-section">In this section</h2>
+    <div class="card-grid">
       <a href="wae/"><span class="t">Works-As-Executed</span><span class="d">The WAE ribbon: sheet import, preset labels, grade calculation and annotations.</span></a>
       <a href="lot-loader/"><span class="t">NSW Lot Loader</span><span class="d">Fetch cadastral lot boundaries, labels and road names from NSW Spatial.</span></a>
       <a href="point-cloud/"><span class="t">Point Cloud Digitizer</span><span class="d">Trace features off a point cloud at a fixed step, then export to 12d.</span></a>
     </div>
 
-    <h2>Getting started</h2>
+    <h2 id="getting-started">Getting started</h2>
     <p>
       Most WAE work starts by bringing the design sheets in — see
       <a href="wae/import-sheet/">Import Sheet</a> — and then annotating them with the
@@ -74,8 +74,8 @@ write("engineering/index.html", "engineering", "Engineering",
       matching leaders and dimensions, the standard scale list, and plot shortcuts.
     </p>
 
-    <h2>In this section</h2>
-    <div class="index-list">
+    <h2 id="in-this-section">In this section</h2>
+    <div class="card-grid">
       <a href="text/"><span class="t">Text &amp; Leaders</span><span class="d">BW25–BW70 annotation text and the matching multileader styles.</span></a>
       <a href="dimensions/"><span class="t">Dimensions</span><span class="d">The BWAN_DIM dimension wrappers for linear, aligned, angular, arc and radial.</span></a>
       <a href="standards/"><span class="t">Styles &amp; Scales</span><span class="d">Importing the BW style set, and creating or resetting annotation scales.</span></a>
@@ -97,8 +97,8 @@ write("quality/index.html", "quality", "Quality",
       How a drawing gets checked and signed off, using the project drawing checklist.
     </p>
 
-    <h2>In this section</h2>
-    <div class="index-list">
+    <h2 id="in-this-section">In this section</h2>
+    <div class="card-grid">
       <a href="checklist/"><span class="t">Drawing Checklist</span><span class="d">The QA panel: revisions, automatic checks, and saving a completed pass.</span></a>
     </div>
 """ + page_nav(nxt=("checklist/", "Drawing Checklist")))
@@ -112,14 +112,24 @@ write("onboarding/index.html", "onboarding", "Onboarding",
       draw in and the data sources we rely on day to day.
     </p>
 
-    <h2>In this section</h2>
-    <div class="index-list">
+    <h2 id="in-this-section">In this section</h2>
+    <div class="card-grid">
       <a href="bricscad/"><span class="t">BricsCAD</span><span class="d">What BricsCAD is, how it fits our workflow, and where to learn it.</span></a>
       <a href="resources/"><span class="t">Spatial Data Resources</span><span class="d">SIX Maps, Nearmap, MetroMap and ELVIS — what each is good for.</span></a>
       <a href="glossary/"><span class="t">Glossary</span><span class="d">Plan types, abbreviations and the terms you'll hear in the office.</span></a>
     </div>
 
-    <h2>Where to go next</h2>
+
+    <figure class="photo">
+      <img src="../assets/img/drafting-corner-web.jpg" width="1400" height="933"
+           loading="lazy" decoding="async"
+           alt="The drafting area in the Western Sydney office — a row of dual-monitor
+                desks along a window wall, with planted timber storage running down
+                the centre of the floor.">
+      <figcaption>The drafting floor at LPC House, Oran Park.</figcaption>
+    </figure>
+
+    <h2 id="where-to-go-next">Where to go next</h2>
     <p>
       Once you're comfortable with BricsCAD, move on to
       <a href="../drafting/">Drafting</a> to install the WSY ribbon and learn the

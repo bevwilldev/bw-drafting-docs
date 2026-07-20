@@ -6,6 +6,21 @@
 <title>Drafting Documentation — Beveridge Williams Western Sydney</title>
 <meta name="description" content="Documentation for the BW Western Sydney drafting and survey toolset: BricsCAD command reference, drafting standards, and onboarding.">
 <link rel="icon" href="assets/img/bw-logo.svg">
+<!-- Link previews (Teams, Slack, iMessage). og:url and og:image MUST be
+     absolute — relative paths are ignored by every scraper — so the domain is
+     hardcoded here. If this site ever moves to a custom domain or an org
+     account, these two lines and the canonical below need updating. -->
+<link rel="canonical" href="https://agabanto.github.io/bw-drafting-docs/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BW Drafting Docs">
+<meta property="og:title" content="Drafting Documentation — BW Western Sydney">
+<meta property="og:description" content="Reference and guidance for the Western Sydney drafting and survey toolset: the BricsCAD plugin suite, our drafting standards, and how we work.">
+<meta property="og:url" content="https://agabanto.github.io/bw-drafting-docs/">
+<meta property="og:image" content="https://agabanto.github.io/bw-drafting-docs/assets/img/office-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LPC House at dusk, the Beveridge Williams Western Sydney office.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -26,23 +41,79 @@
 <div class="layout">
   <aside data-sidenav="home"></aside>
 
-  <main class="content" id="main">
-    <h1>Drafting Documentation</h1>
-    <p class="lede">
-      Reference and guidance for the Western Sydney drafting and survey toolset —
-      the BricsCAD plugin suite, our drafting standards, and how we work.
-    </p>
-
-    <h2>Start here</h2>
-    <div class="index-list">
-      <a href="drafting/"><span class="t">Drafting</span><span class="d">The WSY Drafting ribbon, our drafting standards, and the full command reference.</span></a>
-      <a href="survey/"><span class="t">Survey</span><span class="d">Works-As-Executed tools, the NSW Lot Loader and the Point Cloud Digitizer.</span></a>
-      <a href="engineering/"><span class="t">Engineering</span><span class="d">The BW Engineering ribbon: text, leaders, dimensions, scales and plotting.</span></a>
-      <a href="onboarding/"><span class="t">Onboarding</span><span class="d">New to the team? Start with BricsCAD, then the spatial data resources we use.</span></a>
-      <a href="quality/"><span class="t">Quality</span><span class="d">The drawing QA checklist and how a drawing gets signed off.</span></a>
+  <main class="content is-home" id="main">
+    <div class="hero">
+      <img class="hero-bg" src="assets/img/office-hero.jpg" alt="" aria-hidden="true"
+           width="1200" height="900" decoding="async">
+      <span class="eyebrow">BW Western Sydney</span>
+      <h1>Drafting Documentation</h1>
+      <p class="lede">
+        Reference and guidance for the Western Sydney drafting and survey toolset —
+        the BricsCAD plugin suite, our drafting standards, and how we work.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="drafting/commands/#alphabetical-index">
+          Browse the command reference
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/>
+          </svg>
+        </a>
+        <a class="btn btn-quiet" href="onboarding/">New to the team? Start here</a>
+      </div>
     </div>
 
-    <h2>What this site covers</h2>
+    <div class="stat-strip">
+      <div class="stat"><span class="n">72</span><span class="l">Commands</span></div>
+      <div class="stat"><span class="n">8</span><span class="l">Ribbon panels</span></div>
+      <div class="stat"><span class="n">5</span><span class="l">Sections</span></div>
+    </div>
+
+    <h2 id="start-here">Start here</h2>
+    <div class="card-grid">
+      <a href="drafting/">
+        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 12.5 12.5 2l1.5 1.5L3.5 14H2z"/><path d="M10.5 4 12 5.5"/></svg></span>
+        <span class="t">Drafting</span>
+        <span class="d">The WSY Drafting ribbon, our drafting standards, and the full command reference.</span>
+        <span class="m">16 pages · 72 commands</span>
+      </a>
+      <a href="survey/">
+        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 1.8 14.2 13H1.8z"/><circle cx="8" cy="9.6" r="1.5"/></svg></span>
+        <span class="t">Survey</span>
+        <span class="d">Works-As-Executed tools, the NSW Lot Loader and the Point Cloud Digitizer.</span>
+        <span class="m">10 pages · 6 WAE tools</span>
+      </a>
+      <a href="engineering/">
+        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 11.5h12M2 4.5h12"/><path d="M5 2.5v4M11 9.5v4"/></svg></span>
+        <span class="t">Engineering</span>
+        <span class="d">The BW Engineering ribbon: text, leaders, dimensions, scales and plotting.</span>
+        <span class="m">5 pages</span>
+      </a>
+      <a href="onboarding/">
+        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 2 14.5 5 8 8 1.5 5z"/><path d="M4 6.6v3.2c0 1 1.8 1.9 4 1.9s4-.9 4-1.9V6.6"/></svg></span>
+        <span class="t">Onboarding</span>
+        <span class="d">New to the team? Start with BricsCAD, then the spatial data resources we use.</span>
+        <span class="m">5 pages · glossary</span>
+      </a>
+      <a href="quality/">
+        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M13.5 4.5 6.5 11.5 2.5 7.5"/></svg></span>
+        <span class="t">Quality</span>
+        <span class="d">The drawing QA checklist and how a drawing gets signed off.</span>
+        <span class="m">2 pages</span>
+      </a>
+    </div>
+
+    <h2 id="what-this-site-covers">What this site covers</h2>
     <p>
       Every command in the BW BricsCAD Tools suite is documented here — what it does,
       what it prompts for, what it draws and on which layer, and the things worth
@@ -55,12 +126,13 @@
       using.
     </p>
 
-    <h2>Finding a command</h2>
+    <h2 id="finding-a-command">Finding a command</h2>
     <p>
       If you know the command name, the
-      <a href="drafting/commands/">command reference</a> lists everything
-      alphabetically and by ribbon panel. Commands are shown the way you'd type
-      them, like <code class="cmd">AUTODIM</code> or <code class="cmd">IMPORTSHEET</code>.
+      <a href="drafting/commands/#alphabetical-index">command reference</a> lists
+      every command alphabetically and by ribbon panel, with a filter box to
+      narrow it down. Commands are shown the way you'd type them, like
+      <code class="cmd">AUTODIM</code> or <code class="cmd">SETLAYOUT</code>.
     </p>
     <div class="note">
       <strong>Note</strong> — a number of commands have no ribbon button and are

@@ -28,7 +28,7 @@
     <h1>WSY Drafting Standards</h1>
     <p class="lede">The specific standard used by the Western Sydney drafting team.</p>
 
-    <h2>Colour and line weight</h2>
+    <h2 id="colour-and-line-weight">Colour and line weight</h2>
     <p>Line weight is driven by colour through the plot style table. Set objects ByLayer and let
     the layer's colour determine the plotted weight.</p>
     <div class="table-wrap"><table>
@@ -44,7 +44,7 @@
       </tbody>
     </table></div>
 
-    <h2>Text styles</h2>
+    <h2 id="text-styles">Text styles</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Style</th><th>Used for</th></tr></thead>
       <tbody>
@@ -58,12 +58,12 @@
     <p>Text height is always <code>TEXTSIZE ÷ annotation scale</code>, and text is created
     annotative.</p>
 
-    <h2>Layer management</h2>
+    <h2 id="layer-management">Layer management</h2>
     <p>Layers are created on demand by the commands — you shouldn't need to make them by hand.
     Before issuing a drawing, run <code>DWGHEALTH</code> and <code>PURGE</code> to clear unused
     definitions.</p>
 
-    <h2>Page setup</h2>
+    <h2 id="page-setup">Page setup</h2>
     <figure><img src="../../../assets/img/page-setup.png" alt="Page setup"></figure>
     <p>Sheets plot through the BW plot configurations with the BW plot style tables. The
     engineering and WAE plot commands apply these automatically.</p>

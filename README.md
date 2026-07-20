@@ -39,6 +39,22 @@ build step** — the HTML they emit is committed and can be edited directly.
 Re-running a generator overwrites the pages it owns, so don't run them after
 hand-editing unless you've folded your changes back into the script.
 
+One exception: `tools/gen_index.py` is worth re-running. It rebuilds the
+alphabetical index on `drafting/commands/index.html` by scraping the panel pages
+themselves, so the index can't drift behind the reference the way the old
+hand-maintained table did (it had fallen to 32 entries against 74 documented
+commands). It only rewrites the block between the `ALPHA_START` / `ALPHA_END`
+markers, and it must run *after* `gen_commands.py`, which owns the rest of that
+page:
+
+```
+python tools/gen_commands.py && python tools/gen_index.py
+```
+
+**After adding or renaming a command, run `gen_index.py`.** Where a command's
+first sentence doesn't stand alone out of context, add a curated line to
+`OVERRIDES` at the top of that script.
+
 ## Structure
 
 ```
@@ -51,7 +67,7 @@ onboarding/           BricsCAD, spatial data resources, glossary
 assets/css/site.css   All styling
 assets/js/site.js     Navigation data + page behaviour
 assets/img/           Screenshots, tutorial GIFs, logos
-tools/                Page generators (optional)
+tools/                Page generators (optional) + gen_index.py (re-runnable)
 ```
 
 ## Notes

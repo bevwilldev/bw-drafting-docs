@@ -14,7 +14,7 @@ W("drafting/interface/index.html", "drafting", "Custom CAD Interface",
     <p class="lede">A BricsCAD ribbon built around how we actually draft — so the standards are
     applied by the tool rather than remembered by the drafter.</p>
 
-    <h2>Why it exists</h2>
+    <h2 id="why-it-exists">Why it exists</h2>
     <p>Drawing to a standard by hand means remembering a layer, a text style, a height and an
     annotation scale for every object you place. The ribbon collapses that into one button: run
     <code class="cmd">SUBLN</code> and the text lands on the right layer, in the right style, at the
@@ -28,7 +28,7 @@ W("drafting/interface/index.html", "drafting", "Custom CAD Interface",
         and per-lot sales layouts are single commands rather than afternoons.</li>
     </ul>
 
-    <h2>What's included</h2>
+    <h2 id="whats-included">What's included</h2>
     <p>The suite installs several independent plugins. You may have some or all depending on what
     was selected at install:</p>
     <div class="table-wrap"><table>
@@ -43,7 +43,7 @@ W("drafting/interface/index.html", "drafting", "Custom CAD Interface",
       </tbody>
     </table></div>
 
-    <h2>Getting it</h2>
+    <h2 id="getting-it">Getting it</h2>
     <p>The suite is installed from the BW BricsCAD Tools installer. See
     <a href="installation/">Installation</a>.</p>
 """ + page_nav(prev=("../", "Drafting"), nxt=("installation/", "Installation")))
@@ -58,7 +58,7 @@ W("drafting/interface/installation/index.html", "drafting", "Installation",
     back when it exits, which would undo the installer's changes. The installer will tell you if
     it's still running.</div>
 
-    <h2>Running the installer</h2>
+    <h2 id="running-the-installer">Running the installer</h2>
     <ol>
       <li>Run the installer. It checks you're on the company network before proceeding.</li>
       <li><strong>Choose components.</strong> Pick a workstation preset from the drop-down, or tick
@@ -67,7 +67,7 @@ W("drafting/interface/installation/index.html", "drafting", "Installation",
       <li>Finish, then start BricsCAD. The ribbons load automatically.</li>
     </ol>
 
-    <h2>Delivery modes</h2>
+    <h2 id="delivery-modes">Delivery modes</h2>
     <p>Templates, plot styles and command aliases have to land somewhere. The installer offers
     three options:</p>
     <div class="table-wrap"><table>
@@ -86,12 +86,12 @@ W("drafting/interface/installation/index.html", "drafting", "Installation",
       </tbody>
     </table></div>
 
-    <h2>Checking it worked</h2>
+    <h2 id="checking-it-worked">Checking it worked</h2>
     <p>Start BricsCAD. You should see a line on the command line naming the plugins that loaded,
     and the ribbon tabs should be present. If a tab is missing, see
     <a href="../troubleshooting/">Troubleshooting</a>.</p>
 
-    <h2>Updating</h2>
+    <h2 id="updating">Updating</h2>
     <p>The suite checks for new releases in the background and tells you on the command line when
     one is available. Type <code class="cmd">WSYUPDATE</code> to launch the installer for the new
     version.</p>
@@ -106,10 +106,10 @@ W("drafting/interface/using/index.html", "drafting", "Using the Ribbon",
     <div class="note"><strong>Tip</strong> — hover any button for a one-line description of what it
     does and the command name behind it. Every command can also be typed directly.</div>
 
-    <h2>Support</h2>
+    <h2 id="support">Support</h2>
     <p>Help, and a link to this documentation.</p>
 
-    <h2>Cadastre</h2>
+    <h2 id="cadastre">Cadastre</h2>
     <figure><img src="../../../assets/img/subject-lots-panel.png" alt="Subject lots panel"></figure>
     <p>Boundaries, lot numbers, areas, dimensions and bearings for the subject lots, plus the
     adjoining-lot equivalents, easements and roads. See
@@ -117,31 +117,31 @@ W("drafting/interface/using/index.html", "drafting", "Using the Ribbon",
     <figure><img src="../../../assets/img/ease-panel.png" alt="Easement panel"></figure>
     <figure><img src="../../../assets/img/road-panel.png" alt="Road panel"></figure>
 
-    <h2>Survey</h2>
+    <h2 id="survey">Survey</h2>
     <figure><img src="../../../assets/img/surv-panel.png" alt="Survey panel"></figure>
     <p>Pegs, reference marks, SSMs, ties and traverse lines. See
     <a href="../../commands/survey/">Survey commands</a>.</p>
     <figure><img src="../../../assets/img/ref-panel.png" alt="Reference panel"></figure>
 
-    <h2>Occupations</h2>
+    <h2 id="occupations">Occupations</h2>
     <figure><img src="../../../assets/img/occs-panel.png" alt="Occupations panel"></figure>
     <p>Fence lines, fence ticks and walls.</p>
 
-    <h2>Text</h2>
+    <h2 id="text">Text</h2>
     <figure><img src="../../../assets/img/text-panel.png" alt="Text panel"></figure>
     <p>Text styles, leaders, and the label tools — brackets, background masks and curve-aligned
     text. See <a href="../../commands/text/">Text commands</a>.</p>
 
-    <h2>Sheeting</h2>
+    <h2 id="sheeting">Sheeting</h2>
     <figure><img src="../../../assets/img/sheet-panel.png" alt="Sheeting panel"></figure>
     <p>North points and sheet sets. See <a href="../../commands/sheeting/">Sheeting commands</a>.</p>
 
-    <h2>Annotation</h2>
+    <h2 id="annotation">Annotation</h2>
     <figure><img src="../../../assets/img/anno-panel.png" alt="Annotation panel"></figure>
     <p>Creating annotation scales and stepping through them. See
     <a href="../../commands/annotation/">Annotation commands</a>.</p>
 
-    <h2>QA</h2>
+    <h2 id="qa">QA</h2>
     <p>Opens the project drawing checklist. See <a href="../../../quality/checklist/">Drawing
     Checklist</a>.</p>
 """ + page_nav(prev=("../installation/", "Installation"), nxt=("../troubleshooting/", "Troubleshooting")))
@@ -152,7 +152,7 @@ W("drafting/interface/troubleshooting/index.html", "drafting", "Troubleshooting"
     <p class="lede">Most problems are a ribbon that didn't load or a component that wasn't
     installed. Work through these in order.</p>
 
-    <h2>A ribbon tab is missing</h2>
+    <h2 id="a-ribbon-tab-is-missing">A ribbon tab is missing</h2>
     <p>First, restart BricsCAD — the ribbons load at startup and a tab can be missed if BricsCAD
     was busy. If it's still missing, reset the customisation:</p>
     <ol>
@@ -163,7 +163,7 @@ W("drafting/interface/troubleshooting/index.html", "drafting", "Troubleshooting"
     <figure><img src="../../../assets/img/customize.png" alt="Customize dialog"></figure>
     <figure><img src="../../../assets/img/manage-customizations.png" alt="Manage customizations"></figure>
 
-    <h2>A command says "unknown command"</h2>
+    <h2 id="a-command-says-unknown-command">A command says "unknown command"</h2>
     <p>That component probably isn't installed. Commands are grouped by plugin, and each is
     optional at install time:</p>
     <div class="table-wrap"><table>
@@ -178,20 +178,20 @@ W("drafting/interface/troubleshooting/index.html", "drafting", "Troubleshooting"
     </table></div>
     <p>Re-run the installer and tick the missing component.</p>
 
-    <h2>Lines look wrong — fences and easements draw solid</h2>
+    <h2 id="lines-look-wrong-fences-and-easements-draw-solid">Lines look wrong — fences and easements draw solid</h2>
     <p>The linetype file didn't resolve. You'll see a message on the command line saying so. Re-run
     the installer to restore the Support files.</p>
 
-    <h2>Plot commands don't produce a PDF</h2>
+    <h2 id="plot-commands-dont-produce-a-pdf">Plot commands don't produce a PDF</h2>
     <p>The plot device isn't installed. The engineering and WAE plot commands need the BW plot
     configurations, which ship with those components — re-run the installer.</p>
 
-    <h2>Text is the wrong size</h2>
+    <h2 id="text-is-the-wrong-size">Text is the wrong size</h2>
     <p>Text height is the drawing's <code>TEXTSIZE</code> divided by the current annotation scale.
     If text comes out too large or small, check the annotation scale is set correctly before
     placing it.</p>
 
-    <h2>Still stuck</h2>
+    <h2 id="still-stuck">Still stuck</h2>
     <p>Contact the CAD team lead with the drawing, the command you ran and the exact message from
     the command line.</p>
 """ + page_nav(prev=("../using/", "Using the Ribbon"), nxt=("../../standards/", "Drafting Standards")))
@@ -203,33 +203,33 @@ W("drafting/standards/index.html", "drafting", "Drafting Standards",
     <p class="lede">Why we draw the way we do — the conventions that make our drawings consistent,
     legible and plottable.</p>
 
-    <h2>Line weights</h2>
+    <h2 id="line-weights">Line weights</h2>
     <p>Line weight carries meaning: boundaries read heavier than annotation, and easements read
     lighter still. We drive weight from colour through the plot style table rather than setting it
     per object, so weight stays consistent no matter who drew the object.</p>
 
-    <h2>Text styles</h2>
+    <h2 id="text-styles">Text styles</h2>
     <p>A small set of named styles covers everything, each sized for a role — large for lot
     numbers, medium for areas, small for dimensions and bearings, thin for labels. Using the named
     styles rather than ad-hoc heights is what keeps a drawing coherent.</p>
 
-    <h2>Layers</h2>
+    <h2 id="layers">Layers</h2>
     <p>Every object belongs on a layer that describes what it <em>is</em>, not what it looks like.
     The ribbon commands create and set the correct layer for you. Keep drawings tidy with
     <code>DWGHEALTH</code> and <code>PURGE</code> before issuing.</p>
 
-    <h2>Annotative entities</h2>
+    <h2 id="annotative-entities">Annotative entities</h2>
     <p>Nearly all our text and symbols are annotative: they're defined once and displayed at the
     correct size for whatever annotation scale a viewport uses. This is what lets one model space
     serve sheets at different scales.</p>
     <div class="note"><strong>Note</strong> — set the annotation scale <em>before</em> placing
     annotative objects. Objects only display at the scales attached to them.</div>
 
-    <h2>Plotting</h2>
+    <h2 id="plotting">Plotting</h2>
     <p>Plot styles map colour to line weight. Page setups are configured per sheet size, and the
     plot commands apply the correct device and style table for you.</p>
 
-    <h2>Rotated views</h2>
+    <h2 id="rotated-views">Rotated views</h2>
     <p>Where a plan is rotated in a viewport, annotation should read horizontally on the sheet.
     Commands that place text account for the viewport twist and the current UCS.</p>
 """ + page_nav(prev=("../interface/troubleshooting/", "Troubleshooting"), nxt=("wsy/", "WSY Drafting Standards")))
@@ -239,7 +239,7 @@ W("drafting/standards/wsy/index.html", "drafting", "WSY Drafting Standards",
   """    <h1>WSY Drafting Standards</h1>
     <p class="lede">The specific standard used by the Western Sydney drafting team.</p>
 
-    <h2>Colour and line weight</h2>
+    <h2 id="colour-and-line-weight">Colour and line weight</h2>
     <p>Line weight is driven by colour through the plot style table. Set objects ByLayer and let
     the layer's colour determine the plotted weight.</p>
     <div class="table-wrap"><table>
@@ -255,7 +255,7 @@ W("drafting/standards/wsy/index.html", "drafting", "WSY Drafting Standards",
       </tbody>
     </table></div>
 
-    <h2>Text styles</h2>
+    <h2 id="text-styles">Text styles</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Style</th><th>Used for</th></tr></thead>
       <tbody>
@@ -269,12 +269,12 @@ W("drafting/standards/wsy/index.html", "drafting", "WSY Drafting Standards",
     <p>Text height is always <code>TEXTSIZE ÷ annotation scale</code>, and text is created
     annotative.</p>
 
-    <h2>Layer management</h2>
+    <h2 id="layer-management">Layer management</h2>
     <p>Layers are created on demand by the commands — you shouldn't need to make them by hand.
     Before issuing a drawing, run <code>DWGHEALTH</code> and <code>PURGE</code> to clear unused
     definitions.</p>
 
-    <h2>Page setup</h2>
+    <h2 id="page-setup">Page setup</h2>
     <figure><img src="../../../assets/img/page-setup.png" alt="Page setup"></figure>
     <p>Sheets plot through the BW plot configurations with the BW plot style tables. The
     engineering and WAE plot commands apply these automatically.</p>

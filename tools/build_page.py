@@ -14,6 +14,7 @@ Pages are declared in PAGES below as (path, section, title, description, body).
 
 import io
 import os
+import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -90,10 +91,21 @@ def page_nav(prev=None, nxt=None):
     return "\n".join(out)
 
 
+def slug(text):
+    """Heading id, matching the fallback slugifier in assets/js/site.js.
+
+    Names like "SSMX / SSMY" must not become id="ssmx / ssmy" — spaces are not
+    valid in a fragment identifier, so the TOC link and any deep link silently
+    fail to scroll.
+    """
+    text = re.sub(r"[^\w\s-]", "", text.lower().strip())
+    return re.sub(r"\s+", "-", text)[:60]
+
+
 def cmd_block(name, summary, usage=None, produces=None, notes=None, ribbon=None):
     """One command entry: heading, summary, then optional detail sections."""
     out = [
-        '    <h3 id="{0}"><code class="cmd">{1}</code></h3>'.format(name.lower(), name),
+        '    <h3 id="{0}"><code class="cmd">{1}</code></h3>'.format(slug(name), name),
         "    <p>{0}</p>".format(summary),
     ]
     if ribbon:

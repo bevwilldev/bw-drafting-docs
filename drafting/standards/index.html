@@ -29,33 +29,33 @@
     <p class="lede">Why we draw the way we do — the conventions that make our drawings consistent,
     legible and plottable.</p>
 
-    <h2>Line weights</h2>
+    <h2 id="line-weights">Line weights</h2>
     <p>Line weight carries meaning: boundaries read heavier than annotation, and easements read
     lighter still. We drive weight from colour through the plot style table rather than setting it
     per object, so weight stays consistent no matter who drew the object.</p>
 
-    <h2>Text styles</h2>
+    <h2 id="text-styles">Text styles</h2>
     <p>A small set of named styles covers everything, each sized for a role — large for lot
     numbers, medium for areas, small for dimensions and bearings, thin for labels. Using the named
     styles rather than ad-hoc heights is what keeps a drawing coherent.</p>
 
-    <h2>Layers</h2>
+    <h2 id="layers">Layers</h2>
     <p>Every object belongs on a layer that describes what it <em>is</em>, not what it looks like.
     The ribbon commands create and set the correct layer for you. Keep drawings tidy with
     <code>DWGHEALTH</code> and <code>PURGE</code> before issuing.</p>
 
-    <h2>Annotative entities</h2>
+    <h2 id="annotative-entities">Annotative entities</h2>
     <p>Nearly all our text and symbols are annotative: they're defined once and displayed at the
     correct size for whatever annotation scale a viewport uses. This is what lets one model space
     serve sheets at different scales.</p>
     <div class="note"><strong>Note</strong> — set the annotation scale <em>before</em> placing
     annotative objects. Objects only display at the scales attached to them.</div>
 
-    <h2>Plotting</h2>
+    <h2 id="plotting">Plotting</h2>
     <p>Plot styles map colour to line weight. Page setups are configured per sheet size, and the
     plot commands apply the correct device and style table for you.</p>
 
-    <h2>Rotated views</h2>
+    <h2 id="rotated-views">Rotated views</h2>
     <p>Where a plan is rotated in a viewport, annotation should read horizontally on the sheet.
     Commands that place text account for the viewport twist and the current UCS.</p>
     <nav class="page-nav">

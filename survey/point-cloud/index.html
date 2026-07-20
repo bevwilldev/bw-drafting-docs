@@ -30,11 +30,11 @@
     and the next vertex lands exactly that distance along, snapped to the cloud, numbered and
     coded as you go.</p>
 
-    <h2>Opening it</h2>
+    <h2 id="opening-it">Opening it</h2>
     <p>Run <code class="cmd">PCDIG</code>, or use the button on the <strong>WSY Tools</strong>
     ribbon tab. Each drawing gets its own panel.</p>
 
-    <h2>Setting up</h2>
+    <h2 id="setting-up">Setting up</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
       <tbody>
@@ -49,14 +49,14 @@
       </tbody>
     </table></div>
 
-    <h2>Using a code library</h2>
+    <h2 id="using-a-code-library">Using a code library</h2>
     <p>Browse to a Trimble <code>.fxl</code> feature library with the <strong>…</strong> button.
     Once loaded, the point code becomes a searchable picker, and the layer and colour come from the
     selected feature automatically. The <strong>✕</strong> button unloads it.</p>
     <div class="note"><strong>Note</strong> — the library isn't remembered between sessions; browse
     to it again when you reopen the drawing.</div>
 
-    <h2>Digitising</h2>
+    <h2 id="digitising">Digitising</h2>
     <ul>
       <li><strong>Add Line</strong> — pick a start point, then pick a direction for each following
         point. A guide circle shows the fixed distance. <strong>Undo</strong> steps back a point;
@@ -68,7 +68,7 @@
     <p>While digitising, 2D snaps are turned off and point-cloud snapping is turned on, then
     restored when you finish.</p>
 
-    <h2>Exporting to 12d</h2>
+    <h2 id="exporting-to-12d">Exporting to 12d</h2>
     <p><strong>Export to 12da…</strong> writes every digitised string and point to a 12d Model ASCII
     file. Points sitting on a string vertex aren't duplicated. Colours come from the code library
     where one is loaded.</p>

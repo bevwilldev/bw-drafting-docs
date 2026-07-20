@@ -14,7 +14,7 @@ b = """    <h1>Dimensions &amp; Curve Tables</h1>
     <div class="note"><strong>None of these have a ribbon button</strong> — they're typed at the
     command line. This is the largest and most useful part of the toolset that's easy to miss.</div>
 
-    <h2>The workflow</h2>
+    <h2 id="the-workflow">The workflow</h2>
     <p>These commands are designed to run in sequence:</p>
     <ol>
       <li><code class="cmd">AUTODIM</code> dimensions every boundary segment and drops a numbered
@@ -24,7 +24,7 @@ b = """    <h1>Dimensions &amp; Curve Tables</h1>
       <li><code class="cmd">CURVETABLEUPDATE</code> resyncs the table after further edits.</li>
     </ol>
 
-    <h2>Dimensioning</h2>
+    <h2 id="dimensioning">Dimensioning</h2>
 """
 b += CB("AUTODIM", "Dimensions every segment of the selected lot boundaries in one hit — length inside, bearing outside, and a numbered label on each curve.",
         usage="""<p>Pre-select, or <code>Select polylines/arcs:</code>. Then
@@ -45,7 +45,7 @@ b += "\n" + CB("DIMRENUM", "Renumbers dimension labels in sequence, closing gaps
         notes="Existing relative order is preserved — labels are sorted by their current number, so renumbering closes gaps without shuffling things around.")
 b += """
 
-    <h2>Curve tables</h2>
+    <h2 id="curve-tables">Curve tables</h2>
 """
 b += CB("CURVETABLE", "Builds a schedule of curved dimensions from the numbered curve labels, or exports them to CSV.",
         usage="""<p><strong>In model space:</strong> pre-select, or <code>Select dimension label blocks
@@ -76,7 +76,7 @@ W(D + "dimensions/index.html", "drafting", "Dimensions & Curve Tables",
 b = """    <h1>Topography &amp; Earthworks</h1>
     <p class="lede">Batters, contour labels, surface levels and fill-plan hatching.</p>
 
-    <h2>Commands</h2>
+    <h2 id="commands">Commands</h2>
 """
 b += CB("BATTER", "Fills the space between a top and toe line with batter ticks, each stretched to span the gap.",
         ribbon="Topography → Batter",
@@ -96,7 +96,7 @@ b += "\n" + CB("LEVTOTXT", "Writes surface levels into existing text by picking 
         notes="Uses the drawing's TIN surface if there is one, otherwise builds a mesh from 3D faces. Because it samples a surface, your pick only needs to be right in plan — you don't have to snap to 3D geometry. No ribbon button.")
 b += """
 
-    <h2>Fill plans</h2>
+    <h2 id="fill-plans">Fill plans</h2>
     <p><code class="cmd">FILL1</code> through <code class="cmd">FILL11</code> hatch earthworks depth
     bands. Each sets its layer then runs a solid hatch behind the boundary, repeating until you press
     Esc — so you can hatch many lots in one band without re-running.</p>
@@ -123,7 +123,7 @@ b = """    <h1>Utilities</h1>
     <p class="lede">Offsetting, copying to vertices, pipes, imports and text number tools. Mostly
     command-line only.</p>
 
-    <h2>Drawing tools</h2>
+    <h2 id="drawing-tools">Drawing tools</h2>
 """
 b += CB("MOFFSET", "Offsets a whole selection at once, with a live preview, repeating until you stop.",
         usage="""<p><code>Specify offset distance or [Through/Erase]:</code> — <strong>Erase</strong>
@@ -137,7 +137,7 @@ b += "\n" + CB("PIPEL", "Turns polylines into pipes — a styled centreline with
         notes="The walls stay associated with the centreline: edit the centreline and they follow. They're deliberately locked so they can't be dragged off. The last size is remembered between sessions.")
 b += """
 
-    <h2>Import</h2>
+    <h2 id="import">Import</h2>
 """
 b += CB("LANDXML", "Imports an NSW ePlan / LandXML file — lot boundaries, lot numbers with areas, and monument labels.",
         usage="<p>Opens a file dialog, then <code>Import CgPoints as point entities? [Yes/No] &lt;No&gt;:</code>.</p>",
@@ -145,7 +145,7 @@ b += CB("LANDXML", "Imports an NSW ePlan / LandXML file — lot boundaries, lot 
         notes="Two data-quality guards: a curve whose geometry is inconsistent degrades to a straight chord rather than a wild arc, and arcs sweeping over 180° are redrawn as the minor arc and reported so you can check them against the plan.")
 b += """
 
-    <h2>Text numbers</h2>
+    <h2 id="text-numbers">Text numbers</h2>
 """
 b += CB("TRUNC", "Chops decimals off the number in selected text — cutting, not rounding.",
         usage="<p>Pre-select, then <code>Decimal places &lt;2&gt;:</code>.</p>",
@@ -154,7 +154,7 @@ b += "\n" + CB("RROUND", "Rounds the number in selected text — up, down or to 
         usage="<p><code>Rounding mode [Nearest/Up/Down]:</code> → <code>Decimal places &lt;2&gt;:</code>.</p>")
 b += """
 
-    <h2>Title blocks</h2>
+    <h2 id="title-blocks">Title blocks</h2>
 """
 b += CB("UPDATE", "Fills in title-block attributes across all layouts from a central CSV register.",
         usage="<p>No prompts — it runs from files.</p>",

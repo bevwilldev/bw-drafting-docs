@@ -10,7 +10,7 @@ D = "drafting/commands/"
 b = """    <h1>Survey Commands</h1>
     <p class="lede">Pegs, reference marks, survey marks, ties and traverse lines.</p>
 
-    <h2>Marks and symbols</h2>
+    <h2 id="marks-and-symbols">Marks and symbols</h2>
 """
 b += CB("PEG", "Drops peg symbols, either one at a time or on every vertex of chosen polylines.",
         ribbon="Survey → Peg",
@@ -36,7 +36,7 @@ b += "\n" + CB("SSMX / SSMY", "Place a single 'X' or 'Y' mark symbol.",
         produces="X or Y blocks on <strong>SURV SSM MARK</strong>.")
 b += """
 
-    <h2>Lines</h2>
+    <h2 id="lines">Lines</h2>
 """
 b += CB("TIEL", "Draws a tie line between two points, labelling the distance on one side and the bearing on the other.",
         ribbon="Survey → Ties",
@@ -48,7 +48,7 @@ b += "\n" + CB("TRAVL", "Draws a traverse line — a dashed annotative leader wi
         produces="Layer <strong>SURV TRAVERSE</strong> with the condensed linetype scale.")
 b += """
 
-    <h2>Survey text</h2>
+    <h2 id="survey-text">Survey text</h2>
     <p>These follow the same pattern as the cadastre text commands — pre-select to restyle, or run
     with nothing selected to place new text in a loop.</p>
     <div class="table-wrap"><table>
@@ -62,7 +62,7 @@ b += """
       </tbody>
     </table></div>
 
-    <h2>Occupations</h2>
+    <h2 id="occupations">Occupations</h2>
 """
 b += CB("OSFCE", "Draws an occupation fence line using the fence linetype.",
         ribbon="Occupations → Fence",
@@ -81,7 +81,7 @@ W(D + "survey/index.html", "drafting", "Survey Commands",
 b = """    <h1>Text &amp; Labels</h1>
     <p class="lede">Text styles, leaders, and the tools for placing and tidying labels.</p>
 
-    <h2>Text styles</h2>
+    <h2 id="text-styles">Text styles</h2>
     <p>Pre-select text to restyle it, or run with nothing selected to place new text in a loop.
     All four place on the <strong>TEXT</strong> layer.</p>
     <div class="table-wrap"><table>
@@ -94,7 +94,7 @@ b = """    <h1>Text &amp; Labels</h1>
       </tbody>
     </table></div>
 
-    <h2>Leaders</h2>
+    <h2 id="leaders">Leaders</h2>
 """
 b += CB("STRAIGHTLEADER / CURVELEADER", "Label leaders — straight-segment or spline — whose text matches your current style.",
         ribbon="Text → Straight Leader / Curved Leader",
@@ -102,7 +102,7 @@ b += CB("STRAIGHTLEADER / CURVELEADER", "Label leaders — straight-segment or s
         produces="The leader takes your current text style and height, so it matches surrounding annotation.")
 b += """
 
-    <h2>Placing and aligning</h2>
+    <h2 id="placing-and-aligning">Placing and aligning</h2>
 """
 b += CB("ATC", "Aligns text along a curve with a live drag preview.",
         ribbon="Text → Align Text to Curve",
@@ -125,7 +125,7 @@ b += "\n" + CB("MTC", "Drops each selected label into the middle of its lot.",
         notes="Works on concave lots — the interior point is genuinely inside the polygon, not just the centroid.")
 b += """
 
-    <h2>Tidying text</h2>
+    <h2 id="tidying-text">Tidying text</h2>
 """
 b += CB("TBRK", "Adds or removes brackets around selected text.", ribbon="Text → Toggle Brackets",
         usage="<p>Pre-select, or select text, mtext, leaders or dimensions. Each is toggled individually.</p>",
@@ -148,7 +148,7 @@ b = """    <h1>Annotation &amp; Scales</h1>
     annotative, meaning it displays at the size appropriate to the current annotation scale. Set
     the scale before you place annotation.</div>
 
-    <h2>Commands</h2>
+    <h2 id="commands">Commands</h2>
 """
 b += CB("CSCALE", "Creates annotation scales from a dialog, working out the ratio for you.",
         ribbon="Annotation → Create New Scale",
@@ -178,7 +178,7 @@ W(D + "annotation/index.html", "drafting", "Annotation & Scale Commands",
 b = """    <h1>Sheeting</h1>
     <p class="lede">North points, sheet sets, and building per-lot sales layouts.</p>
 
-    <h2>Commands</h2>
+    <h2 id="commands">Commands</h2>
 """
 b += CB("ADDNORTH", "Drops a north point already rotated to match a viewport's twist.",
         ribbon="Sheeting → North Point",

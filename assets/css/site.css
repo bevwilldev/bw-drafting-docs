@@ -12,6 +12,32 @@
    Hairline borders instead of shadows. Near-flat surfaces. The brand red is an
    accent for state (active nav, current page), not decoration — a red-heavy
    interface reads as "error" and dates quickly. Type does the hierarchy work.
+
+   SEPARATION MODEL — how the page breaks itself up.
+   Three tiers of rule, and nothing else: --line-accent above an <h2> (a new
+   section), --line above an <h3> (a new command entry), --line inside tables
+   and cards. Spacing reinforces it — related things sit at .9em, boundaries get
+   1.5–3em. If you need to separate something new, reach for an existing tier
+   before inventing a fourth. The old failure mode was one uniform 1.15em gap
+   and one hairline weight everywhere, which is why the page read as a slab.
+
+   MOTION — timing lives in --ease / --ease-out / --ease-spring, nowhere else.
+   620ms fade-up on load, staggered 50ms; 200–340ms on hover and state. Reach
+   for a token rather than writing a cubic-bezier inline, or the site drifts
+   back to the mix of ad-hoc 120ms and 180ms values this replaced. No
+   scroll-driven animation (see the note in the Motion section for why).
+   Everything is CSS-only so a JS failure can never leave content invisible.
+
+   The reduced-motion rule below kills EVERY transition with !important. That
+   is correct, but note Windows reports prefers-reduced-motion when animation
+   effects are off OR battery saver is on — so "the animations don't work" is
+   usually that, not a bug.
+
+   CONTRAST — every foreground/background pair meets WCAG AA (4.5:1 for text,
+   3:1 for UI). --brand-ink and --brand-hover INVERT between themes: light mode
+   is white-on-red darkening on hover, dark mode is near-black on the brighter
+   accent, lightening on hover. White on dark-mode #f2555a is 3.4:1 and fails,
+   which is why that inversion exists — don't "simplify" it back to one value.
    ========================================================================= */
 
 /* ---------- Design tokens ------------------------------------------------ */
@@ -19,6 +45,13 @@
   /* Brand — used sparingly and deliberately. */
   --brand: #d81f21;
   --brand-ink: #ffffff;
+  --brand-hover: #be1b1d;
+  /* The logo's script mark. Deliberately the artwork's own red and NOT --brand,
+     and deliberately not overridden per theme — it is brand artwork, not UI
+     state. Verified 4.4:1 on white and 4.5:1 on the dark bg, so it clears the
+     3:1 WCAG 1.4.11 bar for graphical objects in both. The monogram beside it
+     is currentColor and does follow the theme. */
+  --brand-mark: #eb2324;
 
   /* Neutral scale (light). Slightly cool; avoids the muddiness of pure grey. */
   --bg: #ffffff;
@@ -27,11 +60,16 @@
   --ink: #18181b;
   --ink-strong: #09090b;
   --ink-muted: #52525b;
-  --ink-faint: #a1a1aa;
+  /* 4.8:1 on --bg. Was #a1a1aa (2.6:1) — it failed AA, and because it coloured
+     the h4 labels that structure every command entry, the page's own signposts
+     were the faintest thing on it. */
+  --ink-faint: #71717a;
   --line: #e7e7ea;
   --line-strong: #d4d4d8;
+  --line-accent: #c8c8cf;      /* section rules — one step up from --line */
   --code-bg: #f6f6f7;
   --select: rgba(216, 31, 33, .12);
+  --brand-wash: rgba(216, 31, 33, .06);
 
   /* Type */
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -47,6 +85,13 @@
   --measure: 700px;          /* ~72 characters — the readable line length */
   --gap: 56px;
   --radius: 5px;
+
+  /* Motion. One place, so timing stays consistent across components.
+     --ease-spring overshoots slightly; use it for things that should feel
+     mechanical (a chevron snapping round), never for opacity. */
+  --ease:        cubic-bezier(.32, .72, 0, 1);
+  --ease-out:    cubic-bezier(.22, .8, .3, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -57,12 +102,16 @@
     --ink: #ededf0;
     --ink-strong: #ffffff;
     --ink-muted: #9b9ba4;
-    --ink-faint: #6b6b75;
+    --ink-faint: #8a8a96;
     --line: #232327;
     --line-strong: #33333a;
+    --line-accent: #3d3d46;
     --code-bg: #17171a;
     --brand: #f2555a;
+    --brand-ink: #180a0b;
+    --brand-hover: #f7787c;
     --select: rgba(242, 85, 90, .16);
+    --brand-wash: rgba(242, 85, 90, .09);
   }
 }
 :root[data-theme="dark"] {
@@ -72,12 +121,16 @@
   --ink: #ededf0;
   --ink-strong: #ffffff;
   --ink-muted: #9b9ba4;
-  --ink-faint: #6b6b75;
+  --ink-faint: #8a8a96;
   --line: #232327;
   --line-strong: #33333a;
+  --line-accent: #3d3d46;
   --code-bg: #17171a;
   --brand: #f2555a;
+  --brand-ink: #180a0b;
+  --brand-hover: #f7787c;
   --select: rgba(242, 85, 90, .16);
+  --brand-wash: rgba(242, 85, 90, .09);
 }
 
 /* ---------- Reset -------------------------------------------------------- */
@@ -143,8 +196,15 @@ kbd {
   padding: 0 28px; display: flex; align-items: center; gap: 16px;
 }
 
-.logo { display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
-.logo img { height: 26px; width: auto; }
+.logo {
+  display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0;
+  color: var(--ink);          /* the inlined mark's currentColor fills read this */
+}
+/* Beats the .bw-logo rule carried inside the SVG file for standalone/favicon
+   use, so the site's theme toggle wins over the OS preference when inlined. */
+.logo .logo-mark { height: 26px; width: auto; }
+.logo:hover .logo-mark { color: var(--brand); }
+.logo .logo-mark { transition: color .24s var(--ease); }
 .logo-text {
   font-family: var(--font-brand);
   font-weight: 600; font-size: 15px; letter-spacing: -.01em;
@@ -154,22 +214,37 @@ kbd {
 
 .nav { margin-left: auto; display: flex; align-items: center; gap: 2px; }
 .nav a {
+  position: relative;
   text-decoration: none; color: var(--ink-muted);
   padding: 6px 11px; border-radius: var(--radius);
   font-size: 13.5px; font-weight: 450;
-  transition: color .12s;
+  transition: color .2s var(--ease);
+}
+/* Underline grows from the centre instead of the colour just swapping. */
+.nav a::after {
+  content: ""; position: absolute; left: 11px; right: 11px; bottom: 2px;
+  height: 1.5px; border-radius: 1px; background: var(--brand);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform .3s var(--ease-out);
 }
 .nav a:hover { color: var(--ink); }
+.nav a:hover::after { transform: scaleX(1); }
 .nav a[aria-current="page"] { color: var(--ink); font-weight: 550; }
+.nav a[aria-current="page"]::after { transform: scaleX(1); background: var(--ink-faint); }
+.nav a[aria-current="page"]:hover::after { background: var(--brand); }
 
 .icon-btn {
   display: grid; place-items: center;
   width: 30px; height: 30px; padding: 0;
   background: none; border: 0; border-radius: var(--radius);
   color: var(--ink-faint); cursor: pointer;
-  transition: color .12s, background .12s;
+  transition: color .2s var(--ease), background .2s var(--ease),
+              transform .45s var(--ease-spring);
 }
-.icon-btn:hover { color: var(--ink); background: var(--bg-subtle); }
+.icon-btn:hover { color: var(--ink); background: var(--bg-subtle); transform: scale(1.12); }
+.icon-btn:active { transform: scale(.94); transition-duration: .08s; }
+/* The theme toggle swings as it switches — the one place a flourish earns it. */
+#themeToggle:hover { transform: scale(1.12) rotate(18deg); }
 .icon-btn svg { width: 16px; height: 16px; }
 
 #navToggle { display: none; margin-right: -4px; }
@@ -209,11 +284,14 @@ kbd {
   display: block; text-decoration: none;
   padding: 5px 10px;
   font-size: 13.5px; line-height: 1.5; color: var(--ink-muted);
-  border-radius: 4px;
-  transition: color .12s;
+  border-radius: 5px;
+  transition: color .2s var(--ease), background .2s var(--ease),
+              transform .26s var(--ease-out);
 }
-.sidenav a:hover { color: var(--ink); }
-.sidenav a[aria-current="page"] { color: var(--brand); font-weight: 550; }
+.sidenav a:hover {
+  color: var(--ink); background: var(--bg-subtle); transform: translateX(3px);
+}
+.sidenav a[aria-current="page"] { color: var(--brand); font-weight: 600; }
 
 /* Groups */
 .nav-group { margin-bottom: 1px; }
@@ -221,30 +299,75 @@ kbd {
   width: 100%; display: flex; align-items: center; gap: 6px;
   background: none; border: 0; cursor: pointer;
   padding: 6px 10px; border-radius: 4px;
-  font-size: 13.5px; font-weight: 550; color: var(--ink);
+  font-size: 13.5px; font-weight: 600; color: var(--ink);
   text-align: left;
+  transition: color .18s var(--ease), background .18s var(--ease);
 }
-.nav-group > button:hover { color: var(--ink-strong); }
+.nav-group > button:hover { color: var(--ink-strong); background: var(--bg-subtle); }
 .nav-group > button .chev {
   width: 12px; height: 12px; flex-shrink: 0; color: var(--ink-faint);
-  transition: transform .18s ease;
+  transition: transform .34s var(--ease-spring), color .18s var(--ease);
 }
+.nav-group > button:hover .chev { color: var(--brand); }
 .nav-group[data-open="true"] > button .chev { transform: rotate(90deg); }
 .nav-group > button > span { flex: 1; }
+
+/* THE DROPDOWN ANIMATION.
+   This was `display: none` -> `display: block`, which is not an animatable
+   property pair — the panel snapped open and only the chevron moved. The
+   0fr -> 1fr grid-row trick animates to the content's true height without
+   hard-coding a max-height that would break when a section gains pages.
+   Needs the inner wrapper that buildSidenav() adds; it owns the overflow. */
 .nav-group > .nav-items {
-  display: none;
-  margin: 1px 0 8px 0;
-  padding-left: 10px;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin: 1px 0 0 15px;
   border-left: 1px solid var(--line);
-  margin-left: 15px;
+  transition: grid-template-rows .32s var(--ease-out),
+              opacity .24s var(--ease),
+              margin-bottom .32s var(--ease-out),
+              border-color .24s var(--ease);
 }
-.nav-group[data-open="true"] > .nav-items { display: block; }
-.nav-group .nav-items a { padding-left: 12px; }
-/* Current page in a group gets a flush indicator on the group's rule. */
+.nav-group[data-open="true"] > .nav-items {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-bottom: 8px;
+  border-left-color: var(--line-accent);
+}
+.nav-items-inner {
+  overflow: hidden; min-height: 0;
+  /* Collapsed links must leave the tab order, not just get clipped. */
+  visibility: hidden;
+  transition: visibility 0s .32s;
+}
+.nav-group[data-open="true"] > .nav-items > .nav-items-inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+/* Links slide in behind the panel as it opens. */
+.nav-items-inner a {
+  transform: translateX(-6px);
+  transition: transform .3s var(--ease-out), color .16s var(--ease), background .16s var(--ease);
+}
+.nav-group[data-open="true"] .nav-items-inner a { transform: none; }
+.nav-group[data-open="true"] .nav-items-inner a:nth-child(1) { transition-delay: .03s; }
+.nav-group[data-open="true"] .nav-items-inner a:nth-child(2) { transition-delay: .055s; }
+.nav-group[data-open="true"] .nav-items-inner a:nth-child(3) { transition-delay: .08s; }
+.nav-group[data-open="true"] .nav-items-inner a:nth-child(4) { transition-delay: .105s; }
+.nav-group[data-open="true"] .nav-items-inner a:nth-child(n + 5) { transition-delay: .13s; }
+
+/* Links carry the indent themselves. The active marker used to be pulled flush
+   with `margin-left: -11px`, which the new .nav-items-inner overflow clip would
+   now cut off — so the inset is gone and the bar sits at the link's own edge,
+   directly against the group rule. Same look, nothing outside the clip box. */
+.nav-group .nav-items a { padding-left: 22px; }
 .nav-group .nav-items a[aria-current="page"] {
   box-shadow: inset 2px 0 0 var(--brand);
-  margin-left: -11px; padding-left: 23px;
+  background: var(--brand-wash);
+  border-radius: 0 4px 4px 0;
 }
+.nav-group .nav-items a[aria-current="page"]:hover { background: var(--brand-wash); }
 
 /* ---------- Content ------------------------------------------------------ */
 .content {
@@ -254,42 +377,121 @@ kbd {
 }
 .content > * + * { margin-top: 1.15em; }
 
+/* SPACING RHYTHM — the old uniform 1.15em gap between every sibling meant a
+   paragraph following a paragraph sat as far apart as a new section following a
+   table, so nothing grouped. Related things now sit closer; boundaries get air. */
+.content > p + p { margin-top: .9em; }
+.content > .table-wrap, .content > .note, .content > figure, .content > pre { margin-top: 1.6em; }
+.content > .note + .note { margin-top: .8em; }
+
 .content h1 {
-  font-size: 2rem; line-height: 1.15; letter-spacing: -.032em;
-  font-weight: 620; color: var(--ink-strong); margin-bottom: .35em;
+  font-size: 2.3rem; line-height: 1.08; letter-spacing: -.04em;
+  font-weight: 700; color: var(--ink-strong); margin-bottom: .35em;
+  text-wrap: balance;
 }
+
+/* A section rule, not just space. Major sections read as separate slabs, and
+   a short brand tab rides on the rule so the eye catches the break. */
 .content h2 {
-  font-size: 1.28rem; line-height: 1.3; letter-spacing: -.019em;
-  font-weight: 600; color: var(--ink-strong);
-  margin-top: 2.6em;
+  position: relative;
+  font-size: 1.5rem; line-height: 1.25; letter-spacing: -.028em;
+  font-weight: 680; color: var(--ink-strong);
+  margin-top: 3.1em; padding-top: 1.55em;
+  border-top: 1px solid var(--line-accent);
+  text-wrap: balance;
 }
+.content h2::before {
+  content: ""; position: absolute; left: 0; top: -1px;
+  width: 34px; height: 2px; border-radius: 2px;
+  background: var(--brand);
+}
+.content h1 ~ h2:first-of-type { margin-top: 2.4em; }
+/* The stat strip already closes with a rule — don't stack a second one on it,
+   and drop the brand tab with it so it isn't left floating on nothing. */
+.content > .stat-strip + h2 { border-top: 0; padding-top: 0; margin-top: 2.2em; }
+.content > .stat-strip + h2::before { display: none; }
+
+/* Each command entry is one unit: a hairline above it, and the name sitting
+   proud of the body text. On a page of ten commands this is the difference
+   between a wall of text and ten scannable blocks. */
 .content h3 {
-  font-size: 1.02rem; line-height: 1.4; letter-spacing: -.012em;
-  font-weight: 600; margin-top: 2em;
+  font-size: 1.06rem; line-height: 1.4; letter-spacing: -.012em;
+  font-weight: 620; color: var(--ink-strong);
+  margin-top: 2.4em; padding-top: 1.4em;
+  border-top: 1px solid var(--line);
 }
+.content h2 + h3 { margin-top: 1.5em; padding-top: 0; border-top: 0; }
+
+/* The "How to use it" / "What it produces" labels. Previously --ink-faint at
+   2.6:1, i.e. the page's own signposts were its least legible text. Now a
+   readable label with a brand tick to anchor the eye. */
 .content h4 {
-  font-size: .82rem; font-weight: 600; margin-top: 1.6em;
-  color: var(--ink-faint); text-transform: uppercase; letter-spacing: .06em;
+  font-size: .75rem; font-weight: 650; margin-top: 1.7em;
+  color: var(--ink-muted); text-transform: uppercase; letter-spacing: .07em;
+  display: flex; align-items: center; gap: .6em;
 }
+.content h4::before {
+  content: ""; flex: none;
+  width: 3px; height: .95em; border-radius: 2px;
+  background: var(--brand); opacity: .55;
+}
+.content h4 + p, .content h4 + ul, .content h4 + ol { margin-top: .5em; }
+
 .content h2, .content h3, .content h4 { scroll-margin-top: calc(var(--header-h) + 24px); }
 .content h1 + .lede { margin-top: 0; }
+
+/* Landing on a deep link should be obvious — the target glows briefly. */
+.content h2:target, .content h3:target { animation: target-flash 1.8s ease-out; }
+@keyframes target-flash {
+  0%, 30% { background: var(--brand-wash); box-shadow: -10px 0 0 var(--brand-wash), 10px 0 0 var(--brand-wash); }
+  100%    { background: transparent; box-shadow: none; }
+}
 
 .lede {
   font-size: 1.06rem; line-height: 1.6; color: var(--ink-muted);
   letter-spacing: -.008em;
 }
 
+/* Breadcrumb — JS-injected, sits above the h1. */
+.crumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 7px;
+  margin-bottom: 14px;
+  font-size: .78rem; font-weight: 550; letter-spacing: .01em;
+}
+.content .crumbs a {
+  color: var(--ink-faint); text-decoration: none;
+  transition: color .14s ease;
+}
+.content .crumbs a:hover { color: var(--brand); }
+.crumbs .sep { color: var(--line-accent); }
+.crumbs .here { color: var(--ink-muted); }
+.crumbs + h1 { margin-top: 0; }
+
 .content ul, .content ol { padding-left: 1.35em; }
 .content li + li { margin-top: .4em; }
 .content li::marker { color: var(--ink-faint); }
 
-.content a:not(.card):not(.page-nav a) {
-  color: var(--ink); text-decoration: underline;
-  text-decoration-color: var(--line-strong);
+/* Inline links were --ink (identical to body text) underlined in --line-strong
+   (1.5:1) — effectively invisible until hover. Colour now carries it.
+   Prose links only: the component rules below are more specific and win, so
+   navigation chrome inside .content stays quiet. */
+.content a {
+  color: var(--brand); text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--brand) 35%, transparent);
   text-underline-offset: 3px; text-decoration-thickness: 1px;
-  transition: text-decoration-color .12s, color .12s;
+  transition: text-decoration-color .15s ease, color .15s ease;
 }
-.content a:not(.card):hover { color: var(--brand); text-decoration-color: var(--brand); }
+.content a:hover { color: var(--brand); text-decoration-color: var(--brand); }
+
+/* Navigational links are not prose. 72 red rows in the command index would
+   read as noise, not emphasis. */
+.content .card-grid a,
+.content .page-nav a { color: inherit; text-decoration: none; }
+.content table a {
+  color: var(--ink-muted); text-decoration: none;
+  transition: color .15s ease;
+}
+.content table a:hover { color: var(--brand); }
 
 /* Inline code */
 .content code {
@@ -326,31 +528,54 @@ kbd {
 .meta strong { color: var(--ink-muted); font-weight: 550; }
 
 /* Tables */
-.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.table-wrap {
+  overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--bg-raised);
+}
 .content table { border-collapse: collapse; width: 100%; font-size: .875rem; }
 .content th, .content td {
   padding: 9px 14px; text-align: left; border-bottom: 1px solid var(--line);
   vertical-align: top;
 }
 .content th {
-  font-weight: 550; color: var(--ink-muted); white-space: nowrap;
-  font-size: .78rem; text-transform: uppercase; letter-spacing: .05em;
+  font-weight: 600; color: var(--ink-muted); white-space: nowrap;
+  font-size: .74rem; text-transform: uppercase; letter-spacing: .06em;
   background: var(--bg-subtle);
+  border-bottom-color: var(--line-accent);
 }
+.content tbody tr { transition: background .12s; }
+.content tbody tr:hover { background: var(--bg-subtle); }
 .content tbody tr:last-child td { border-bottom: 0; }
 .content table code, .content table .cmd { white-space: nowrap; }
 
-/* Callouts — quiet by default. */
+/* Callouts — quiet, but no longer the same grey as everything around them. */
 .note {
   border: 1px solid var(--line);
-  border-left: 2px solid var(--line-strong);
+  border-left: 3px solid var(--line-accent);
   background: var(--bg-subtle);
-  padding: 12px 16px; border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 13px 17px; border-radius: 0 var(--radius) var(--radius) 0;
   font-size: .91rem; line-height: 1.6; color: var(--ink-muted);
 }
-.note strong:first-child { color: var(--ink); font-weight: 600; }
-.note.warn { border-left-color: var(--brand); }
+.note strong:first-child { color: var(--ink); font-weight: 650; }
+.note.warn {
+  border-left-color: var(--brand);
+  background: var(--brand-wash);
+  border-color: color-mix(in srgb, var(--brand) 18%, var(--line));
+}
 .note.warn strong:first-child { color: var(--brand); }
+
+/* A full-width photograph in the flow of a page — distinct from the screenshot
+   figures below, which are UI captures and want a plain hairline. */
+.photo { margin: 2.6em 0 0; }
+.photo img {
+  width: 100%; height: auto;
+  aspect-ratio: 3 / 2; object-fit: cover;
+  border-radius: 10px; border: 1px solid var(--line);
+}
+.photo figcaption {
+  margin-top: 10px;
+  font-size: .78rem; color: var(--ink-faint); letter-spacing: .01em;
+}
 
 /* Figures */
 figure { margin: 0; }
@@ -367,33 +592,342 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   border: 1px solid var(--line); border-radius: var(--radius);
 }
 
-/* Index lists — replaces the old card grid. Reads as a reference, not a promo. */
-.index-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
-.index-list a {
-  display: grid; grid-template-columns: minmax(150px, 210px) 1fr; gap: 24px;
-  padding: 15px 4px; text-decoration: none !important; color: inherit;
-  border-bottom: 1px solid var(--line);
-  transition: background .12s;
+/* ---------- Hub pages: hero, cards, stats -------------------------------
+   NOTE — a flat .index-list previously replaced an earlier card grid here, on
+   the reasoning that a reference should not read as a promo. That reasoning
+   still holds for the dense command tables, which stay flat. But it left the
+   seven hub pages (home and the section landings) as four lines of text in a
+   700px column, reading as unfinished rather than restrained. Cards are back
+   on HUB PAGES ONLY; .index-list is gone, since nothing used it afterwards. */
+
+.content.is-home { max-width: 980px; }
+
+/* NB: .hero must stay positioned — both the bloom and the photo below are
+   absolutely positioned against it, and without this they escape to the
+   initial containing block. */
+.hero { position: relative; isolation: isolate; padding: 8px 0 10px; }
+
+/* Office facade bleeding into the hero's right edge.
+   CONTRAST RULE — the mask reaches fully transparent 74% of the way across,
+   i.e. before it gets anywhere near the copy, so every word in the hero sits
+   on flat --bg at its full ratio. Nothing here is text-over-photo, which is
+   why it needs no scrim and cannot fail an audit. If the photo is ever
+   widened, that stop has to move with it.
+   Decorative: empty alt + aria-hidden, so screen readers skip it. */
+.hero-bg {
+  position: absolute; z-index: -1; pointer-events: none;
+  /* Bleeds UPWARD only. It was centred at 132% tall, so it overhung the bottom
+     by ~16% — more than the 34px gap down to the stat strip's rule, so the
+     photo crossed the divider. Anchoring the top and ending at 96% keeps the
+     bleed behind the header while leaving the rule clean.
+     Fixed by geometry on purpose: a second mask layer for a bottom fade needs
+     mask-composite: intersect, which falls back to `add` where unsupported —
+     that union would cancel the horizontal fade and push the photo under the
+     copy, breaking the contrast guarantee above. Not worth it. */
+  top: -16%; right: -5%;
+  width: min(56%, 620px); height: 112%;
+  object-fit: cover; object-position: 62% 42%;
+  border-radius: 18px;
+  opacity: .42;
+  -webkit-mask-image: linear-gradient(to left, #000 0%, rgba(0,0,0,.55) 42%, transparent 74%);
+          mask-image: linear-gradient(to left, #000 0%, rgba(0,0,0,.55) 42%, transparent 74%);
+  animation: rise .9s var(--ease-out) .1s backwards;
 }
-.index-list a:hover { background: var(--bg-subtle); }
-.index-list .t { font-weight: 550; font-size: .95rem; color: var(--ink-strong); letter-spacing: -.01em; }
-.index-list a:hover .t { color: var(--brand); }
-.index-list .d { font-size: .89rem; color: var(--ink-muted); line-height: 1.55; }
-@media (max-width: 620px) {
-  .index-list a { grid-template-columns: 1fr; gap: 3px; }
+/* Right-edge fade.
+   Horizontal edges only: the photo fades out on BOTH sides, but keeps a clean
+   hard cut top and bottom. That crisp horizontal line is deliberate — it gives
+   the hero a defined band and breaks the block up, where fading all four sides
+   left it looking like an undifferentiated smudge.
+   Done as an overlay painted in var(--bg) rather than a second mask layer:
+   stacking masks needs mask-composite: intersect, which falls back to a UNION
+   where unsupported and would cancel the left fade, pushing the photo under
+   the copy. Background layers composite by plain alpha painting everywhere,
+   with no such failure mode — and since this only paints MORE --bg over the
+   photo it can only improve text contrast, never reduce it. Theme-aware for
+   free, because var(--bg) is already per-theme.
+   NOTE: with no bottom fade, the geometry above is what keeps the photo off
+   the stat-strip rule. Don't extend its height past 112%. */
+.hero::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: -16%; right: -5%;
+  width: min(56%, 620px); height: 112%;
+  border-radius: 18px;
+  /* Two-stop fallback for anything without color-mix() — a plain linear ramp,
+     just a long one. Overridden immediately below where color-mix is supported. */
+  background-image: linear-gradient(to left, var(--bg) 0%, transparent 34%);
+  /* A two-stop gradient interpolates alpha linearly, and the eye picks out the
+     point where it terminates — that was the faint edge. These intermediate
+     stops approximate an ease-out curve so the ramp lands softly instead of
+     stopping dead, and it runs over 42% rather than 15%. The photo still has
+     roughly 30% of its width at full strength between this fade and the mask
+     that clears the left side at 74%. */
+  background-image: linear-gradient(to left,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--bg) 88%, transparent) 8%,
+    color-mix(in srgb, var(--bg) 66%, transparent) 16%,
+    color-mix(in srgb, var(--bg) 42%, transparent) 24%,
+    color-mix(in srgb, var(--bg) 20%, transparent) 31%,
+    color-mix(in srgb, var(--bg) 6%, transparent) 37%,
+    transparent 42%);
+}
+@media (max-width: 899px) { .hero::after { display: none; } }
+
+/* Dimmer in dark mode — a dusk sky still reads as a bright patch against
+   #0b0b0d and would pull the eye off the title. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-bg { opacity: .3; filter: brightness(.82); }
+}
+:root[data-theme="dark"] .hero-bg { opacity: .3; filter: brightness(.82); }
+
+/* Below this width the copy spans the full column, so there is no longer a
+   safe empty area for the photo to occupy without sitting under text. */
+@media (max-width: 899px) { .hero-bg { display: none; } }
+
+/* A brand-tinted bloom behind the hero. Sits in a pseudo-element behind the
+   text, never under it — all hero copy stays on flat --bg for contrast. */
+.hero::before {
+  content: ""; position: absolute; z-index: -1;
+  left: -18%; right: -30%; top: -46%; height: 300px;
+  background:
+    radial-gradient(46% 62% at 14% 32%, var(--brand-wash), transparent 70%),
+    radial-gradient(38% 54% at 62% 12%, color-mix(in srgb, var(--brand) 5%, transparent), transparent 72%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5.4vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+  font-weight: 700;
+  margin-bottom: .3em;
+  text-wrap: balance;
+}
+.hero .lede { font-size: 1.18rem; max-width: 31em; line-height: 1.55; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+
+/* Small brand eyebrow above the title — orients, and gives the page a top. */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 16px; padding: 5px 12px 5px 10px;
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--line));
+  border-radius: 999px;
+  background: var(--brand-wash);
+  font-size: .74rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--brand);
+}
+.eyebrow::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--brand); flex: none;
+  animation: pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1;  transform: scale(1); }
+  50%      { opacity: .45; transform: scale(.82); }
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px; border-radius: var(--radius);
+  font-size: .89rem; font-weight: 600; letter-spacing: -.01em;
+  text-decoration: none !important; border: 1px solid transparent;
+  transition: background .26s var(--ease), border-color .26s var(--ease),
+              transform .26s var(--ease-out), color .26s var(--ease),
+              box-shadow .26s var(--ease-out);
+}
+.btn svg { width: 15px; height: 15px; flex: none; transition: transform .34s var(--ease-spring); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); transition-duration: .08s; }
+.btn:hover svg { transform: translateX(4px); }
+
+/* --brand-ink and --brand-hover are per-theme, and they invert. Light mode is
+   white-on-red and darkens on hover. Dark mode's accent (#f2555a) is far too
+   bright for white text — 3.4:1, a genuine AA failure — so it takes near-black
+   text and LIGHTENS on hover, since darkening would drop the ratio instead. */
+.btn-primary { background: var(--brand); border-color: var(--brand); }
+.btn-primary:hover {
+  background: var(--brand-hover); border-color: var(--brand-hover);
+  box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--brand) 70%, transparent);
+}
+.btn-quiet { border-color: var(--line-accent); background: var(--bg-raised); }
+.btn-quiet:hover { background: var(--bg-subtle); border-color: var(--ink-faint); }
+
+/* Button text colour must beat `.content a:hover` (0,2,1), which otherwise
+   repaints the label brand-red — red-on-red at 1.2:1, i.e. unreadable. The
+   :hover/:focus-visible selectors here are (0,3,0) and win. */
+.content .btn-primary,
+.content .btn-primary:hover,
+.content .btn-primary:focus-visible { color: var(--brand-ink); }
+.content .btn-quiet,
+.content .btn-quiet:hover,
+.content .btn-quiet:focus-visible { color: var(--ink); }
+
+/* Factual counts, scraped not invented — see tools/gen_index.py. */
+.stat-strip {
+  display: flex; flex-wrap: wrap; gap: 0 34px;
+  padding: 18px 0; margin-top: 34px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat .n {
+  font-size: 2.1rem; font-weight: 700; letter-spacing: -.045em;
+  color: var(--ink-strong); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat:first-child .n { color: var(--brand); }
+.stat .l {
+  font-size: .74rem; text-transform: uppercase; letter-spacing: .07em;
+  font-weight: 600; color: var(--ink-faint);
+}
+
+/* Card grid — hub pages. Inner markup is unchanged from the old flat list
+   (<span class="t"> / <span class="d">), so adopting it is a container-class
+   swap; .ic and .m are optional and only the home page uses them. */
+.card-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+}
+/* quality/ has a single child — a full-bleed lone card looks like a mistake. */
+.card-grid a:only-child { max-width: 440px; }
+.card-grid a {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 18px 19px 19px;
+  border: 1px solid var(--line); border-radius: 11px;
+  background: var(--bg-raised);
+  text-decoration: none !important; color: inherit;
+  transition: border-color .3s var(--ease), transform .3s var(--ease-out),
+              background .3s var(--ease), box-shadow .3s var(--ease-out);
+}
+/* Brand hairline wipes across the top edge on hover. */
+.card-grid a::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: var(--brand);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .38s var(--ease-out);
+}
+/* A soft brand glow blooms from the top-left rather than a flat fill. */
+.card-grid a::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 90% at 0% 0%, var(--brand-wash), transparent 62%);
+  opacity: 0; transition: opacity .34s var(--ease);
+}
+.card-grid a:hover, .card-grid a:focus-visible {
+  border-color: color-mix(in srgb, var(--brand) 30%, var(--line));
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px -20px rgba(0, 0, 0, .55),
+              0 2px 8px -6px rgba(0, 0, 0, .3);
+}
+.card-grid a:hover::after, .card-grid a:focus-visible::after { transform: scaleX(1); }
+.card-grid a:hover::before, .card-grid a:focus-visible::before { opacity: 1; }
+.card-grid a:active { transform: translateY(-1px); transition-duration: .08s; }
+
+.card-grid .ic {
+  width: 32px; height: 32px; margin-bottom: 7px; border-radius: 8px;
+  display: grid; place-items: center;
+  background: var(--brand-wash); color: var(--brand);
+  transition: background .3s var(--ease), transform .42s var(--ease-spring);
+}
+.card-grid .ic svg { width: 16px; height: 16px; }
+.card-grid a:hover .ic {
+  background: color-mix(in srgb, var(--brand) 18%, transparent);
+  transform: scale(1.12) rotate(-4deg);
+}
+
+.card-grid .t {
+  font-weight: 640; font-size: .97rem; color: var(--ink-strong);
+  letter-spacing: -.014em;
+  transition: color .24s var(--ease), transform .3s var(--ease-out);
+}
+.card-grid a:hover .t { color: var(--brand); transform: translateX(3px); }
+.card-grid .d, .card-grid .m { transition: transform .3s var(--ease-out); }
+.card-grid a:hover .d { transform: translateX(3px); }
+.card-grid .d { font-size: .875rem; color: var(--ink-muted); line-height: 1.55; }
+.card-grid .m {
+  margin-top: auto; padding-top: 11px;
+  font-size: .73rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-faint);
 }
 
 /* Prev / next */
-.page-nav { display: flex; gap: 10px; margin-top: 4em; padding-top: 24px; border-top: 1px solid var(--line); }
+.page-nav { display: flex; gap: 10px; margin-top: 4em; padding-top: 24px; border-top: 1px solid var(--line-accent); }
 .page-nav a {
   flex: 1; text-decoration: none !important; color: inherit;
   border: 1px solid var(--line); border-radius: var(--radius); padding: 11px 15px;
-  transition: border-color .15s;
+  background: var(--bg-raised);
+  transition: border-color .28s var(--ease), transform .28s var(--ease-out),
+              background .28s var(--ease), box-shadow .28s var(--ease-out);
 }
-.page-nav a:hover { border-color: var(--line-strong); }
-.page-nav .dir { font-size: .74rem; color: var(--ink-faint); letter-spacing: .04em; text-transform: uppercase; }
-.page-nav .ttl { font-weight: 550; font-size: .9rem; margin-top: 2px; }
+.page-nav a:hover {
+  border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
+  background: var(--bg-subtle);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -20px rgba(0, 0, 0, .55);
+}
+.page-nav a:active { transform: translateY(-1px); transition-duration: .08s; }
+.page-nav .dir { font-size: .72rem; color: var(--ink-faint); letter-spacing: .05em; text-transform: uppercase; }
+.page-nav .ttl {
+  font-weight: 600; font-size: .9rem; margin-top: 2px;
+  transition: color .16s ease;
+}
+.page-nav a:hover .ttl { color: var(--brand); }
 .page-nav .next { text-align: right; }
+
+/* ---------- Motion ------------------------------------------------------
+   Deliberately small: content settles once on load, and sections ease in as
+   they arrive. Everything here is CSS-only, so a JS failure never leaves
+   content stuck invisible, and the global prefers-reduced-motion rule above
+   collapses every duration to ~0. */
+
+.content > * {
+  animation: rise .62s var(--ease-out) backwards;
+}
+/* Stagger the first screenful so the page assembles rather than pops. */
+.content > *:nth-child(1) { animation-delay: .02s; }
+.content > *:nth-child(2) { animation-delay: .07s; }
+.content > *:nth-child(3) { animation-delay: .12s; }
+.content > *:nth-child(4) { animation-delay: .17s; }
+.content > *:nth-child(5) { animation-delay: .22s; }
+.content > *:nth-child(n + 6) { animation-delay: .26s; }
+
+/* Cards arrive individually, left to right, after their grid does. */
+.card-grid a { animation: rise .6s var(--ease-out) backwards; }
+.card-grid a:nth-child(1) { animation-delay: .20s; }
+.card-grid a:nth-child(2) { animation-delay: .26s; }
+.card-grid a:nth-child(3) { animation-delay: .32s; }
+.card-grid a:nth-child(4) { animation-delay: .38s; }
+.card-grid a:nth-child(n + 5) { animation-delay: .44s; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* NOTE — deliberately no scroll-driven reveal here. `animation-timeline: view()`
+   resolves to the FIRST keyframe when its timeline is inactive, and a page too
+   short to scroll has exactly that. With a fade-up keyframe that means content
+   stuck at opacity 0. Not worth the risk for a decorative effect. */
+
+/* Header lifts off the page once you scroll — a cue that content is above. */
+.header { transition: border-color .28s var(--ease), box-shadow .28s var(--ease); }
+.header.is-scrolled {
+  border-bottom-color: var(--line-accent);
+  box-shadow: 0 4px 20px -10px rgba(0, 0, 0, .3);
+}
+
+/* Reading progress. Rides the header's bottom edge; on an 800-word command
+   page it answers "how much of this is left" at a glance. Width is driven by
+   a CSS variable set from JS, so there is no per-frame style recalculation. */
+.progress {
+  position: absolute; left: 0; bottom: -1px; height: 2px;
+  width: 100%; transform: scaleX(var(--progress, 0)); transform-origin: left;
+  background: linear-gradient(90deg,
+              color-mix(in srgb, var(--brand) 55%, transparent), var(--brand));
+  transition: transform .1s linear, opacity .3s var(--ease);
+  opacity: 0; pointer-events: none;
+}
+.header.is-scrolled .progress { opacity: 1; }
 
 /* ---------- On-page TOC -------------------------------------------------- */
 .toc {
@@ -419,12 +953,15 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .toc li a {
   display: block; text-decoration: none;
   padding: 4px 12px; margin-left: -1px;
-  border-left: 1px solid transparent;
+  border-left: 2px solid transparent;
   font-size: 12.5px; line-height: 1.5; color: var(--ink-faint);
-  transition: color .12s, border-color .12s;
+  transition: color .16s ease, border-color .16s ease, transform .16s ease;
 }
-.toc li a:hover { color: var(--ink); }
-.toc li a.active { color: var(--brand); border-left-color: var(--brand); }
+.toc li a:hover { color: var(--ink); border-left-color: var(--line-accent); }
+.toc li a.active {
+  color: var(--brand); border-left-color: var(--brand);
+  transform: translateX(2px);
+}
 .toc li.lvl-3 a { padding-left: 24px; }
 .toc.is-empty { display: none; }
 
@@ -439,6 +976,34 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .footer a:hover { color: var(--ink); }
 .footer .copyright { margin-left: auto; }
 
+/* ---------- Command filter ----------------------------------------------- */
+/* Progressive enhancement: the input is hidden until site.js wires it up, so
+   with JS off you get the full table rather than a control that does nothing. */
+.cmd-filter { display: none; margin: 18px 0 14px; }
+.cmd-filter.is-ready { display: block; }
+
+.cmd-filter input {
+  width: 100%; max-width: 420px; padding: 9px 12px;
+  font: inherit; font-size: .92rem; color: var(--ink);
+  background: var(--bg-raised);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+}
+.cmd-filter input::placeholder { color: var(--ink-muted); }
+.cmd-filter input:focus-visible {
+  outline: 2px solid var(--brand); outline-offset: 1px; border-color: var(--brand);
+}
+.cmd-filter-count {
+  margin: 7px 0 0; font-size: .8rem; color: var(--ink-muted); min-height: 1.2em;
+}
+
+/* Match highlight inside filtered rows. */
+.cmd-filter-hit { background: var(--select); border-radius: 2px; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
 /* ---------- Lightbox ----------------------------------------------------- */
 .lightbox {
   position: fixed; inset: 0; z-index: 200;
@@ -446,8 +1011,16 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   display: none; place-items: center; padding: 48px;
   backdrop-filter: blur(6px);
 }
-.lightbox.is-open { display: grid; }
-.lightbox img { max-width: 100%; max-height: 86vh; border-radius: var(--radius); }
+.lightbox.is-open { display: grid; animation: fade .18s ease; }
+.lightbox img {
+  max-width: 100%; max-height: 86vh; border-radius: var(--radius);
+  animation: zoom-in .22s cubic-bezier(.22, .8, .3, 1);
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
 .lightbox-close {
   position: absolute; top: 18px; right: 22px;
   background: none; border: 0; color: #fff; font-size: 30px; line-height: 1;
@@ -471,9 +1044,13 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
     background: var(--bg); border-right: 1px solid var(--line);
     padding: 22px 14px 44px;
     transform: translateX(-100%);
-    transition: transform .2s cubic-bezier(.4, 0, .2, 1);
+    /* Closed drawer must leave the tab order, not just sit off-screen —
+       translate alone keeps all 16 links keyboard-focusable behind the page. */
+    visibility: hidden;
+    box-shadow: 0 0 40px -12px rgba(0, 0, 0, .45);
+    transition: transform .34s var(--ease), visibility 0s .34s;
   }
-  .sidenav.is-open { transform: none; }
+  .sidenav.is-open { transform: none; visibility: visible; transition-delay: 0s; }
   .content { padding-top: 30px; max-width: none; }
   .nav-backdrop {
     position: fixed; inset: var(--header-h) 0 0; z-index: 80;

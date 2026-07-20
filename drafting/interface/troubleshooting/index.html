@@ -29,7 +29,7 @@
     <p class="lede">Most problems are a ribbon that didn't load or a component that wasn't
     installed. Work through these in order.</p>
 
-    <h2>A ribbon tab is missing</h2>
+    <h2 id="a-ribbon-tab-is-missing">A ribbon tab is missing</h2>
     <p>First, restart BricsCAD — the ribbons load at startup and a tab can be missed if BricsCAD
     was busy. If it's still missing, reset the customisation:</p>
     <ol>
@@ -40,7 +40,7 @@
     <figure><img src="../../../assets/img/customize.png" alt="Customize dialog"></figure>
     <figure><img src="../../../assets/img/manage-customizations.png" alt="Manage customizations"></figure>
 
-    <h2>A command says "unknown command"</h2>
+    <h2 id="a-command-says-unknown-command">A command says "unknown command"</h2>
     <p>That component probably isn't installed. Commands are grouped by plugin, and each is
     optional at install time:</p>
     <div class="table-wrap"><table>
@@ -55,20 +55,20 @@
     </table></div>
     <p>Re-run the installer and tick the missing component.</p>
 
-    <h2>Lines look wrong — fences and easements draw solid</h2>
+    <h2 id="lines-look-wrong-fences-and-easements-draw-solid">Lines look wrong — fences and easements draw solid</h2>
     <p>The linetype file didn't resolve. You'll see a message on the command line saying so. Re-run
     the installer to restore the Support files.</p>
 
-    <h2>Plot commands don't produce a PDF</h2>
+    <h2 id="plot-commands-dont-produce-a-pdf">Plot commands don't produce a PDF</h2>
     <p>The plot device isn't installed. The engineering and WAE plot commands need the BW plot
     configurations, which ship with those components — re-run the installer.</p>
 
-    <h2>Text is the wrong size</h2>
+    <h2 id="text-is-the-wrong-size">Text is the wrong size</h2>
     <p>Text height is the drawing's <code>TEXTSIZE</code> divided by the current annotation scale.
     If text comes out too large or small, check the annotation scale is set correctly before
     placing it.</p>
 
-    <h2>Still stuck</h2>
+    <h2 id="still-stuck">Still stuck</h2>
     <p>Contact the CAD team lead with the drawing, the command you ran and the exact message from
     the command line.</p>
     <nav class="page-nav">

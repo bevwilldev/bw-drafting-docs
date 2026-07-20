@@ -32,7 +32,7 @@
     <div class="note"><strong>None of these have a ribbon button</strong> — they're typed at the
     command line. This is the largest and most useful part of the toolset that's easy to miss.</div>
 
-    <h2>The workflow</h2>
+    <h2 id="the-workflow">The workflow</h2>
     <p>These commands are designed to run in sequence:</p>
     <ol>
       <li><code class="cmd">AUTODIM</code> dimensions every boundary segment and drops a numbered
@@ -42,7 +42,7 @@
       <li><code class="cmd">CURVETABLEUPDATE</code> resyncs the table after further edits.</li>
     </ol>
 
-    <h2>Dimensioning</h2>
+    <h2 id="dimensioning">Dimensioning</h2>
     <h3 id="autodim"><code class="cmd">AUTODIM</code></h3>
     <p>Dimensions every segment of the selected lot boundaries in one hit — length inside, bearing outside, and a numbered label on each curve.</p>
     <h4>How to use it</h4>
@@ -69,7 +69,7 @@
     <p>Pre-select, or <code>Select dimension labels to renumber:</code> → <code>Starting number &lt;1&gt;:</code>.</p>
     <div class="note"><strong>Note</strong> — Existing relative order is preserved — labels are sorted by their current number, so renumbering closes gaps without shuffling things around.</div>
 
-    <h2>Curve tables</h2>
+    <h2 id="curve-tables">Curve tables</h2>
     <h3 id="curvetable"><code class="cmd">CURVETABLE</code></h3>
     <p>Builds a schedule of curved dimensions from the numbered curve labels, or exports them to CSV.</p>
     <h4>How to use it</h4>
