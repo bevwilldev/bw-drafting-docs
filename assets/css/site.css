@@ -252,12 +252,10 @@ kbd {
   background: none; border: 0; border-radius: var(--radius);
   color: var(--ink-faint); cursor: pointer;
   transition: color .2s var(--ease), background .2s var(--ease),
-              transform .45s var(--ease-spring);
+              transform .2s var(--ease-out);
 }
-.icon-btn:hover { color: var(--ink); background: var(--bg-subtle); transform: scale(1.12); }
-.icon-btn:active { transform: scale(.94); transition-duration: .08s; }
-/* The theme toggle swings as it switches — the one place a flourish earns it. */
-#themeToggle:hover { transform: scale(1.12) rotate(18deg); }
+.icon-btn:hover { color: var(--ink); background: var(--bg-subtle); }
+.icon-btn:active { transform: scale(.96); transition-duration: .08s; }
 .icon-btn svg { width: 16px; height: 16px; }
 
 #navToggle { display: none; margin-right: -4px; }
@@ -319,7 +317,7 @@ kbd {
 .nav-group > button:hover { color: var(--ink-strong); background: var(--bg-subtle); }
 .nav-group > button .chev {
   width: 12px; height: 12px; flex-shrink: 0; color: var(--ink-faint);
-  transition: transform .34s var(--ease-spring), color .18s var(--ease);
+  transition: transform .2s var(--ease-out), color .18s var(--ease);
 }
 .nav-group > button:hover .chev { color: var(--brand); }
 .nav-group[data-open="true"] > button .chev { transform: rotate(90deg); }
@@ -748,10 +746,10 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
               transform .26s var(--ease-out), color .26s var(--ease),
               box-shadow .26s var(--ease-out);
 }
-.btn svg { width: 15px; height: 15px; flex: none; transition: transform .34s var(--ease-spring); }
-.btn:hover { transform: translateY(-2px); }
+.btn svg { width: 15px; height: 15px; flex: none; transition: transform .22s var(--ease-out); }
+.btn:hover { transform: translateY(-1px); }
 .btn:active { transform: translateY(0); transition-duration: .08s; }
-.btn:hover svg { transform: translateX(4px); }
+.btn:hover svg { transform: translateX(2px); }
 
 /* --brand-ink and --brand-hover are per-theme, and they invert. Light mode is
    white-on-red and darkens on hover. Dark mode's accent (#f2555a) is far too
@@ -828,9 +826,8 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 }
 .card-grid a:hover, .card-grid a:focus-visible {
   border-color: color-mix(in srgb, var(--brand) 30%, var(--line));
-  transform: translateY(-4px);
-  box-shadow: 0 14px 34px -20px rgba(0, 0, 0, .55),
-              0 2px 8px -6px rgba(0, 0, 0, .3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -16px rgba(0, 0, 0, .45);
 }
 .card-grid a:hover::after, .card-grid a:focus-visible::after { transform: scaleX(1); }
 .card-grid a:hover::before, .card-grid a:focus-visible::before { opacity: 1; }
@@ -840,12 +837,12 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   width: 32px; height: 32px; margin-bottom: 7px; border-radius: 8px;
   display: grid; place-items: center;
   background: var(--brand-wash); color: var(--brand);
-  transition: background .3s var(--ease), transform .42s var(--ease-spring);
+  transition: background .28s var(--ease), transform .28s var(--ease-out);
 }
 .card-grid .ic svg { width: 16px; height: 16px; }
 .card-grid a:hover .ic {
   background: color-mix(in srgb, var(--brand) 18%, transparent);
-  transform: scale(1.12) rotate(-4deg);
+  transform: scale(1.04);
 }
 
 .card-grid .t {
@@ -853,9 +850,7 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   letter-spacing: -.014em;
   transition: color .24s var(--ease), transform .3s var(--ease-out);
 }
-.card-grid a:hover .t { color: var(--brand); transform: translateX(3px); }
-.card-grid .d, .card-grid .m { transition: transform .3s var(--ease-out); }
-.card-grid a:hover .d { transform: translateX(3px); }
+.card-grid a:hover .t { color: var(--brand); }
 .card-grid .d { font-size: .875rem; color: var(--ink-muted); line-height: 1.55; }
 .card-grid .m {
   margin-top: auto; padding-top: 11px;
@@ -875,8 +870,8 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .page-nav a:hover {
   border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
   background: var(--bg-subtle);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px -20px rgba(0, 0, 0, .55);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px -12px rgba(0, 0, 0, .45);
 }
 .page-nav a:active { transform: translateY(-1px); transition-duration: .08s; }
 .page-nav .dir { font-size: .72rem; color: var(--ink-faint); letter-spacing: .05em; text-transform: uppercase; }
