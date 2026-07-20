@@ -20,6 +20,12 @@
   /* ---------- Site structure ------------------------------------------- */
 
   var SECTIONS = {
+    'getting-started': {
+      title: 'Getting Started',
+      items: [
+        { href: '/getting-started/', text: 'Installation' }
+      ]
+    },
     drafting: {
       title: 'Drafting',
       items: [
@@ -27,7 +33,6 @@
         {
           group: 'Custom CAD Interface', items: [
             { href: '/drafting/interface/', text: 'Introduction' },
-            { href: '/drafting/interface/installation/', text: 'Installation' },
             { href: '/drafting/interface/using/', text: 'Using the Ribbon' },
             { href: '/drafting/interface/troubleshooting/', text: 'Troubleshooting' }
           ]
@@ -113,6 +118,7 @@
   };
 
   var TOP_NAV = [
+    { href: '/getting-started/', text: 'Getting Started' },
     { href: '/onboarding/', text: 'Onboarding' },
     { href: '/drafting/', text: 'Drafting' },
     { href: '/survey/', text: 'Survey' },
