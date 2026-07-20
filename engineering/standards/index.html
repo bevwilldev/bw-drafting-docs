@@ -33,23 +33,32 @@
     <p>Creates the full BW style set without disturbing what's currently active.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Standards → Import Styles</p>
     <h4>How to use it</h4>
-    <p>No prompts.</p>
+    <p>No prompts — run it and the styles are added.</p>
     <h4>What it produces</h4>
-    <p>The BW_AN text style family and the BWAN_DIM25 / BWAN_DIM35 dimension styles. Your active text and dimension styles are restored afterwards.</p>
+    <p>The BW_AN text style family (BW_AN, BW_AN_Italics, BW_BK_Lotno, BW_AU) and the
+    BWAN_DIM25 / BWAN_DIM35 dimension styles. Your active text and dimension styles are left
+    unchanged.</p>
+
     <h3 id="cscale"><code class="cmd">CSCALE</code></h3>
     <p>Creates annotation scales, working out the ratio for you.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Standards → Add New Scale</p>
     <h4>How to use it</h4>
-    <p>Opens a dialog — enter the drawing units and a name. Sequence tokens like <code>{1-5}</code> create a run of scales at once.</p>
+    <p>Opens a dialog — enter the drawing units (paper units are fixed at 1) and a name, which
+    auto-fills to the ratio. Use commas for several names at once, or a sequence token like
+    <code>{1-5}</code> from the ▾ menu to create a run of scales in one go.</p>
     <div class="note"><strong>Note</strong> — This is the same tool as on the WSY Drafting ribbon. The older BWCSCALE has been retired — use CSCALE.</div>
+
     <h3 id="bwscales"><code class="cmd">BWSCALES</code></h3>
-    <p>Rebuilds the drawing's annotation scale list to the engineering standard set.</p>
+    <p>Resets the drawing's annotation scale list to the engineering standard set.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Standards → Reset Scale List</p>
     <h4>How to use it</h4>
-    <p>No prompts and no confirmation — it runs immediately and reports how many scales were removed and added.</p>
+    <p>No prompts and no confirmation — it runs immediately and reports how many scales were
+    removed and added.</p>
     <h4>What it produces</h4>
-    <p>The standard engineering scale list, from 1:10000 down to 1:10 plus the named layout scales.</p>
-    <div class="note warn"><strong>Watch out</strong> — This <strong>wipes the existing scale list</strong> before rebuilding it. Scales still in use by annotative objects survive, but anything else you'd added is removed. It's deliberately a manual command — it never runs on its own.</div>    <nav class="page-nav">
+    <p>The standard engineering scale list — 1:10000 down to 1:10, plus the named layout scales
+    (Layout Plan, Line Marking, Parking Plan, the Turning and Sewer/Water presets, and the MD
+    scales).</p>
+    <div class="note warn"><strong>Watch out</strong> — This <strong>wipes the existing scale list</strong> before rebuilding it. The active scale and any scales still in use by annotative objects survive, but anything else you'd added is removed. It's deliberately a manual command — it never runs on its own.</div>    <nav class="page-nav">
       <a href="../dimensions/"><div class="dir">Previous</div><div class="ttl">Dimensions</div></a>
       <a class="next" href="../plotting/"><div class="dir">Next</div><div class="ttl">Plotting</div></a>
     </nav>

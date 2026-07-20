@@ -34,8 +34,7 @@
     <p class="meta"><strong>Ribbon</strong> &middot; Topography → Batter</p>
     <h4>How to use it</h4>
     <p><code>Select top batter curve:</code> → <code>Select toe (bottom) batter curve:</code>
-        → then drag: the distance from the top line divided by the local gap sets the tick spacing,
-        and the whole run previews live. Click to confirm, Esc to cancel.</p>
+        → then drag to set the tick spacing, with the whole run previewing live. Click to confirm, Esc to cancel.</p>
     <h4>What it produces</h4>
     <p>Batter blocks on the <strong>BATTER</strong> layer, each rotated toward the toe and scaled to span the local gap.</p>
     <div class="note"><strong>Note</strong> — Spacing is adaptive — ticks crowd where the batter narrows. Works on 3D top and toe strings, though the output lands flat.</div>
@@ -45,15 +44,15 @@
     <h4>How to use it</h4>
     <p>Loops: <code>Select contour &lt;exit&gt;:</code> then drag the label along it. Enter or Esc exits.</p>
     <h4>What it produces</h4>
-    <p>Masked annotative text on your current layer and style, moved above the contour so the mask reads.</p>
-    <div class="note"><strong>Note</strong> — The elevation comes from the contour's start point. Offset and rotation are forced to zero during the drag so the label sits on the line, then your ATC preferences are restored.</div>
+    <p>Masked annotative text on your current layer and style, sitting on the contour so the mask reads.</p>
+    <div class="note"><strong>Note</strong> — The elevation comes from the contour's start point.</div>
     <h3 id="levtotxt"><code class="cmd">LEVTOTXT</code></h3>
     <p>Writes surface levels into existing text by picking points.</p>
     <h4>How to use it</h4>
     <p>Picks an elevation source first, then loops: <code>Select text:</code> → <code>Select point for level:</code>.</p>
     <h4>What it produces</h4>
     <p>Overwrites the picked text with the elevation to one decimal place.</p>
-    <div class="note"><strong>Note</strong> — Uses the drawing's TIN surface if there is one, otherwise builds a mesh from 3D faces. Because it samples a surface, your pick only needs to be right in plan — you don't have to snap to 3D geometry. No ribbon button.</div>
+    <div class="note"><strong>Note</strong> — Samples from the drawing's TIN surface, or 3D faces if there's no TIN — so your pick only needs to be right in plan, not snapped to 3D geometry. No ribbon button.</div>
 
     <h2 id="fill-plans">Fill plans</h2>
     <p><code class="cmd">FILL1</code> through <code class="cmd">FILL11</code> hatch earthworks depth

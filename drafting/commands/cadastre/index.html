@@ -33,26 +33,28 @@
 
     <h2 id="boundaries">Boundaries</h2>
     <h3 id="subbdy"><code class="cmd">SUBBDY</code></h3>
-    <p>Puts lot boundary lines on the subject-boundary layer, or traces a new boundary.</p>
+    <p>Moves lot boundary lines onto the subject-boundary layer, or traces a new boundary.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Subject Boundary</p>
     <h4>How to use it</h4>
-    <p>Select the lines first, then run the command — they're moved immediately with no prompts. With nothing selected it hands off to the native <code>-BOUNDARY</code> command so you can pick internal points.</p>
+    <p>Select the boundary lines first, then run the command — they move straight to the layer with no further prompts. Run it with nothing selected and it hands off to the native <code>-BOUNDARY</code> command so you can pick internal points.</p>
     <h4>What it produces</h4>
-    <p>Layer <strong>SUB BDY</strong> (cyan). Lines are replaced by two-vertex polylines; existing polylines are kept. Colour, linetype and lineweight are forced ByLayer.</p>
-    <div class="note"><strong>Note</strong> — Only lines and polylines are touched — anything else in the selection is skipped. Because lines are recreated rather than modified, their object handles change.</div>
+    <p>Layer <strong>SUB BDY</strong> (cyan). Selected lines are replaced by two-vertex polylines; existing polylines are kept. Colour, linetype and lineweight are set ByLayer.</p>
+    <div class="note"><strong>Note</strong> — Only lines and polylines are affected; anything else in the selection is left alone.</div>
     <h3 id="adjbdy"><code class="cmd">ADJBDY</code></h3>
     <p>The same thing for adjoining lots.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Adjoining Boundary</p>
+    <h4>How to use it</h4>
+    <p>Works exactly like <code>SUBBDY</code> — pre-select the lines to move them, or run with nothing selected to trace with <code>-BOUNDARY</code>.</p>
     <h4>What it produces</h4>
     <p>Layer <strong>ADJ BDY</strong> (white).</p>
     <h3 id="easea"><code class="cmd">EASEA</code></h3>
     <p>Draws or converts easement outlines on the dashed easement layer.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Area</p>
     <h4>How to use it</h4>
-    <p>Pre-select to convert, or run with nothing selected to trace with <code>-BOUNDARY</code>.</p>
+    <p>Pre-select easement outlines to convert them, or run with nothing selected to trace a new outline with <code>-BOUNDARY</code>.</p>
     <h4>What it produces</h4>
-    <p>Layer <strong>EASEMENT</strong> (green, DASHED). Linetype scale is set to 0.25 so the dashes read at plan scale.</p>
-    <div class="note"><strong>Note</strong> — Needs the DASHED linetype to be available in the drawing.</div>
+    <p>Layer <strong>EASEMENT</strong> (green, DASHED), drawn at a 0.25 linetype scale so the dashes read at plan scale.</p>
+    <div class="note"><strong>Note</strong> — Needs the DASHED linetype loaded in the drawing.</div>
     <h3 id="easel"><code class="cmd">EASEL</code></h3>
     <p>Draws easement boundary lines by hand.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Lines</p>
@@ -64,7 +66,7 @@
     <p>Places an easement dimension arrow between two snapped points.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Arrow</p>
     <h4>How to use it</h4>
-    <p>Runs <code>DIMALIGNED</code> with intersection and insertion snaps forced on for the duration.</p>
+    <p>Runs <code>DIMALIGNED</code> — pick the two points to dimension between. Intersection and insertion snaps are forced on while it runs.</p>
     <h4>What it produces</h4>
     <p>Layer <strong>EASEMENT LABEL</strong> using the <strong>EASEMENT LABEL</strong> dimension style.</p>
     <div class="note"><strong>Note</strong> — Your running object snaps are overridden while the command runs, then restored.</div>
@@ -72,9 +74,9 @@
     <p>Easement label leader — a spline leader with a dot arrowhead.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Easement Marker</p>
     <h4>How to use it</h4>
-    <p>Runs the native <code>MLEADER</code> command.</p>
+    <p>Runs the native <code>MLEADER</code> command — place the leader as normal.</p>
     <h4>What it produces</h4>
-    <p>Layer <strong>EASEMENT LABEL</strong>, text style THIN LABEL. The leader takes your current text style and height.</p>
+    <p>Layer <strong>EASEMENT LABEL</strong>, text style THIN LABEL.</p>
 
     <h2 id="lot-text">Lot text</h2>
     <p>
@@ -126,7 +128,6 @@
     <p>You then drag-align each piece onto a curve in turn: degrees, then minutes, then seconds.</p>
     <h4>What it produces</h4>
     <p>Three MText labels, style SMALL LABEL on layer <strong>SUB BEARINGS</strong>.</p>
-    <div class="note"><strong>Note</strong> — The whole run is a single undo step — one <kbd>U</kbd> reverts all three labels and the erase.</div>
     <h3 id="csubb"><code class="cmd">CSUBB</code></h3>
     <p>The reverse of STRETCHB — merges three split bearing texts back into one label on a curve.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Condense Bearing</p>
@@ -134,15 +135,15 @@
     <p>Prompts for the degrees, minutes and seconds texts in turn. All three are erased and their contents joined, then you drag-align the combined label onto a curve.</p>
     <h4>What it produces</h4>
     <p>One MText, style SMALL LABEL on <strong>SUB BEARINGS</strong>.</p>
-    <div class="note warn"><strong>Watch out</strong> — If you cancel the drag, the three source texts have already been erased — press <kbd>U</kbd> once to get them back.</div>
+    <div class="note warn"><strong>Watch out</strong> — The three source texts are erased before you place the new label. If you cancel the placement, press <kbd>U</kbd> once to get them back.</div>
     <h3 id="roadlm"><code class="cmd">ROADLM</code></h3>
     <p>Measures a road width between two points and writes <code>(X.XX WIDE)</code> at the midpoint.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Cadastre → Road Label (Measured)</p>
     <h4>How to use it</h4>
     <p><code>First point:</code> → <code>Second point:</code>, with perpendicular and nearest snaps forced on.</p>
     <h4>What it produces</h4>
-    <p>MText on layer <strong>ROAD LABEL</strong>, rotated perpendicular to the measured line and flipped if needed to stay readable.</p>
-    <div class="note"><strong>Note</strong> — Single shot — it doesn't loop. The text runs across the road, not along it.</div>
+    <p>MText on layer <strong>ROAD LABEL</strong>, rotated to run across the road and flipped if needed to stay readable.</p>
+    <div class="note"><strong>Note</strong> — Single shot — it doesn't loop.</div>
     <nav class="page-nav">
       <a href="../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
       <a class="next" href="../survey/"><div class="dir">Next</div><div class="ttl">Survey</div></a>

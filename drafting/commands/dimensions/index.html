@@ -50,24 +50,20 @@
         <code>Enter precision &lt;3&gt;:</code> → <code>Include bearings? [Yes/No] &lt;Yes&gt;:</code>
         → <code>Starting curve number:</code> (defaults to this drawing's highest existing label plus one).</p>
     <h4>What it produces</h4>
-    <p>Lengths on <strong>SUB DIMENSIONS</strong>, bearings on <strong>SUB BEARINGS</strong>, and a Dimension Label block on <strong>DIM LABEL</strong> for each arc carrying its chord, arc, radius and bearing as hidden attributes.</p>
-    <div class="note"><strong>Note</strong> — Several behaviours worth knowing. For a closed lot, dimensions go <em>inside</em> and
-        bearings <em>outside</em>. A boundary shared between two lots is dimensioned once, not twice.
-        Existing labels are never doubled up, so re-running after edits only fills the gaps. Collinear
-        runs merge into one stretched bearing. Segments it can't dimension are counted and reported
-        rather than hidden.</div>
+    <p>Lengths on <strong>SUB DIMENSIONS</strong>, bearings on <strong>SUB BEARINGS</strong>, and a numbered curve label on <strong>DIM LABEL</strong> for each arc — the labels the curve table is built from.</p>
+    <div class="note"><strong>Note</strong> — Re-running is safe: existing labels aren't doubled up, so it only fills in what's missing, and a boundary shared between two lots is dimensioned once. If a segment can't be dimensioned it's reported on the command line rather than skipped silently.</div>
     <h3 id="dimlab"><code class="cmd">DIMLAB</code></h3>
     <p>Places numbered dimension-label bubbles, or converts existing text into them.</p>
     <h4>How to use it</h4>
     <p>Pre-select text to convert it. Otherwise <code>Specify starting number:</code> then place them one at a time; the number increments as you go.</p>
     <h4>What it produces</h4>
     <p>Dimension Label blocks on <strong>DIM LABEL</strong>.</p>
-    <div class="note"><strong>Note</strong> — Numbering continues from the highest number already in the drawing and skips any number already in use. The whole run is one undo step.</div>
+    <div class="note"><strong>Note</strong> — Numbering carries on from the highest number already in the drawing, skipping any that's taken.</div>
     <h3 id="dimrenum"><code class="cmd">DIMRENUM</code></h3>
     <p>Renumbers dimension labels in sequence, closing gaps left by deleted ones.</p>
     <h4>How to use it</h4>
     <p>Pre-select, or <code>Select dimension labels to renumber:</code> → <code>Starting number &lt;1&gt;:</code>.</p>
-    <div class="note"><strong>Note</strong> — Existing relative order is preserved — labels are sorted by their current number, so renumbering closes gaps without shuffling things around.</div>
+    <div class="note"><strong>Note</strong> — It keeps the labels in their existing order and just closes the gaps.</div>
 
     <h2 id="curve-tables">Curve tables</h2>
     <h3 id="curvetable"><code class="cmd">CURVETABLE</code></h3>
@@ -79,9 +75,7 @@
         <p>Then <code>N curves — specify table insertion point or [Export]:</code>. Export writes a CSV.</p>
     <h4>What it produces</h4>
     <p>A table titled <em>Schedule of Short &amp; Curved Dimensions</em> on the <strong>TEXT</strong> layer, with columns for number, bearing, chord, arc and radius, sorted numerically.</p>
-    <div class="note"><strong>Note</strong> — Viewport scoping is the subtle part: a label must both carry that viewport's annotation
-        scale <em>and</em> fall inside its boundary — respecting a non-rectangular clip if there is one.
-        If nothing qualifies, the message tells you exactly what was rejected and why.</div>
+    <div class="note"><strong>Note</strong> — In a layout it lists only the curves actually visible in the viewport you pick. If none qualify, it tells you why on the command line.</div>
     <h3 id="curvetableupdate"><code class="cmd">CURVETABLEUPDATE</code></h3>
     <p>Resyncs a placed curve table with the drawing — adds new curves, drops deleted ones, refreshes changed values.</p>
     <h4>How to use it</h4>
@@ -91,12 +85,12 @@
     <p>Turns live curve-table refreshing on or off.</p>
     <h4>How to use it</h4>
     <p>A toggle — no prompts. The setting is remembered between sessions.</p>
-    <div class="note"><strong>Note</strong> — Off by default. When on, linked tables refresh shortly after you stop editing. The refresh doesn't add undo steps.</div>
+    <div class="note"><strong>Note</strong> — Off by default. When on, a placed curve table refreshes shortly after you edit the labels it's built from.</div>
     <h3 id="dimdata"><code class="cmd">DIMDATA</code></h3>
     <p>The inverse of CURVETABLE — reads a hand-drawn or imported curve schedule and writes its values back into the matching numbered labels.</p>
     <h4>How to use it</h4>
     <p>Pre-select, or <code>Select the curve schedule text (window the whole table):</code>.</p>
-    <div class="note"><strong>Note</strong> — Built for surveyor DXF exports. It reconstructs the table from the text positions, using a header row if one is present, otherwise assuming the standard No / Bearing / Chord / Arc / Radius order.</div>
+    <div class="note"><strong>Note</strong> — Built for reading surveyor curve schedules. It expects the standard columns: number, bearing, chord, arc, radius.</div>
     <h3 id="alab"><code class="cmd">ALAB</code></h3>
     <p>Labels each selected lot with its area.</p>
     <h4>How to use it</h4>

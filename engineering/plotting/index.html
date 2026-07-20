@@ -38,11 +38,16 @@
       <tbody>
         <tr><td><code class="cmd">BWPDFA1</code></td><td>A1 PDF at 1:1</td></tr>
         <tr><td><code class="cmd">BWPDFA3</code></td><td>A3 PDF at 1:2</td></tr>
-        <tr><td><code class="cmd">BWPRINTA3</code></td><td>A3 print to the survey room printer</td></tr>
+        <tr><td><code class="cmd">BWPRINTA3</code></td><td>A3 print to the survey room printer (WSY-SurveyRoom)</td></tr>
       </tbody>
     </table></div>
-    <p>PDFs are written to your Documents folder, named after the drawing and layout, and opened
-    when finished.</p>
+
+    <h4>How to use it</h4>
+    <p>Open the layout you want and run the command — there are no prompts, it plots the current
+    layout with the correct device, sheet size and scale. The two PDF commands write to your
+    Documents folder, named after the drawing and layout (<code>drawing-layout.pdf</code>), and open
+    the file when finished. <code class="cmd">BWPRINTA3</code> sends the sheet to the survey room
+    printer and confirms with a message once it's done.</p>
 
     <div class="note"><strong>Note</strong> — these need the BW plot configurations, which install
     with the engineering and WAE components. If the device is missing the command says so and stops
@@ -51,7 +56,8 @@
     <h2 id="folder-shortcuts">Folder shortcuts</h2>
     <ul>
       <li><code class="cmd">DIROPEN</code> — opens the current drawing's folder in Explorer.</li>
-      <li><code class="cmd">EXCELREG</code> — opens the job's drawing register spreadsheet.</li>
+      <li><code class="cmd">EXCELREG</code> — opens the job's drawing register spreadsheet
+      (<code>*_Drawing_Register.xls</code> / <code>.xlsx</code>) from the drawing's folder.</li>
     </ul>
     <p>Both need the drawing to have been saved.</p>
 

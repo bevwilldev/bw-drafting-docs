@@ -70,15 +70,15 @@
     <h4>How to use it</h4>
     <p><code>Enter label words (space-separated):</code> then drag each word onto a curve. The word list wraps, so you can keep going along a fence line.</p>
     <h4>What it produces</h4>
-    <p>Text created with the shared ATC settings.</p>
+    <p>Text created with the shared ATC settings — on the layer and style those settings specify.</p>
     <h3 id="mtc"><code class="cmd">MTC</code></h3>
     <p>Drops each selected label into the middle of its lot.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Text → Move to Center</p>
     <h4>How to use it</h4>
-    <p>Pre-select, or <code>Select closed polylines and text:</code>. Each label is moved to an interior point of the nearest unused closed polyline.</p>
+    <p>Pre-select, or <code>Select closed polylines and text:</code>. Each label moves to the middle of the nearest lot that hasn't already taken a label.</p>
     <h4>What it produces</h4>
     <p>Moves existing mtext; creates nothing.</p>
-    <div class="note"><strong>Note</strong> — Works on concave lots — the interior point is genuinely inside the polygon, not just the centroid.</div>
+    <div class="note"><strong>Note</strong> — The label lands inside the lot, even on concave or L-shaped lots.</div>
 
     <h2 id="tidying-text">Tidying text</h2>
     <h3 id="tbrk"><code class="cmd">TBRK</code></h3>
@@ -86,18 +86,18 @@
     <p class="meta"><strong>Ribbon</strong> &middot; Text → Toggle Brackets</p>
     <h4>How to use it</h4>
     <p>Pre-select, or select text, mtext, leaders or dimensions. Each is toggled individually.</p>
-    <div class="note"><strong>Note</strong> — Dimensions keep their live measured value — the brackets are applied as a text override around the measurement, not baked in.</div>
+    <div class="note"><strong>Note</strong> — Dimensions keep their live measured value.</div>
     <h3 id="tbg"><code class="cmd">TBG</code></h3>
     <p>Turns background masks on or off behind selected text.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Text → Toggle Background Mask</p>
     <h4>How to use it</h4>
-    <p>Pre-select to toggle immediately, or run and use the <strong>Settings</strong> keyword to set the mask scale and colour first.</p>
-    <div class="note"><strong>Note</strong> — Settings offers the drawing background, a chosen colour, or <em>Auto</em>, which samples the colour of whatever hatch sits beneath the text. Changing settings forces the mask on rather than toggling.</div>
+    <p>Pre-select mtext, leaders or dimensions to toggle immediately, or run and use the <strong>Settings</strong> keyword to set the mask scale and colour first.</p>
+    <div class="note"><strong>Note</strong> — Settings masks with the drawing background, a fixed colour, or <em>Auto</em>, which matches the colour of the hatch behind each label. Changing any setting turns the mask on rather than toggling it.</div>
     <h3 id="tadd"><code class="cmd">TADD</code></h3>
     <p>Adds a prefix or suffix to selected text.</p>
     <h4>How to use it</h4>
     <p><code>Add text as [Prefix/Suffix] &lt;Suffix&gt;:</code> → <code>Text to add:</code>. Pre-select, or you'll be asked to select afterwards.</p>
-    <div class="note"><strong>Note</strong> — Dimensions keep their live measurement, as with TBRK.</div>
+    <div class="note"><strong>Note</strong> — Dimensions keep their live measured value, as with TBRK.</div>
     <nav class="page-nav">
       <a href="../survey/"><div class="dir">Previous</div><div class="ttl">Survey</div></a>
       <a class="next" href="../annotation/"><div class="dir">Next</div><div class="ttl">Annotation & Scales</div></a>

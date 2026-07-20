@@ -26,22 +26,27 @@
 
   <main class="content" id="main">
     <h1>Point Cloud Digitizer</h1>
-    <p class="lede">Traces features off a point cloud at a controlled step — you pick a direction
-    and the next vertex lands exactly that distance along, snapped to the cloud, numbered and
-    coded as you go.</p>
+    <p class="lede">Traces features off a point cloud — step along at a fixed distance per vertex, or
+    trace freely — with each vertex snapped to the cloud, numbered and coded as you go.</p>
 
     <h2 id="opening-it">Opening it</h2>
     <p>Run <code class="cmd">PCDIG</code>, or use the button on the <strong>WSY Tools</strong>
-    ribbon tab. Each drawing gets its own panel.</p>
+    ribbon tab. Each drawing gets its own panel. The <strong>?</strong> button in its title bar
+    opens offline help.</p>
 
     <h2 id="setting-up">Setting up</h2>
     <div class="table-wrap"><table>
       <thead><tr><th>Setting</th><th>What it does</th></tr></thead>
       <tbody>
-        <tr><td>Segment distance</td><td>How far each new point lands from the last. Read live —
-          change it mid-string and the next segment uses the new value.</td></tr>
+        <tr><td>Fixed-distance stepping</td><td>The checkbox beside <em>Segment Dist</em>. With it
+          on, each new vertex lands exactly the segment distance from the last in the direction you
+          pick, and a guide circle shows that distance. Turn it off to trace freely — you click each
+          vertex where you like and the distance field greys out.</td></tr>
+        <tr><td>Segment distance</td><td>How far each new vertex lands from the last while stepping.
+          Read live — change it mid-string and the next segment uses the new value.</td></tr>
         <tr><td>Enable point creation</td><td>Places a survey point at each vertex as well as the
-          line. Uses Civil points where available.</td></tr>
+          line. Uses Civil points where available (the label reads Civil or Standard to show
+          which).</td></tr>
         <tr><td>Start number</td><td>The first point number. Auto-fills past anything already used;
           the <strong>↻</strong> button finds the lowest free number.</td></tr>
         <tr><td>Point code</td><td>The feature code written onto the points and string.</td></tr>
@@ -61,11 +66,12 @@
       <li><strong>Add Line</strong> — pick a start point, then pick a direction for each following
         point. A guide circle shows the fixed distance. <strong>Undo</strong> steps back a point;
         Esc finishes the string.</li>
-      <li><strong>Add Point</strong> — places standalone points without a line.</li>
+      <li><strong>Add Point</strong> — places standalone points without a line. Undo steps back;
+        Esc finishes.</li>
       <li><strong>Extend</strong> — select an existing 3D polyline near the end you want to
         continue from.</li>
     </ul>
-    <p>While digitising, 2D snaps are turned off and point-cloud snapping is turned on, then
+    <p>While digitising, ordinary 2D snaps are turned off and point-cloud snapping is turned on, then
     restored when you finish.</p>
 
     <h2 id="exporting-to-12d">Exporting to 12d</h2>

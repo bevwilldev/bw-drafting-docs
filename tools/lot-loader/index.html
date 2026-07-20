@@ -31,16 +31,19 @@
 
     <h2 id="opening-it">Opening it</h2>
     <p>Run <code class="cmd">NSWLOTS</code>, or use the button on the <strong>WSY Tools</strong>
-    ribbon tab. The panel stays open while you work.</p>
+    ribbon tab. The panel stays open while you work. The <strong>?</strong> button in its title bar
+    opens offline help.</p>
 
     <h2 id="import-options">Import options</h2>
-    <p>These apply to whichever search you use:</p>
+    <p>These control what gets labelled and whether road data comes in:</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Option</th><th>Effect</th></tr></thead>
       <tbody>
-        <tr><td>Subject Lot Labels</td><td>Labels the lots you asked for.</td></tr>
+        <tr><td>Subject Lot Labels</td><td>Labels the lots you asked for (the <em>By Lot ID</em>
+          search only).</td></tr>
         <tr><td>Adjoining Lot Labels</td><td>Labels neighbouring lots. <em>Adjacent only</em> labels
-          just those sharing a boundary; <em>All</em> also labels the surrounding buffer.</td></tr>
+          just those sharing a boundary; <em>All</em> also labels the surrounding buffer. On the
+          <em>By Point</em> and <em>By Extent</em> searches this labels everything returned.</td></tr>
         <tr><td>Road Names</td><td>Places road name text along each centreline.</td></tr>
         <tr><td>Road Centrelines</td><td>Also draws the centreline geometry.</td></tr>
       </tbody>
@@ -49,13 +52,16 @@
     <h2 id="three-ways-to-search">Three ways to search</h2>
     <h3>By Lot ID</h3>
     <p>Enter the plan number (required) and optionally the lot and section, choosing DP or SP. Add
-    more rows with <strong>+</strong> for multiple lots. The <strong>Buffer</strong> is how far
-    around each lot to fetch surrounding lots — set 0 for adjoining only.</p>
+    more rows with <strong>+</strong> for multiple lots (up to ten), then click <strong>Fetch
+    Lots</strong>. The <strong>Buffer</strong> is how far around each lot to fetch surrounding lots —
+    set 0 for adjoining only (up to 5000&nbsp;m). If an entry matches nothing, it's flagged on the
+    command line so you can check the lot and plan.</p>
     <h3>By Point</h3>
-    <p>Click <strong>Pick Point</strong>, pick in the drawing, and every lot within the buffer
-    radius is fetched.</p>
+    <p>Click <strong>Pick Point</strong>, pick in the drawing, set the buffer radius, then
+    <strong>Fetch Lots</strong> — every lot within that radius is fetched.</p>
     <h3>By Extent</h3>
-    <p>Use the current view, or draw a rectangle.</p>
+    <p>Choose <strong>Current View</strong> or <strong>Draw Rectangle</strong>, then <strong>Fetch
+    Lots</strong>.</p>
 
     <h2 id="what-you-get">What you get</h2>
     <div class="table-wrap"><table>
@@ -69,8 +75,10 @@
         <tr><td>ROAD CL</td><td>Road centrelines</td></tr>
       </tbody>
     </table></div>
-    <p>Re-running never doubles up — lots already loaded are skipped. Your entries and settings are
-    remembered for next time.</p>
+    <p>The <em>By Lot ID</em> search separates the lots you asked for (SUB layers) from their
+    neighbours (ADJ layers); the <em>By Point</em> and <em>By Extent</em> searches load everything
+    onto the ADJ layers. Re-running never doubles up — lots already loaded are skipped. Your entries
+    and settings are remembered for next time.</p>
 
     <h2 id="labelling-loaded-lots">Labelling loaded lots</h2>
     <p><code class="cmd">NSWLABELLOTS</code> labels lots that were loaded earlier — select the

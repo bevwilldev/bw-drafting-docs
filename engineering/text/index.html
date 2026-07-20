@@ -29,9 +29,8 @@
     <p class="lede">Annotation at the BW standard heights, with leaders that match.</p>
 
     <h2 id="text">Text</h2>
-    <p>Four commands, one per standard height. Select text first to reformat it, or run with
-    nothing selected to place new text — you'll be prompted for a point and the editor opens there,
-    looping until Esc.</p>
+    <p>Four commands, one per standard height. Select text first to reformat it to that height,
+    style and layer, or run with nothing selected to place new text.</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Command</th><th>Height</th><th>Layer</th></tr></thead>
       <tbody>
@@ -41,16 +40,31 @@
         <tr><td><code class="cmd">BW70</code></td><td>7 mm</td><td>T70</td></tr>
       </tbody>
     </table></div>
-    <p>All use the <strong>BW_AN</strong> text style and are created annotative, so the plotted size
-    follows the annotation scale.</p>
+
+    <h4>How to use it</h4>
+    <p>With text selected, run the command and it's reformatted in place. With nothing selected
+    you're asked <em>Text insertion point [ESC to exit]</em> — pick a point, type the text, and it
+    keeps prompting for the next point until you press Esc.</p>
+
+    <h4>What it produces</h4>
+    <p>Text on the height's layer (T25–T70) in the <strong>BW_AN</strong> style, created annotative
+    so the plotted size follows the drawing's annotation scale.</p>
 
     <h2 id="multileaders">Multileaders</h2>
     <p><code class="cmd">BWML25</code>, <code class="cmd">BWML35</code>,
-    <code class="cmd">BWML50</code> and <code class="cmd">BWML70</code> set the matching leader
-    style and layer, then hand over to the normal multileader command.</p>
+    <code class="cmd">BWML50</code> and <code class="cmd">BWML70</code> place a multileader whose
+    text and arrow are sized to match the same standard height.</p>
 
-    <div class="note"><strong>Note</strong> — layers are created on demand, so you don't need a
-    particular template for these to work.</div>
+    <h4>How to use it</h4>
+    <p>Run the command and the normal multileader placement takes over — pick the arrow point, the
+    landing, and type the text.</p>
+
+    <h4>What it produces</h4>
+    <p>A multileader on the matching T-layer using the sized <strong>BWAN_ML</strong> leader style
+    (2.5 / 3.5 / 5 / 7 mm), annotative, with BW_AN text.</p>
+
+    <div class="note"><strong>Note</strong> — layers and styles are created on demand, so you don't
+    need a particular template for these to work.</div>
     <nav class="page-nav">
       <a href="../"><div class="dir">Previous</div><div class="ttl">Engineering</div></a>
       <a class="next" href="../dimensions/"><div class="dir">Next</div><div class="ttl">Dimensions</div></a>

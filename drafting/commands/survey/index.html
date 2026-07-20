@@ -48,7 +48,7 @@
         position.</p>
     <h4>What it produces</h4>
     <p>Reference Mark blocks on <strong>SURV REFERENCE</strong>, annotative.</p>
-    <div class="note"><strong>Note</strong> — Replace keeps only the position — rotation and attributes of the old block are discarded.</div>
+    <div class="note"><strong>Note</strong> — Replace keeps only the position — the old block's rotation and attributes are dropped.</div>
     <h3 id="survssm"><code class="cmd">SURVSSM</code></h3>
     <p>Places SSM (state survey mark) symbols in a loop.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Survey → SSM</p>
@@ -71,7 +71,7 @@
     <h4>How to use it</h4>
     <p><code>Specify base point for leader:</code> → <code>Specify second point for leader:</code>, with endpoint, intersection and perpendicular snaps forced on.</p>
     <h4>What it produces</h4>
-    <p>A dashed leader on <strong>SURV TIES</strong> plus two labels on <strong>SURV TIES TEXT</strong>. Distance is rounded to the nearest 0.005; the bearing reads to the nearest 5 seconds.</p>
+    <p>A dashed leader on <strong>SURV TIES</strong> plus two labels on <strong>SURV TIES TEXT</strong> — distance one side, bearing the other. Distance is rounded to the nearest 0.005; the bearing reads to the nearest 5 seconds.</p>
     <h3 id="travl"><code class="cmd">TRAVL</code></h3>
     <p>Draws a traverse line — a dashed annotative leader with no text.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Survey → Traverse</p>
@@ -98,12 +98,16 @@
     <h3 id="osfce"><code class="cmd">OSFCE</code></h3>
     <p>Draws an occupation fence line using the fence linetype.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Occupations → Fence</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>MLEADER</code> command — draw the fence line as normal.</p>
     <h4>What it produces</h4>
     <p>Layer <strong>SURV OCCS</strong> with the Fence linetype.</p>
     <div class="note"><strong>Note</strong> — Needs the Support linetype file. If the fence draws solid, the linetype didn't load — see Troubleshooting.</div>
     <h3 id="bdyfce"><code class="cmd">BDYFCE</code></h3>
     <p>Boundary fence tick line.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Occupations → Fence Ticks</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>MLEADER</code> command, with endpoint and nearest snaps forced on.</p>
     <h4>What it produces</h4>
     <p>Layer <strong>SURV OCCS</strong> with the Fence Tick linetype.</p>
     <h3 id="dpwall"><code class="cmd">DPWALL</code></h3>

@@ -36,7 +36,7 @@
     <p><code>Specify offset distance or [Through/Erase]:</code> — <strong>Erase</strong>
         asks whether to delete the sources, <strong>Through</strong> takes the distance from the cursor.
         Then select objects and drag to choose the side.</p>
-    <div class="note"><strong>Note</strong> — The curve nearest your cursor decides the side, and other closed shapes follow the same sense — so a batch of lots all shrink or all grow together rather than splitting. You can type an exact distance mid-drag.</div>
+    <div class="note"><strong>Note</strong> — A whole batch offsets consistently — closed shapes all grow or all shrink together. You can type an exact distance mid-drag.</div>
     <h3 id="vcopy"><code class="cmd">VCOPY</code></h3>
     <p>Copies blocks or text to every vertex of the chosen polylines.</p>
     <h4>How to use it</h4>
@@ -45,7 +45,7 @@
     <p>Turns polylines into pipes — a styled centreline with two wall lines that follow it when you edit.</p>
     <h4>How to use it</h4>
     <p>Pre-select, or <code>Select polylines to convert to pipes:</code> → <code>Enter pipe size:</code>.</p>
-    <div class="note"><strong>Note</strong> — The walls stay associated with the centreline: edit the centreline and they follow. They're deliberately locked so they can't be dragged off. The last size is remembered between sessions.</div>
+    <div class="note"><strong>Note</strong> — Edit the centreline and the walls follow; they're locked so they can't be dragged off. The last pipe size is remembered between sessions.</div>
 
     <h2 id="import">Import</h2>
     <h3 id="landxml"><code class="cmd">LANDXML</code></h3>
@@ -54,7 +54,7 @@
     <p>Opens a file dialog, then <code>Import CgPoints as point entities? [Yes/No] &lt;No&gt;:</code>.</p>
     <h4>What it produces</h4>
     <p>Boundaries on the subject or adjoining layers by parcel class, with labels on the matching text layers. Arcs are preserved.</p>
-    <div class="note"><strong>Note</strong> — Two data-quality guards: a curve whose geometry is inconsistent degrades to a straight chord rather than a wild arc, and arcs sweeping over 180° are redrawn as the minor arc and reported so you can check them against the plan.</div>
+    <div class="note"><strong>Note</strong> — Wide arcs (sweeping over 180°) are flagged on the command line so you can check them against the plan.</div>
 
     <h2 id="text-numbers">Text numbers</h2>
     <h3 id="trunc"><code class="cmd">TRUNC</code></h3>
@@ -66,6 +66,7 @@
     <p>Rounds the number in selected text — up, down or to nearest.</p>
     <h4>How to use it</h4>
     <p><code>Rounding mode [Nearest/Up/Down]:</code> → <code>Decimal places &lt;2&gt;:</code>.</p>
+    <div class="note"><strong>Note</strong> — The rounding mode is remembered between uses.</div>
 
     <h2 id="title-blocks">Title blocks</h2>
     <h3 id="update"><code class="cmd">UPDATE</code></h3>
@@ -81,7 +82,7 @@
     <p>Strips all inline formatting out of text, leaving the plain words.</p>
     <h4>How to use it</h4>
     <p>Pre-select, or select mtext, leaders, dimensions or blocks with attributes.</p>
-    <div class="note"><strong>Note</strong> — Line breaks are kept — they're content, not formatting. Background masks aren't touched; use TBG for those.</div>
+    <div class="note"><strong>Note</strong> — Line breaks are kept. Background masks aren't touched — use TBG for those.</div>
     <h3 id="wsyupdate"><code class="cmd">WSYUPDATE</code></h3>
     <p>Checks for a newer release of the suite and launches the installer.</p>
     <h4>How to use it</h4>

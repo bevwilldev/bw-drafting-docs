@@ -31,18 +31,16 @@
 
     <h2 id="commands">Commands</h2>
     <ul>
-      <li><code class="cmd">HTXT</code> — text at 0°, reading horizontally.</li>
-      <li><code class="cmd">VTXT</code> — text at 270°, reading up the sheet.</li>
+      <li><code class="cmd">HTXT</code> — horizontal text at 0°.</li>
+      <li><code class="cmd">VTXT</code> — vertical text at 270°.</li>
     </ul>
 
     <h2 id="using-them">Using them</h2>
-    <p>Run the command, then <code>Text insertion point:</code>. The text editor opens at that
-    point — type the content and finish as normal. Because the WAE label style has a fixed height
-    you're not asked for one.</p>
+    <p>Run the command, then <code>Text insertion point:</code>. Type the text in place and finish
+    as normal. Because the WAE label style has a fixed height you're not asked for one.</p>
 
-    <div class="note"><strong>Note</strong> — both temporarily set the drawing's angle base to
-    zero so the rotation is absolute, then restore it. If you interrupt the command, the setting is
-    still restored.</div>
+    <div class="note"><strong>Note</strong> — it places the text at a fixed angle regardless of the
+    drawing's current angle base.</div>
     <nav class="page-nav">
       <a href="../labels/"><div class="dir">Previous</div><div class="ttl">Preset Labels</div></a>
       <a class="next" href="../calculate-grade/"><div class="dir">Next</div><div class="ttl">Calculate Grade</div></a>
