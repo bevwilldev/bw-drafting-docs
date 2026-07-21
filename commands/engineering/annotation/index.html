@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annotation — WSY Hub</title>
+<meta name="description" content="BW standard text heights, matching multileaders and the dimension wrappers.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Annotation</h1>
+    <p class="lede">BW standard text heights, matching multileaders and the dimension wrappers.</p>
+
+    <h2 id="bw25"><code class="cmd">BW25</code></h2>
+    <p>The smallest of the four BW text heights, for general notes and callouts on engineering plans. Like the rest of the family it does double duty: it places new text, and it reformats text you already have to the standard.</p>
+    <h4>How to use it</h4>
+    <p>Select the text first and it's reformatted in place — single-line text is converted to MText on the way. Run it with nothing selected and it loops, prompting <em>Text insertion point [ESC to exit]</em> and opening the in-place editor at each point until you press Esc. Empty results are discarded.</p>
+    <h4>What it produces</h4>
+    <p>Annotative MText in the <strong>BW_AN</strong> style on layer <strong>T25</strong> (yellow), colour ByLayer, line spacing 0.8 at-least. The height is the drawing's <code>TEXTSIZE</code> — set to 2.5 by this command — divided by the current annotation scale value. Reformatted text is attached middle-centre; newly placed text is attached top-left.</p>
+    <div class="note"><strong>Note</strong> — Set the right annotation scale before you place text — the height is derived from it.</div>
+
+    <h2 id="bw35"><code class="cmd">BW35</code></h2>
+    <p>The 3.5 mm step of the BW text family — the usual choice for sub-headings and labels that need to read above general note text.</p>
+    <h4>How to use it</h4>
+    <p>Select the text first and it's reformatted in place — single-line text is converted to MText on the way. Run it with nothing selected and it loops, prompting <em>Text insertion point [ESC to exit]</em> and opening the in-place editor at each point until you press Esc.</p>
+    <h4>What it produces</h4>
+    <p>Annotative MText in the <strong>BW_AN</strong> style on layer <strong>T35</strong> (green), at a working <code>TEXTSIZE</code> of 3.5 divided by the current annotation scale value.</p>
+
+    <h2 id="bw50"><code class="cmd">BW50</code></h2>
+    <p>The 5 mm step of the BW text family, for headings and anything that has to stand out on a plotted sheet.</p>
+    <h4>How to use it</h4>
+    <p>Select the text first and it's reformatted in place — single-line text is converted to MText on the way. Run it with nothing selected and it loops, prompting <em>Text insertion point [ESC to exit]</em> until you press Esc.</p>
+    <h4>What it produces</h4>
+    <p>Annotative MText in the <strong>BW_AN</strong> style on layer <strong>T50</strong> (cyan), at a working <code>TEXTSIZE</code> of 5.0 divided by the current annotation scale value.</p>
+
+    <h2 id="bw70"><code class="cmd">BW70</code></h2>
+    <p>The largest of the four BW text heights — plan titles and major headings.</p>
+    <h4>How to use it</h4>
+    <p>Select the text first and it's reformatted in place — single-line text is converted to MText on the way. Run it with nothing selected and it loops, prompting <em>Text insertion point [ESC to exit]</em> until you press Esc.</p>
+    <h4>What it produces</h4>
+    <p>Annotative MText in the <strong>BW_AN</strong> style on layer <strong>T70</strong> (blue), at a working <code>TEXTSIZE</code> of 7.0 divided by the current annotation scale value.</p>
+
+    <h2 id="bwdimali"><code class="cmd">BWDIMALI</code></h2>
+    <p>The aligned equivalent of <code class="cmd">BWDIMLIN</code> — the dimension line runs parallel to the two points rather than orthogonally.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>DIMALIGNED</code> prompts follow — pick the two points, then place the dimension line.</p>
+    <h4>What it produces</h4>
+    <p>An aligned dimension on layer <strong>DIMS</strong> in the <strong>BWAN_DIM25</strong> style.</p>
+
+    <h2 id="bwdimang"><code class="cmd">BWDIMANG</code></h2>
+    <p>Dimensions the angle between two lines, or the included angle of an arc or circle, with the BW layer and style already set.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>DIMANGULAR</code> prompts follow — pick the two lines (or the arc), then place the dimension arc.</p>
+    <h4>What it produces</h4>
+    <p>An angular dimension on layer <strong>DIMS</strong> in the <strong>BWAN_DIM25</strong> style. Angular decimal places are set to 0 in that style.</p>
+
+    <h2 id="bwdimarc"><code class="cmd">BWDIMARC</code></h2>
+    <p>Dimensions the length along an arc rather than the chord — used on kerb returns and curved alignments.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>DIMARC</code> prompts follow — select the arc or polyline arc segment, then place the dimension.</p>
+    <h4>What it produces</h4>
+    <p>An arc length dimension on layer <strong>DIMS</strong> in the <strong>BWAN_DIM25</strong> style.</p>
+
+    <h2 id="bwdimdia"><code class="cmd">BWDIMDIA</code></h2>
+    <p>Labels the diameter of a circle or arc — typically pipes and pits — with the BW layer and dimension style already set.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>DIMDIAMETER</code> prompts follow — select the circle or arc, then place the dimension text.</p>
+    <h4>What it produces</h4>
+    <p>A diameter dimension on layer <strong>DIMS</strong> in the <strong>BWAN_DIM25</strong> style.</p>
+
+    <h2 id="bwdimlin"><code class="cmd">BWDIMLIN</code></h2>
+    <p>A wrapper around the native <code>DIMLINEAR</code> that sets the DIMS layer and the BW dimension style first, so you never have to remember to switch either.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the normal linear dimension prompts follow — pick the two extension line origins, then place the dimension line.</p>
+    <h4>What it produces</h4>
+    <p>A linear dimension on layer <strong>DIMS</strong> (white) in the <strong>BWAN_DIM25</strong> style: 2.5 mm yellow text in BW_AN, 2.5 mm closed filled arrows, two decimal places, text above the dimension line, and annotative.</p>
+
+    <h2 id="bwdimrad"><code class="cmd">BWDIMRAD</code></h2>
+    <p>Labels the radius of a circle or arc with the BW layer and dimension style already set.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>DIMRADIUS</code> prompts follow — select the circle or arc, then place the dimension text.</p>
+    <h4>What it produces</h4>
+    <p>A radius dimension on layer <strong>DIMS</strong> in the <strong>BWAN_DIM25</strong> style.</p>
+
+    <h2 id="bwml25"><code class="cmd">BWML25</code></h2>
+    <p>Places a multileader whose text height, arrow size and dogleg all match the 2.5 mm BW text standard, so a leader note sits alongside <code class="cmd">BW25</code> text without looking out of scale.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>MLEADER</code> takes over — pick the arrow point, then the landing, then type the text.</p>
+    <h4>What it produces</h4>
+    <p>A multileader on layer <strong>T25</strong> using the <strong>BWAN_ML25</strong> style: straight leader, dogleg enabled at 2.5, 2.5 mm arrow, annotative MText content in <strong>BW_AN</strong> at 2.5 mm, leader and text colour ByLayer, landing gap 1.5, attached to the middle of the top line and held horizontal. The style is made current (<code>CMLEADERSTYLE</code>).</p>
+
+    <h2 id="bwml35"><code class="cmd">BWML35</code></h2>
+    <p>The 3.5 mm multileader, sized to sit with <code class="cmd">BW35</code> text.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>MLEADER</code> takes over — pick the arrow point, then the landing, then type the text.</p>
+    <h4>What it produces</h4>
+    <p>A multileader on layer <strong>T35</strong> using the <strong>BWAN_ML35</strong> style — same specification as the rest of the family, with the text height, arrow size and dogleg length all at 3.5.</p>
+
+    <h2 id="bwml50"><code class="cmd">BWML50</code></h2>
+    <p>The 5 mm multileader, sized to sit with <code class="cmd">BW50</code> text.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>MLEADER</code> takes over — pick the arrow point, then the landing, then type the text.</p>
+    <h4>What it produces</h4>
+    <p>A multileader on layer <strong>T50</strong> using the <strong>BWAN_ML50</strong> style, with the text height, arrow size and dogleg length all at 5.0.</p>
+
+    <h2 id="bwml70"><code class="cmd">BWML70</code></h2>
+    <p>The largest BW multileader, sized to sit with <code class="cmd">BW70</code> text.</p>
+    <h4>How to use it</h4>
+    <p>Run the command and the native <code>MLEADER</code> takes over — pick the arrow point, then the landing, then type the text.</p>
+    <h4>What it produces</h4>
+    <p>A multileader on layer <strong>T70</strong> using the <strong>BWAN_ML70</strong> style, with the text height, arrow size and dogleg length all at 7.0.</p>
+
+    <nav class="page-nav">
+      <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

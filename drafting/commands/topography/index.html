@@ -2,86 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Topography & Earthworks — BW Drafting Docs</title>
-<meta name="description" content="Batters, contour labels, surface levels and fill-plan hatching.">
+<title>Moved — WSY Hub</title>
+<meta http-equiv="refresh" content="0; url=../../../commands/drafting/topography/">
+<link rel="canonical" href="../../../commands/drafting/topography/">
 <link rel="icon" href="../../../assets/img/bw-logo.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
-     domain-locked: add every serving domain to the kit or it falls back. -->
-<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
 <link rel="stylesheet" href="../../../assets/css/site.css">
-<script>
-  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
-</script>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
-<header data-header></header>
-
-<div class="layout">
-  <aside data-sidenav="drafting"></aside>
-
+<div class="layout no-nav">
   <main class="content" id="main">
-    <h1>Topography &amp; Earthworks</h1>
-    <p class="lede">Batters, contour labels, surface levels and fill-plan hatching.</p>
-
-    <h2 id="commands">Commands</h2>
-    <h3 id="batter"><code class="cmd">BATTER</code></h3>
-    <p>Fills the space between a top and toe line with batter ticks, each stretched to span the gap.</p>
-    <p class="meta"><strong>Ribbon</strong> &middot; Topography → Batter</p>
-    <h4>How to use it</h4>
-    <p><code>Select top batter curve:</code> → <code>Select toe (bottom) batter curve:</code>
-        → then drag to set the tick spacing, with the whole run previewing live. Click to confirm, Esc to cancel.</p>
-    <h4>What it produces</h4>
-    <p>Batter blocks on the <strong>BATTER</strong> layer, each rotated toward the toe and scaled to span the local gap.</p>
-    <div class="note"><strong>Note</strong> — Spacing is adaptive — ticks crowd where the batter narrows. Works on 3D top and toe strings, though the output lands flat.</div>
-    <h3 id="contlab"><code class="cmd">CONTLAB</code></h3>
-    <p>Labels a contour with its elevation, sitting the text on the line with a mask through it.</p>
-    <p class="meta"><strong>Ribbon</strong> &middot; Topography → Contour Label</p>
-    <h4>How to use it</h4>
-    <p>Loops: <code>Select contour &lt;exit&gt;:</code> then drag the label along it. Enter or Esc exits.</p>
-    <h4>What it produces</h4>
-    <p>Masked annotative text on your current layer and style, sitting on the contour so the mask reads.</p>
-    <div class="note"><strong>Note</strong> — The elevation comes from the contour's start point.</div>
-    <h3 id="levtotxt"><code class="cmd">LEVTOTXT</code></h3>
-    <p>Writes surface levels into existing text by picking points.</p>
-    <h4>How to use it</h4>
-    <p>Picks an elevation source first, then loops: <code>Select text:</code> → <code>Select point for level:</code>.</p>
-    <h4>What it produces</h4>
-    <p>Overwrites the picked text with the elevation to one decimal place.</p>
-    <div class="note"><strong>Note</strong> — Samples from the drawing's TIN surface, or 3D faces if there's no TIN — so your pick only needs to be right in plan, not snapped to 3D geometry. No ribbon button.</div>
-
-    <h2 id="fill-plans">Fill plans</h2>
-    <p><code class="cmd">FILL1</code> through <code class="cmd">FILL11</code> hatch earthworks depth
-    bands. Each sets its layer then runs a solid hatch behind the boundary, repeating until you press
-    Esc — so you can hatch many lots in one band without re-running.</p>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Command</th><th>Depth band</th></tr></thead>
-      <tbody>
-        <tr><td><code class="cmd">FILL1</code></td><td>0.0 – 0.5</td></tr>
-        <tr><td><code class="cmd">FILL2</code></td><td>0.5 – 1.0</td></tr>
-        <tr><td><code class="cmd">FILL3</code></td><td>1.0 – 1.5</td></tr>
-        <tr><td><code class="cmd">FILL4</code></td><td>1.5 – 2.0</td></tr>
-        <tr><td><code class="cmd">FILL5</code></td><td>2.0 – 2.5</td></tr>
-        <tr><td><code class="cmd">FILL6</code></td><td>2.5 – 3.0</td></tr>
-        <tr><td><code class="cmd">FILL7</code></td><td>Over 3</td></tr>
-        <tr><td><code class="cmd">FILL8</code> – <code class="cmd">FILL11</code></td><td>4, 5, 6 and 7</td></tr>
-      </tbody>
-    </table></div>
-    <div class="note"><strong>Note</strong> — none of the fill commands has a ribbon button.</div>
-    <nav class="page-nav">
-      <a href="../dimensions/"><div class="dir">Previous</div><div class="ttl">Dimensions & Curve Tables</div></a>
-      <a class="next" href="../utilities/"><div class="dir">Next</div><div class="ttl">Utilities</div></a>
-    </nav>
+    <h1>This page has moved</h1>
+    <p class="lede">
+      The command reference is now shared across the whole suite, organised by
+      ribbon tab and panel.
+    </p>
+    <p><a class="btn btn-primary" href="../../../commands/drafting/topography/">Go to the new page</a></p>
+    <p>If you are not redirected automatically, follow the link above.</p>
   </main>
-
-  <aside data-toc></aside>
 </div>
-
-<footer data-footer></footer>
-<script src="../../../assets/js/site.js"></script>
 </body>
 </html>

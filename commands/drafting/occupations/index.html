@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Occupations — WSY Hub</title>
+<meta name="description" content="Fences, walls and other occupations shown against a boundary.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Occupations</h1>
+    <p class="lede">Fences, walls and other occupations shown against a boundary.</p>
+
+<h2 id="osfce"><code class="cmd">OSFCE</code></h2>
+    <p>Draws an occupation fence line using the fence linetype.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Occupations → Fence</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>MLEADER</code> command — draw the fence line as normal.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>SURV OCCS</strong> with the Fence linetype.</p>
+    <div class="note"><strong>Note</strong> — Needs the Support linetype file. If the fence draws solid, the linetype didn't load — see Troubleshooting.</div>
+
+<h2 id="bdyfce"><code class="cmd">BDYFCE</code></h2>
+    <p>Boundary fence tick line.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Occupations → Fence Ticks</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>MLEADER</code> command, with endpoint and nearest snaps forced on.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>SURV OCCS</strong> with the Fence Tick linetype.</p>
+
+<h2 id="dpwall"><code class="cmd">DPWALL</code></h2>
+    <p>Inserts a wall symbol at a point and rotation.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Occupations → Wall</p>
+    <h4>How to use it</h4>
+    <p><code>Specify insertion point:</code> → <code>Specify rotation &lt;0&gt;:</code>.</p>
+    <h4>What it produces</h4>
+    <p>Wall blocks on <strong>SURV OCCS</strong>, annotative.</p>
+
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

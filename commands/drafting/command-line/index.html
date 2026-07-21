@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commands without a ribbon button — WSY Hub</title>
+<meta name="description" content="Typed at the command line - a large part of the toolset, including the whole boundary dimensioning and curve table workflow.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Commands without a ribbon button</h1>
+    <p class="lede">Typed at the command line - a large part of the toolset, including the whole boundary dimensioning and curve table workflow.</p>
+
+<h2 id="the-workflow">The workflow</h2>
+    <p>These commands are designed to run in sequence:</p>
+    <ol>
+      <li><code class="cmd">AUTODIM</code> dimensions every boundary segment and drops a numbered
+        label on each curve.</li>
+      <li><code class="cmd">DIMRENUM</code> tidies the numbering if you've edited things.</li>
+      <li><code class="cmd">CURVETABLE</code> builds a schedule from those numbered labels.</li>
+      <li><code class="cmd">CURVETABLEUPDATE</code> resyncs the table after further edits.</li>
+    </ol>
+
+<h2 id="fill-plans">Fill plans</h2>
+    <p><code class="cmd">FILL1</code> through <code class="cmd">FILL11</code> hatch earthworks depth
+    bands. Each sets its layer then runs a solid hatch behind the boundary, repeating until you press
+    Esc — so you can hatch many lots in one band without re-running.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>Depth band</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">FILL1</code></td><td>0.0 – 0.5</td></tr>
+        <tr><td><code class="cmd">FILL2</code></td><td>0.5 – 1.0</td></tr>
+        <tr><td><code class="cmd">FILL3</code></td><td>1.0 – 1.5</td></tr>
+        <tr><td><code class="cmd">FILL4</code></td><td>1.5 – 2.0</td></tr>
+        <tr><td><code class="cmd">FILL5</code></td><td>2.0 – 2.5</td></tr>
+        <tr><td><code class="cmd">FILL6</code></td><td>2.5 – 3.0</td></tr>
+        <tr><td><code class="cmd">FILL7</code></td><td>Over 3</td></tr>
+        <tr><td><code class="cmd">FILL8</code> – <code class="cmd">FILL11</code></td><td>4, 5, 6 and 7</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><strong>Note</strong> — none of the fill commands has a ribbon button.</div>
+
+<h2 id="annotog"><code class="cmd">ANNOTOG</code></h2>
+    <p>Shows or hides annotative objects at all scales, not just the current one.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — it's a toggle, and reports the new state.</p>
+    <div class="note"><strong>Note</strong> — Useful for checking what's attached to which scale. No ribbon button.</div>
+
+<h2 id="autodim"><code class="cmd">AUTODIM</code></h2>
+    <p>Dimensions every segment of the selected lot boundaries in one hit — length inside, bearing outside, and a numbered label on each curve.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select polylines/arcs:</code>. Then
+        <code>Enter precision &lt;3&gt;:</code> → <code>Include bearings? [Yes/No] &lt;Yes&gt;:</code>
+        → <code>Starting curve number:</code> (defaults to this drawing's highest existing label plus one).</p>
+    <h4>What it produces</h4>
+    <p>Lengths on <strong>SUB DIMENSIONS</strong>, bearings on <strong>SUB BEARINGS</strong>, and a numbered curve label on <strong>DIM LABEL</strong> for each arc — the labels the curve table is built from.</p>
+    <div class="note"><strong>Note</strong> — Re-running is safe: existing labels aren't doubled up, so it only fills in what's missing, and a boundary shared between two lots is dimensioned once. If a segment can't be dimensioned it's reported on the command line rather than skipped silently.</div>
+
+<h2 id="dimlab"><code class="cmd">DIMLAB</code></h2>
+    <p>Places numbered dimension-label bubbles, or converts existing text into them.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select text to convert it. Otherwise <code>Specify starting number:</code> then place them one at a time; the number increments as you go.</p>
+    <h4>What it produces</h4>
+    <p>Dimension Label blocks on <strong>DIM LABEL</strong>.</p>
+    <div class="note"><strong>Note</strong> — Numbering carries on from the highest number already in the drawing, skipping any that's taken.</div>
+
+<h2 id="dimrenum"><code class="cmd">DIMRENUM</code></h2>
+    <p>Renumbers dimension labels in sequence, closing gaps left by deleted ones.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select dimension labels to renumber:</code> → <code>Starting number &lt;1&gt;:</code>.</p>
+    <div class="note"><strong>Note</strong> — It keeps the labels in their existing order and just closes the gaps.</div>
+
+<h2 id="curvetable"><code class="cmd">CURVETABLE</code></h2>
+    <p>Builds a schedule of curved dimensions from the numbered curve labels, or exports them to CSV.</p>
+    <h4>How to use it</h4>
+    <p><strong>In model space:</strong> pre-select, or <code>Select dimension label blocks
+        or Enter for all:</code>. <strong>In a layout:</strong> it asks you to
+        <code>Select viewport:</code> and includes only the labels visible in it.</p>
+        <p>Then <code>N curves — specify table insertion point or [Export]:</code>. Export writes a CSV.</p>
+    <h4>What it produces</h4>
+    <p>A table titled <em>Schedule of Short &amp; Curved Dimensions</em> on the <strong>TEXT</strong> layer, with columns for number, bearing, chord, arc and radius, sorted numerically.</p>
+    <div class="note"><strong>Note</strong> — In a layout it lists only the curves actually visible in the viewport you pick. If none qualify, it tells you why on the command line.</div>
+
+<h2 id="curvetableupdate"><code class="cmd">CURVETABLEUPDATE</code></h2>
+    <p>Resyncs a placed curve table with the drawing — adds new curves, drops deleted ones, refreshes changed values.</p>
+    <h4>How to use it</h4>
+    <p><code>Select curve table to update or Enter to refresh all:</code>.</p>
+    <div class="note"><strong>Note</strong> — Only works on tables created by CURVETABLE. The table keeps the size it was created at, so it won't jump around if you've changed annotation scale.</div>
+
+<h2 id="curvetableauto"><code class="cmd">CURVETABLEAUTO</code></h2>
+    <p>Turns live curve-table refreshing on or off.</p>
+    <h4>How to use it</h4>
+    <p>A toggle — no prompts. The setting is remembered between sessions.</p>
+    <div class="note"><strong>Note</strong> — Off by default. When on, a placed curve table refreshes shortly after you edit the labels it's built from.</div>
+
+<h2 id="dimdata"><code class="cmd">DIMDATA</code></h2>
+    <p>The inverse of CURVETABLE — reads a hand-drawn or imported curve schedule and writes its values back into the matching numbered labels.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select the curve schedule text (window the whole table):</code>.</p>
+    <div class="note"><strong>Note</strong> — Built for reading surveyor curve schedules. It expects the standard columns: number, bearing, chord, arc, radius.</div>
+
+<h2 id="alab"><code class="cmd">ALAB</code></h2>
+    <p>Labels each selected lot with its area.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select polylines to label:</code>.</p>
+    <h4>What it produces</h4>
+    <p>Area labels on <strong>SUB AREA</strong>, placed inside each lot. Areas read in m² below a hectare and ha above.</p>
+
+<h2 id="setlayout"><code class="cmd">SETLAYOUT</code></h2>
+    <p>Builds a complete set of per-lot sales layouts — one sheet per lot, each centred and scaled to its own lot.</p>
+    <h4>How to use it</h4>
+    <p><code>Select the viewport in your MAIN sales layout:</code> → <code>Enter plot scale denominator (e.g. 200 for 1:200) &lt;200&gt;:</code>. Everything else is automatic.</p>
+    <h4>What it produces</h4>
+    <p>One annotation scale and one layout per lot, each viewport centred on its lot. Tabs are sorted into lot order.</p>
+    <div class="note"><strong>Note</strong> — Lot numbers are read as text on the <strong>SUB DP</strong> layer, so a missing or mis-layered lot number simply won't get a sheet — which makes this a handy QA pass. Pair with INCBLOCK. No ribbon button.</div>
+
+<h2 id="incblock"><code class="cmd">INCBLOCK</code></h2>
+    <p>Turns each lot into a numbered annotative block that's only visible at its own scale.</p>
+    <h4>How to use it</h4>
+    <p><code>Enter starting block number &lt;next free number&gt;:</code> then loop: <code>Select lot to block as "N" &lt;exit&gt;:</code>. The annotation scale advances after each lot.</p>
+    <h4>What it produces</h4>
+    <p>A block named after each number containing a copy of the lot, referenced on <strong>SUB BDY</strong>.</p>
+    <div class="note"><strong>Note</strong> — The original lot is left untouched — a copy becomes the block content. Create the named per-lot scales first with CSCALE. No ribbon button.</div>
+
+<h2 id="tadd"><code class="cmd">TADD</code></h2>
+    <p>Adds a prefix or suffix to selected text.</p>
+    <h4>How to use it</h4>
+    <p><code>Add text as [Prefix/Suffix] &lt;Suffix&gt;:</code> → <code>Text to add:</code>. Pre-select, or you'll be asked to select afterwards.</p>
+    <div class="note"><strong>Note</strong> — Dimensions keep their live measured value, as with TBRK.</div>
+
+<h2 id="levtotxt"><code class="cmd">LEVTOTXT</code></h2>
+    <p>Writes surface levels into existing text by picking points.</p>
+    <h4>How to use it</h4>
+    <p>Picks an elevation source first, then loops: <code>Select text:</code> → <code>Select point for level:</code>.</p>
+    <h4>What it produces</h4>
+    <p>Overwrites the picked text with the elevation to one decimal place.</p>
+    <div class="note"><strong>Note</strong> — Samples from the drawing's TIN surface, or 3D faces if there's no TIN — so your pick only needs to be right in plan, not snapped to 3D geometry. No ribbon button.</div>
+
+<h2 id="moffset"><code class="cmd">MOFFSET</code></h2>
+    <p>Offsets a whole selection at once, with a live preview, repeating until you stop.</p>
+    <h4>How to use it</h4>
+    <p><code>Specify offset distance or [Through/Erase]:</code> — <strong>Erase</strong>
+        asks whether to delete the sources, <strong>Through</strong> takes the distance from the cursor.
+        Then select objects and drag to choose the side.</p>
+    <div class="note"><strong>Note</strong> — A whole batch offsets consistently — closed shapes all grow or all shrink together. You can type an exact distance mid-drag.</div>
+
+<h2 id="vcopy"><code class="cmd">VCOPY</code></h2>
+    <p>Copies blocks or text to every vertex of the chosen polylines.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select the objects to copy, or you'll be asked. Then <code>Base point:</code> → <code>Select target polylines:</code>.</p>
+
+<h2 id="pipel"><code class="cmd">PIPEL</code></h2>
+    <p>Turns polylines into pipes — a styled centreline with two wall lines that follow it when you edit.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select polylines to convert to pipes:</code> → <code>Enter pipe size:</code>.</p>
+    <div class="note"><strong>Note</strong> — Edit the centreline and the walls follow; they're locked so they can't be dragged off. The last pipe size is remembered between sessions.</div>
+
+<h2 id="landxml"><code class="cmd">LANDXML</code></h2>
+    <p>Imports an NSW ePlan / LandXML file — lot boundaries, lot numbers with areas, and monument labels.</p>
+    <h4>How to use it</h4>
+    <p>Opens a file dialog, then <code>Import CgPoints as point entities? [Yes/No] &lt;No&gt;:</code>.</p>
+    <h4>What it produces</h4>
+    <p>Boundaries on the subject or adjoining layers by parcel class, with labels on the matching text layers. Arcs are preserved.</p>
+    <div class="note"><strong>Note</strong> — Wide arcs (sweeping over 180°) are flagged on the command line so you can check them against the plan.</div>
+
+<h2 id="trunc"><code class="cmd">TRUNC</code></h2>
+    <p>Chops decimals off the number in selected text — cutting, not rounding.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, then <code>Decimal places &lt;2&gt;:</code>.</p>
+    <div class="note"><strong>Note</strong> — Only the first number in the text is affected.</div>
+
+<h2 id="rround"><code class="cmd">RROUND</code></h2>
+    <p>Rounds the number in selected text — up, down or to nearest.</p>
+    <h4>How to use it</h4>
+    <p><code>Rounding mode [Nearest/Up/Down]:</code> → <code>Decimal places &lt;2&gt;:</code>.</p>
+    <div class="note"><strong>Note</strong> — The rounding mode is remembered between uses.</div>
+
+<h2 id="update"><code class="cmd">UPDATE</code></h2>
+    <p>Fills in title-block attributes across all layouts from a central CSV register.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — it runs from files.</p>
+    <div class="note"><strong>Note</strong> — Needs a <code>_DWGLISTCSV.TXT</code> file beside the drawing whose first line names the CSV register. The CSV has the drawing name in the first column, layout name in the second, and attribute tags as the remaining headers.</div>
+
+<h2 id="ob2wo"><code class="cmd">OB2WO</code></h2>
+    <p>Turns closed shapes into wipeouts.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select or select circles, ellipses and polylines, then <code>Do you want to keep the original entities? [Yes/No] &lt;Yes&gt;:</code>.</p>
+
+<h2 id="smt-stripmtext"><code class="cmd">SMT / STRIPMTEXT</code></h2>
+    <p>Strips all inline formatting out of text, leaving the plain words.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or select mtext, leaders, dimensions or blocks with attributes.</p>
+    <div class="note"><strong>Note</strong> — Line breaks are kept. Background masks aren't touched — use TBG for those.</div>
+
+<h2 id="wsyupdate"><code class="cmd">WSYUPDATE</code></h2>
+    <p>Checks for a newer release of the suite and launches the installer.</p>
+    <h4>How to use it</h4>
+    <p>If an update exists: <code>Update to vX? BricsCAD will need to close to finish. [Yes/No] &lt;Yes&gt;:</code>.</p>
+
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

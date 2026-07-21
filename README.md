@@ -1,12 +1,17 @@
-# BW Western Sydney — Drafting Documentation
+# Western Sydney Hub
 
-Documentation for the Beveridge Williams Western Sydney drafting and survey
-toolset: the BricsCAD plugin suite, our drafting standards, and onboarding
-material. Published with GitHub Pages.
+The central hub for the Beveridge Williams Western Sydney office: the BricsCAD
+plugin suite, our drafting and survey standards, and onboarding material.
+Published with GitHub Pages.
 
-The command reference is written from the shipping plugin source, so it
-describes the tools as they actually behave — prompts, defaults, output layers
-and prerequisites.
+The tools were collected from across the office and packaged into one installable
+suite; this site documents them. The command reference is written from the
+shipping plugin source, so it describes the tools as they actually behave —
+prompts, defaults, output layers and prerequisites.
+
+Nothing here is exclusive to Western Sydney — other offices are welcome to
+install the suite and use what's useful. Built and maintained by the Western
+Sydney Drafting department.
 
 ## Editing
 
@@ -30,44 +35,60 @@ python -m http.server 8080
 
 then visit <http://localhost:8080/>.
 
-### The generators in `tools/`
+### The generators in `scripts/`
 
-The pages were originally produced by the scripts in `tools/`, which stamp the
-shared `<head>` and chrome around body content and work out the correct
-relative path depth for each page. They are an **authoring convenience, not a
-build step** — the HTML they emit is committed and can be edited directly.
-Re-running a generator overwrites the pages it owns, so don't run them after
-hand-editing unless you've folded your changes back into the script.
+Most pages were originally produced by the scripts in `scripts/`, which stamp the
+shared `<head>` and chrome around body content and work out the correct relative
+path depth. They are an **authoring convenience, not a build step** — the HTML
+they emit is committed and can be edited directly.
 
-One exception: `tools/gen_index.py` is worth re-running. It rebuilds the
-alphabetical index on `drafting/commands/index.html` by scraping the panel pages
-themselves, so the index can't drift behind the reference the way the old
-hand-maintained table did (it had fallen to 32 entries against 74 documented
-commands). It only rewrites the block between the `ALPHA_START` / `ALPHA_END`
-markers, and it must run *after* `gen_commands.py`, which owns the rest of that
-page:
+**The command library is the exception: keep using its generators.**
+
+`/commands/` is a shared, suite-wide reference covering all four ribbon tabs
+(WSY Drafting, BW Engineering, WSY WAE, WSY Tools), organised by the panels the
+ribbon actually ships. The taxonomy is read from the `.cui` files in the plugin
+repo, not invented here, so the docs match what people see in BricsCAD.
+
+- `scripts/command_data.json` — editable master for the Engineering, WAE and
+  Tools entries. These were written against the plugin source; correct them
+  here, not in the HTML.
+- `scripts/gen_library_other.py` — renders those entries into pages.
+- `scripts/gen_command_library.py` — scans every page under `/commands/` and
+  rebuilds **both** the alphabetical index and `assets/js/commands.js` (the data
+  behind the home-page search). One scan feeds both, so the index, the search
+  and the pages cannot drift apart.
+
+After adding, renaming or refiling a command:
 
 ```
-python tools/gen_commands.py && python tools/gen_index.py
+python scripts/gen_library_other.py && python scripts/gen_command_library.py
 ```
 
-**After adding or renaming a command, run `gen_index.py`.** Where a command's
-first sentence doesn't stand alone out of context, add a curated line to
-`OVERRIDES` at the top of that script.
+`assets/js/commands.js` is generated but **committed** — the site has no build
+step, GitHub Pages serves the files as they are.
+
+`gen_commands.py` and `gen_index.py` are **superseded and must not be run**:
+they own the old drafting-only pages under `drafting/commands/`, which are now
+redirect stubs. They are kept only as the provenance of the drafting entry text.
 
 ## Structure
 
 ```
 index.html            Home
-drafting/             Ribbon, standards, and the full command reference
-survey/               WAE tools, NSW Lot Loader, Point Cloud Digitizer
+getting-started/      Download and install the suite
+commands/             Shared command library — all four ribbon tabs
+drafting/             WSY Drafting ribbon and drafting standards
+survey/               WAE tools
 engineering/          BW Engineering ribbon
+tools/                NSW Lot Loader, Point Cloud Digitizer
 quality/              Drawing QA checklist
 onboarding/           BricsCAD, spatial data resources, glossary
+about/                How the Hub came together, credits, contributing
 assets/css/site.css   All styling
 assets/js/site.js     Navigation data + page behaviour
+assets/js/commands.js Generated command data for the home search
 assets/img/           Screenshots, tutorial GIFs, logos
-tools/                Page generators (optional) + gen_index.py (re-runnable)
+scripts/              Page generators; command library generators are re-runnable
 ```
 
 ## Notes
@@ -80,8 +101,11 @@ tools/                Page generators (optional) + gen_index.py (re-runnable)
   sidebars. Please don't reintroduce a viewport-locked container with
   independently scrolling panes — it breaks anchor links, back-button scroll
   restoration, mobile URL-bar behaviour and smooth scrolling.
-- **Dark mode** follows the operating system, with a toggle in the header that
-  persists per browser.
+- **Dark is the default theme**, deliberately — not "follow the OS". `:root`
+  carries the dark scale and only an explicit `[data-theme="light"]` switches;
+  there is no `prefers-color-scheme` rule, because a light OS preference
+  flipping the site would defeat the point. The header toggle opts into light
+  and persists per browser.
 
 ## Publishing
 

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open — WSY Hub</title>
+<meta name="description" content="Titleblock update, the drawing register and the job folder.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Open</h1>
+    <p class="lede">Titleblock update, the drawing register and the job folder.</p>
+
+    <h2 id="diropen"><code class="cmd">DIROPEN</code></h2>
+    <p>Opens the folder the active drawing lives in — handy for grabbing a reference, checking the rasters folder or dropping a PDF next to the DWG.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — run it and Explorer opens at the drawing's folder.</p>
+    <h4>What it produces</h4>
+    <p>Nothing in the drawing.</p>
+    <div class="note"><strong>Note</strong> — The drawing has to have been saved; an unsaved drawing has no folder and you'll get <em>Drawing folder not found (unsaved drawing?).</em></div>
+
+    <h2 id="excelreg"><code class="cmd">EXCELREG</code></h2>
+    <p>A shortcut to the register that sits beside the drawings, so you don't have to go looking for it in Explorer.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — run it and the register opens. It looks in the current drawing's folder for the first file matching <code>*_Drawing_Register.xls*</code>, so both <code>.xls</code> and <code>.xlsx</code> registers are found.</p>
+    <h4>What it produces</h4>
+    <p>Nothing in the drawing — it opens the spreadsheet in whatever application is registered for it.</p>
+    <div class="note"><strong>Note</strong> — The drawing has to have been saved. If the folder can't be resolved you get <em>Drawing folder not found (unsaved drawing?).</em>, and if there's no register beside it, <em>File not found.</em></div>
+
+    <h2 id="update"><code class="cmd">UPDATE</code></h2>
+    <p>Fills in every title block in the drawing from a shared CSV, so a project's sheet numbers, titles, dates and revisions are maintained in one spreadsheet rather than sheet by sheet.</p><p>The drawing folder holds a pointer file, <code>_DWGLISTCSV.TXT</code>, whose first line names the CSV. In the CSV the first column is the drawing name, the second is the layout, and every remaining column heading is an attribute tag.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — run it and it reports either <em>--&gt; Attributes are up-to-date.</em> or <em>--&gt; N attributes updated in N blocks.</em> Everything else it has to say is a diagnostic: the pointer file being missing or empty, the CSV not being found, the file not being a <code>.csv</code>, or this drawing's name not appearing in the first column.</p>
+    <h4>What it produces</h4>
+    <p>Changes attribute values on block references in the layouts named in the CSV. Only attributes whose tag matches a column heading and whose value actually differs are touched; nothing is created or erased.</p>
+    <div class="note"><strong>Note</strong> — Drawing names and layout names are matched case-insensitively, and the drawing name is compared without its extension. The CSV is read using the machine's regional list separator, falling back to a comma.</div>
+
+    <nav class="page-nav">
+      <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

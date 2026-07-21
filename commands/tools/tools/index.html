@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools — WSY Hub</title>
+<meta name="description" content="The NSW Lot Loader and Point Cloud Digitizer.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Tools</h1>
+    <p class="lede">The NSW Lot Loader and Point Cloud Digitizer.</p>
+
+    <h2 id="nswlots"><code class="cmd">NSWLOTS</code></h2>
+    <p>Opens the lot loader, which pulls cadastral boundaries, lot labels, road names and road centrelines straight from the NSW Spatial service into model space. Lots can be found by lot and plan number, by picking a point, or by an extent.</p><p>The panel is modeless, so it stays open while you work in the drawing. The <strong>?</strong> button in its title bar opens offline help.</p>
+    <h4>How to use it</h4>
+    <p>The command itself has no prompts — it just shows the panel, and everything happens in the form. Set the import options (subject and adjoining lot labels, road names, road centrelines), choose one of the three searches, and click <strong>Fetch Lots</strong>. Entries and settings are remembered for next time.</p>
+    <h4>What it produces</h4>
+    <p>Polylines and MText on the office cadastral layers: <strong>SUB BDY</strong> and <strong>SUB DP</strong> for the lots you asked for, <strong>ADJ BDY</strong> and <strong>ADJ DP</strong> for neighbours and the surrounding buffer, <strong>ROAD NAME</strong> and <strong>ROAD CL</strong> for roads. The <em>By Point</em> and <em>By Extent</em> searches put everything on the ADJ layers. Lots already loaded are skipped rather than duplicated. Each boundary carries the parcel details as <code>NSW_PARCEL</code> xdata.</p>
+    <div class="note"><strong>Note</strong> — It needs internet access to the NSW Spatial service. The MGA zone is worked out from the fetched data; if it can't be determined the tool assumes Zone 56 and says so in the status bar — worth checking on a Zone 55 job.</div>
+
+    <h2 id="pcdig"><code class="cmd">PCDIG</code></h2>
+    <p>Shows or hides the digitizer panel, which traces features off a point cloud — stepping along at a fixed distance per vertex, or tracing freely — with every vertex snapped to the cloud, numbered and coded as it goes. Each drawing gets its own panel.</p><p>The panel's buttons run the companion commands: <code>PCDIG_LINE</code> (Add Line), <code>PCDIG_POINT</code> (Add Point), <code>PCDIG_EXTEND</code> (Extend an existing 3D polyline) and <code>PCDIG_EXPORT</code> (Export to 12da).</p>
+    <h4>How to use it</h4>
+    <p>The command itself has no prompts — it toggles the panel. Set the segment distance, point numbering, point code and layer (manually or from a Trimble <code>.fxl</code> feature library) in the panel, then start a run. Digitising prompts <em>Pick point (Esc to exit):</em> with an <strong>Undo</strong> keyword that steps back a vertex; Extend asks you to <em>Select polyline near the end you wish to extend:</em>.</p>
+    <h4>What it produces</h4>
+    <p>3D polylines and, optionally, survey points on the feature's layer — Civil points where the Civil module is available, otherwise standard points with the number and code attached. The layer is created from the feature library's colour if it doesn't exist. <strong>Export to 12da…</strong> writes the digitised strings and points to a 12d Model ASCII file.</p>
+    <div class="note"><strong>Note</strong> — While digitising, 2D object snaps are turned off and point-cloud nearest snapping is turned on, and <code>PDMODE</code>/<code>PDSIZE</code> are set for point visibility if they were at their defaults — all restored when the run ends. A locked target layer stops the run before it starts. The export can't run while a digitising run is active.</div>
+
+    <nav class="page-nav">
+      <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

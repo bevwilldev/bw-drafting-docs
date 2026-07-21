@@ -2,74 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Annotation & Scale Commands — BW Drafting Docs</title>
-<meta name="description" content="Creating annotation scales and cycling through them.">
+<title>Moved — WSY Hub</title>
+<meta http-equiv="refresh" content="0; url=../../../commands/drafting/annotation/">
+<link rel="canonical" href="../../../commands/drafting/annotation/">
 <link rel="icon" href="../../../assets/img/bw-logo.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
-     domain-locked: add every serving domain to the kit or it falls back. -->
-<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
 <link rel="stylesheet" href="../../../assets/css/site.css">
-<script>
-  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
-</script>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
-<header data-header></header>
-
-<div class="layout">
-  <aside data-sidenav="drafting"></aside>
-
+<div class="layout no-nav">
   <main class="content" id="main">
-    <h1>Annotation &amp; Scales</h1>
-    <p class="lede">Creating the annotation scales a drawing needs, and moving between them.</p>
-
-    <div class="note"><strong>Why this matters</strong> — nearly everything the toolset places is
-    annotative, meaning it displays at the size appropriate to the current annotation scale. Set
-    the scale before you place annotation.</div>
-
-    <h2 id="commands">Commands</h2>
-    <h3 id="cscale"><code class="cmd">CSCALE</code></h3>
-    <p>Creates annotation scales from a dialog, working out the ratio for you.</p>
-    <p class="meta"><strong>Ribbon</strong> &middot; Annotation → Create New Scale</p>
-    <h4>How to use it</h4>
-    <p>Opens a dialog. Enter the drawing units (the denominator — 200 for 1:200) and a
-        name. The <strong>▾</strong> menu inserts sequence tokens so you can create a run of scales
-        at once:</p>
-        <ul>
-          <li><code>{1-5}</code> — numbers, so <em>Sheet {1-5}</em> makes Sheet 1 … Sheet 5</li>
-          <li><code>{01-10}</code> — zero-padded numbers</li>
-          <li><code>{A-E}</code> — letters</li>
-        </ul>
-        <p>Queue scales with <strong>+</strong>; they're all created when you close the dialog.</p>
-    <h4>What it produces</h4>
-    <p>Named annotation scales using the office convention for metre drawings — 1:200 becomes paper 1, drawing 0.2.</p>
-    <div class="note"><strong>Note</strong> — This is the same tool on the BW Engineering ribbon, and builds the named per-lot scales that SETLAYOUT and INCBLOCK rely on.</div>
-    <h3 id="annonext-annoprev"><code class="cmd">ANNONEXT / ANNOPREV</code></h3>
-    <p>Step forward or back through the drawing's annotation scales.</p>
-    <p class="meta"><strong>Ribbon</strong> &middot; Annotation → Next Scale / Previous Scale</p>
-    <h4>How to use it</h4>
-    <p>No prompts. The new scale is reported on the command line, and the list wraps at both ends.</p>
-    <div class="note"><strong>Note</strong> — Scales imported from xrefs are skipped, so cycling stays within the drawing's own list.</div>
-    <h3 id="annotog"><code class="cmd">ANNOTOG</code></h3>
-    <p>Shows or hides annotative objects at all scales, not just the current one.</p>
-    <h4>How to use it</h4>
-    <p>No prompts — it's a toggle, and reports the new state.</p>
-    <div class="note"><strong>Note</strong> — Useful for checking what's attached to which scale. No ribbon button.</div>
-    <nav class="page-nav">
-      <a href="../text/"><div class="dir">Previous</div><div class="ttl">Text & Labels</div></a>
-      <a class="next" href="../sheeting/"><div class="dir">Next</div><div class="ttl">Sheeting</div></a>
-    </nav>
+    <h1>This page has moved</h1>
+    <p class="lede">
+      The command reference is now shared across the whole suite, organised by
+      ribbon tab and panel.
+    </p>
+    <p><a class="btn btn-primary" href="../../../commands/drafting/annotation/">Go to the new page</a></p>
+    <p>If you are not redirected automatically, follow the link above.</p>
   </main>
-
-  <aside data-toc></aside>
 </div>
-
-<footer data-footer></footer>
-<script src="../../../assets/js/site.js"></script>
 </body>
 </html>

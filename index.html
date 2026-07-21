@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Drafting Documentation — Beveridge Williams Western Sydney</title>
-<meta name="description" content="Documentation for the BW Western Sydney drafting and survey toolset: BricsCAD command reference, drafting standards, and onboarding.">
+<title>Western Sydney Hub — Beveridge Williams</title>
+<meta name="description" content="The tools, standards and know-how of the Beveridge Williams Western Sydney office: the BricsCAD suite, command reference, drafting standards, and onboarding.">
 <link rel="icon" href="assets/img/bw-logo.svg">
 <!-- Link previews (Teams, Slack, iMessage). og:url and og:image MUST be
      absolute — relative paths are ignored by every scraper — so the domain is
@@ -12,9 +13,9 @@
      account, these two lines and the canonical below need updating. -->
 <link rel="canonical" href="https://agabanto.github.io/bw-drafting-docs/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="BW Drafting Docs">
-<meta property="og:title" content="Drafting Documentation — BW Western Sydney">
-<meta property="og:description" content="Reference and guidance for the Western Sydney drafting and survey toolset: the BricsCAD plugin suite, our drafting standards, and how we work.">
+<meta property="og:site_name" content="Western Sydney Hub">
+<meta property="og:title" content="Western Sydney Hub — Beveridge Williams">
+<meta property="og:description" content="The tools, standards and know-how of the Western Sydney office, collected in one place — the BricsCAD suite, our standards, and how we work.">
 <meta property="og:url" content="https://agabanto.github.io/bw-drafting-docs/">
 <meta property="og:image" content="https://agabanto.github.io/bw-drafting-docs/assets/img/office-og.jpg">
 <meta property="og:image:width" content="1200">
@@ -38,130 +39,247 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header data-header></header>
 
-<div class="layout">
-  <aside data-sidenav="home"></aside>
+<!-- The hero sits OUTSIDE .layout so it can span the full window without the
+     negative-margin / 100vw tricks a bleed-out normally needs. Those measure the
+     viewport including the scrollbar, which is exactly how this page ended up
+     scrolling sideways on a phone once already. A plain full-width band with its
+     own centred inner wrapper cannot overflow. -->
+<section class="home-hero">
+  <img class="home-hero-bg" src="assets/img/office-hero.jpg" alt="" aria-hidden="true"
+       width="1200" height="900" decoding="async" fetchpriority="high">
+  <div class="home-hero-inner">
+    <span class="eyebrow">Beveridge Williams</span>
+    <h1>Western Sydney Hub</h1>
+    <p class="lede">
+      The tools, standards and know-how of the Western Sydney office, collected
+      in one place — the BricsCAD suite we built, how we draft, survey and
+      detail, and everything you need to get set up.
+    </p>
 
-  <main class="content is-home" id="main">
-    <div class="hero">
-      <img class="hero-bg" src="assets/img/office-hero.jpg" alt="" aria-hidden="true"
-           width="1200" height="900" decoding="async">
-      <span class="eyebrow">BW Western Sydney</span>
-      <h1>Drafting Documentation</h1>
-      <p class="lede">
-        Reference and guidance for the Western Sydney drafting and survey toolset —
-        the BricsCAD plugin suite, our drafting standards, and how we work.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="getting-started/">
-          New here? Install the suite
+    <!-- Command search. Progressive enhancement: with JS off this is an inert
+         field and the two buttons below still get you everywhere. -->
+    <div class="cmd-search" data-cmd-search hidden>
+      <label class="sr-only" for="cmdSearch">Search commands</label>
+      <div class="cmd-search-field">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
+             stroke-linecap="round" aria-hidden="true">
+          <circle cx="7.2" cy="7.2" r="4.4"/><path d="m10.6 10.6 3 3"/>
+        </svg>
+        <input id="cmdSearch" type="search" autocomplete="off" spellcheck="false"
+               placeholder="Search the commands — try &quot;curve&quot; or AUTODIM">
+      </div>
+      <div class="cmd-search-out" role="listbox" aria-label="Command results"></div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="getting-started/">
+        New here? Install the suite
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/>
+        </svg>
+      </a>
+      <a class="btn btn-quiet" href="commands/#alphabetical-index">Browse the command reference</a>
+    </div>
+
+    <!-- Counts belong to the opening statement, not a band of their own — as a
+         standalone strip they were three small numbers stranded in empty space.
+         Factual, not invented: commands and panels come from the generated
+         index. -->
+    <div class="stat-strip">
+      <div class="stat"><span class="n">119</span><span class="l">Commands</span></div>
+      <div class="stat"><span class="n">4</span><span class="l">Ribbon tabs</span></div>
+      <div class="stat"><span class="n">1</span><span class="l">Installer</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- The drawer lives outside any wrapper: it is position:fixed on mobile and
+     display:none above the breakpoint, so it needs no column of its own. -->
+<aside data-sidenav="home"></aside>
+
+<main id="main" class="home-main">
+
+  <!-- Bands, not one long column. Alternating full-width sections give the page
+       a rhythm the uniform card stack lacked, and each one can carry its own
+       background without any bleed-out trickery. -->
+  <section class="band">
+    <div class="band-inner content is-home">
+      <p class="band-eyebrow"><span class="band-num">01</span> Where everything lives</p>
+      <h2 id="browse-by-section" class="band-h">Browse by section</h2>
+
+      <!-- The install card is the one thing a first-time visitor needs, so it
+           spans the grid and carries its own weight rather than being the first
+           of eight identical tiles. -->
+      <a class="feature-card" href="getting-started/">
+        <span class="feature-body">
+          <span class="feature-kicker">Start here</span>
+          <span class="feature-t">Install the suite</span>
+          <span class="feature-d">One installer, every discipline. Pick a workstation
+            preset or tick the components you want &mdash; each one works on its own.</span>
+        </span>
+        <span class="feature-go" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/>
-          </svg>
+               stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/></svg>
+        </span>
+      </a>
+
+      <div class="card-grid">
+        <a href="commands/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5 2 8l2.5 2.5"/><path d="M11.5 5.5 14 8l-2.5 2.5"/><path d="M9.4 3.4 6.6 12.6"/></svg></span>
+          <span class="t">Command Reference</span>
+          <span class="d">Every command in the suite, across all four ribbon tabs — searchable.</span>
+          <span class="m">119 commands</span>
         </a>
-        <a class="btn btn-quiet" href="drafting/commands/#alphabetical-index">Browse the command reference</a>
+        <a href="drafting/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12.5 12.5 2l1.5 1.5L3.5 14H2z"/><path d="M10.5 4 12 5.5"/></svg></span>
+          <span class="t">Drafting</span>
+          <span class="d">The WSY Drafting ribbon and the standards we draw to.</span>
+          <span class="m">Ribbon &middot; standards</span>
+        </a>
+        <a href="survey/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.8 14.2 13H1.8z"/><circle cx="8" cy="9.6" r="1.5"/></svg></span>
+          <span class="t">Survey</span>
+          <span class="d">Works-As-Executed plans: sheet import, markup labels and the certification tools.</span>
+          <span class="m">8 pages &middot; 6 WAE tools</span>
+        </a>
+        <a href="engineering/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 11.5h12M2 4.5h12"/><path d="M5 2.5v4M11 9.5v4"/></svg></span>
+          <span class="t">Engineering</span>
+          <span class="d">The BW Engineering ribbon: text, leaders, dimensions, scales and plotting.</span>
+          <span class="m">5 pages</span>
+        </a>
+        <a href="tools/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.8" y="1.8" width="5.4" height="5.4" rx="1"/><rect x="8.8" y="1.8" width="5.4" height="5.4" rx="1"/><rect x="1.8" y="8.8" width="5.4" height="5.4" rx="1"/><rect x="8.8" y="8.8" width="5.4" height="5.4" rx="1"/></svg></span>
+          <span class="t">Office Tools</span>
+          <span class="d">The NSW Lot Loader and Point Cloud Digitizer &mdash; in-office data utilities.</span>
+          <span class="m">3 pages</span>
+        </a>
+        <a href="videos/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="2"/><path d="M6.6 6.4 10.2 8l-3.6 1.6z"/></svg></span>
+          <span class="t">Video Guides</span>
+          <span class="d">Watch the tools in use — quicker to see than to read.</span>
+          <span class="m">Playlist</span>
+        </a>
+        <a href="onboarding/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2 14.5 5 8 8 1.5 5z"/><path d="M4 6.6v3.2c0 1 1.8 1.9 4 1.9s4-.9 4-1.9V6.6"/></svg></span>
+          <span class="t">Onboarding</span>
+          <span class="d">New to the team? Start with BricsCAD, then the spatial data resources we use.</span>
+          <span class="m">5 pages &middot; glossary</span>
+        </a>
+        <a href="quality/">
+          <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5 6.5 11.5 2.5 7.5"/></svg></span>
+          <span class="t">Quality</span>
+          <span class="d">The drawing QA checklist and how a drawing gets signed off.</span>
+          <span class="m">2 pages</span>
+        </a>
       </div>
     </div>
-
-    <div class="stat-strip">
-      <div class="stat"><span class="n">72</span><span class="l">Commands</span></div>
-      <div class="stat"><span class="n">8</span><span class="l">Ribbon panels</span></div>
-      <div class="stat"><span class="n">6</span><span class="l">Sections</span></div>
+  </section>
+  <section class="band band-alt">
+    <div class="band-inner content is-home">
+      <p class="band-eyebrow"><span class="band-num">02</span> Context</p>
+      <h2 id="what-this-is" class="band-h">What this is</h2>
+      <div class="prose">
+        <p>
+          The Western Sydney office had its tools scattered &mdash; a routine on someone's
+          desktop, a template on a network drive, a workflow that only worked if you knew
+          who to ask. This is where all of it now lives: the tools collected into one
+          installed suite, and the standards and know-how that go with them.
+        </p>
+        <p>
+          Every command in the BW BricsCAD Tools suite is documented here &mdash; what it
+          does, what it prompts for, what it draws and on which layer, and the things worth
+          knowing before you run it. The command pages are written directly against the
+          shipping tools, so they describe how they actually behave.
+        </p>
+        <p>
+          If you reached this site from a <strong>Help</strong> button on one of the
+          ribbons, use the section navigation to find the tool you were using.
+        </p>
+        <div class="note">
+          <strong>Note</strong> &mdash; a number of commands have no ribbon button and are
+          typed at the command line. They're in the search above and in the
+          <a href="commands/#alphabetical-index">command reference</a> like any
+          other, so it's worth a look even if you only use the ribbon.
+        </div>
+      </div>
     </div>
-
-    <h2 id="start-here">Start here</h2>
-    <div class="card-grid">
-      <a href="getting-started/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 1.5v8"/><path d="M4.5 6 8 9.5 11.5 6"/><path d="M2.5 13.5h11"/></svg></span>
-        <span class="t">Getting Started</span>
-        <span class="d">Download and install the suite — every discipline uses the same installer.</span>
-        <span class="m">Install</span>
-      </a>
-      <a href="drafting/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M2 12.5 12.5 2l1.5 1.5L3.5 14H2z"/><path d="M10.5 4 12 5.5"/></svg></span>
-        <span class="t">Drafting</span>
-        <span class="d">The WSY Drafting ribbon, our drafting standards, and the full command reference.</span>
-        <span class="m">16 pages · 72 commands</span>
-      </a>
-      <a href="survey/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 1.8 14.2 13H1.8z"/><circle cx="8" cy="9.6" r="1.5"/></svg></span>
-        <span class="t">Survey</span>
-        <span class="d">Works-As-Executed plans: sheet import, markup labels and the certification tools.</span>
-        <span class="m">8 pages · 6 WAE tools</span>
-      </a>
-      <a href="engineering/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M2 11.5h12M2 4.5h12"/><path d="M5 2.5v4M11 9.5v4"/></svg></span>
-        <span class="t">Engineering</span>
-        <span class="d">The BW Engineering ribbon: text, leaders, dimensions, scales and plotting.</span>
-        <span class="m">5 pages</span>
-      </a>
-      <a href="tools/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="1.8" y="1.8" width="5.4" height="5.4" rx="1"/><rect x="8.8" y="1.8" width="5.4" height="5.4" rx="1"/>
-          <rect x="1.8" y="8.8" width="5.4" height="5.4" rx="1"/><rect x="8.8" y="8.8" width="5.4" height="5.4" rx="1"/></svg></span>
-        <span class="t">Office Tools</span>
-        <span class="d">The NSW Lot Loader and Point Cloud Digitizer — in-office data utilities.</span>
-        <span class="m">3 pages</span>
-      </a>
-      <a href="onboarding/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 2 14.5 5 8 8 1.5 5z"/><path d="M4 6.6v3.2c0 1 1.8 1.9 4 1.9s4-.9 4-1.9V6.6"/></svg></span>
-        <span class="t">Onboarding</span>
-        <span class="d">New to the team? Start with BricsCAD, then the spatial data resources we use.</span>
-        <span class="m">5 pages · glossary</span>
-      </a>
-      <a href="quality/">
-        <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M13.5 4.5 6.5 11.5 2.5 7.5"/></svg></span>
-        <span class="t">Quality</span>
-        <span class="d">The drawing QA checklist and how a drawing gets signed off.</span>
-        <span class="m">2 pages</span>
-      </a>
+  </section>
+  <section class="band">
+    <div class="band-inner content is-home">
+      <p class="band-eyebrow"><span class="band-num">03</span> Get moving</p>
+      <h2 id="what-are-you-doing" class="band-h">What are you doing today?</h2>
+      <p class="section-lede">
+        The three things people most often arrive here for. Each one is the short
+        path through, in order.
+      </p>
+      <div class="task-grid">
+        <div class="task">
+          <span class="task-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12.5 12.5 2l1.5 1.5L3.5 14H2z"/><path d="M10.5 4 12 5.5"/></svg></span>
+          <h3>Drafting a plan</h3>
+          <ol>
+            <li><a href="drafting/interface/using/">Load the ribbon</a></li>
+            <li><a href="commands/drafting/cadastre/">Lay out the cadastre</a></li>
+            <li><a href="commands/drafting/command-line/">Dimension the boundaries</a></li>
+            <li><a href="commands/drafting/sheeting/">Sheet it up</a></li>
+            <li><a href="quality/checklist/">Run the QA checklist</a></li>
+          </ol>
+        </div>
+        <div class="task">
+          <span class="task-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.8 14.2 13H1.8z"/><circle cx="8" cy="9.6" r="1.5"/></svg></span>
+          <h3>Marking up a WAE</h3>
+          <ol>
+            <li><a href="survey/wae/import-sheet/">Import the design sheet</a></li>
+            <li><a href="survey/wae/labels/">Drop the preset labels</a></li>
+            <li><a href="survey/wae/text/">Add horizontal &amp; vertical text</a></li>
+            <li><a href="survey/wae/calculate-grade/">Calculate grades</a></li>
+            <li><a href="survey/wae/modify-text/">Tidy and flip text</a></li>
+          </ol>
+        </div>
+        <div class="task">
+          <span class="task-ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2 14.5 5 8 8 1.5 5z"/><path d="M4 6.6v3.2c0 1 1.8 1.9 4 1.9s4-.9 4-1.9V6.6"/></svg></span>
+          <h3>Just started here</h3>
+          <ol>
+            <li><a href="onboarding/bricscad/">Get to know BricsCAD</a></li>
+            <li><a href="getting-started/">Install the suite</a></li>
+            <li><a href="drafting/interface/">Meet the ribbon</a></li>
+            <li><a href="onboarding/glossary/">Learn the vocabulary</a></li>
+            <li><a href="onboarding/resources/">Find the data sources</a></li>
+          </ol>
+        </div>
+      </div>
     </div>
-
-    <h2 id="what-this-site-covers">What this site covers</h2>
-    <p>
-      Every command in the BW BricsCAD Tools suite is documented here — what it does,
-      what it prompts for, what it draws and on which layer, and the things worth
-      knowing before you run it. The command pages are generated from the shipping
-      plugin source, so they describe the tools as they actually behave.
-    </p>
-    <p>
-      If you reached this site from a <strong>Help</strong> button on one of the
-      ribbons, use the section navigation on the left to find the tool you were
-      using.
-    </p>
-
-    <h2 id="finding-a-command">Finding a command</h2>
-    <p>
-      If you know the command name, the
-      <a href="drafting/commands/#alphabetical-index">command reference</a> lists
-      every command alphabetically and by ribbon panel, with a filter box to
-      narrow it down. Commands are shown the way you'd type them, like
-      <code class="cmd">AUTODIM</code> or <code class="cmd">SETLAYOUT</code>.
-    </p>
-    <div class="note">
-      <strong>Note</strong> — a number of commands have no ribbon button and are
-      typed at the command line. Those are listed in the command reference too, so
-      it's worth a browse even if you only use the ribbon.
+  </section>
+  <section class="band band-photo">
+    <img class="band-photo-bg" src="assets/img/drafting-corner-web.jpg" alt="" aria-hidden="true"
+         width="1400" height="933" loading="lazy" decoding="async">
+    <div class="band-inner content is-home">
+      <p class="band-eyebrow"><span class="band-num">04</span> Where it comes from</p>
+      <h2 id="built-in-western-sydney" class="band-h">Built in Western Sydney</h2>
+      <div class="prose">
+        <p>
+          These are the tools <em>this</em> office uses, shaped by the work we do &mdash; NSW
+          cadastre, deposited plans, Works-As-Executed. They came from across the team,
+          collected and made installable by the
+          <strong>Western Sydney Drafting department</strong>, who also build and maintain
+          this site.
+        </p>
+        <p>
+          Nothing here is limited to Western Sydney. If you're from another office,
+          you're welcome to install the suite, take what's useful and tell us what isn't.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-quiet" href="about/">Read the full story</a>
+      </div>
     </div>
-  </main>
+  </section>
 
-  <aside data-toc></aside>
-</div>
+</main>
 
 <footer data-footer></footer>
+<script src="assets/js/commands.js"></script>
 <script src="assets/js/site.js"></script>
 </body>
 </html>

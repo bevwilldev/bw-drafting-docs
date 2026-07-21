@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toolbox — WSY Hub</title>
+<meta name="description" content="Shared tools that ride with every plugin in the suite.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Toolbox</h1>
+    <p class="lede">Shared tools that ride with every plugin in the suite.</p>
+
+    <h2 id="atc"><code class="cmd">ATC</code></h2>
+    <p>Aligns new or existing text to a polyline, arc, spline or multileader by dragging it along the target — the text rotates to follow the curve as you move, and you click to drop it. It's the tool for labelling pipes, alignments and boundaries where the label has to sit on the line.</p><p>The same drag machinery is shared with the drafting ribbon's <code>CLABEL</code>, and the settings dialog is common to both.</p>
+    <h4>How to use it</h4>
+    <p>It loops until you exit. At <em>Select text to align [New/Settings] &lt;Exit&gt;:</em> pick existing text or mtext, choose <strong>New</strong> and answer <em>Specify text &lt;select&gt;:</em> to create some, or choose <strong>Settings</strong> to open the dialog. Then <em>Select curve or multileader to align to:</em> — curves nested inside blocks and xrefs are valid targets. Drag the text into place and click. Esc or Enter at the first prompt exits.</p><p>The dialog controls the object type for new text (text or mtext), justification, offset factor, rotation, readable orientation, background mask and its offset, plus Multiple and Copy modes and the layer and text style used for new text. Settings persist between sessions.</p>
+    <h4>What it produces</h4>
+    <p>Moves and rotates the text you selected, or creates new text or mtext using the type, justification, layer and style set in the dialog. With <strong>Copy selected</strong> on, the original is left alone and a copy is placed; with <strong>Multiple</strong> on, it keeps dragging a fresh copy after each click.</p>
+    <div class="note"><strong>Note</strong> — Cancelling a drag restores the original text rather than leaving it half-moved. Text on a locked layer is reported as not editable and skipped.</div>
+
+    <h2 id="ob2wo"><code class="cmd">OB2WO</code></h2>
+    <p>Turns circles, ellipses and polylines into wipeouts. The native wipeout command only accepts straight-segment polylines, so this samples curved geometry into enough vertices to keep the shape.</p>
+    <h4>How to use it</h4>
+    <p>Select the objects first if you like, otherwise it asks for a selection filtered to circles, ellipses and polylines. Then <em>Do you want to keep the original entities? [Yes/No]:</em>, defaulting to Yes.</p>
+    <h4>What it produces</h4>
+    <p>One wipeout per valid object, on the current layer. Circles and ellipses are sampled at 50 points; polyline arc segments at 1 + 25 × √|bulge| points. It reports <em>Wipeouts created for the selection set (N).</em></p>
+    <div class="note"><strong>Note</strong> — Objects that can't be sampled into at least three points are silently skipped.</div>
+
+    <h2 id="outline"><code class="cmd">OUTLINE</code></h2>
+    <p>Traces the outline around a set of objects. It builds a temporary rectangular frame just outside the selection's extents and then uses the native <code>BOUNDARY</code> command to construct outlines around every island inside that frame.</p><p>This is Lee Mac's <em>Outline Objects</em> routine, carried in the suite's Community LISP tools component rather than compiled into the plugin.</p>
+    <h4>How to use it</h4>
+    <p>Select the objects to outline, then answer <em>Erase original objects? [Yes/No] &lt;Yes&gt;:</em> — the default erases them and leaves only the outline.</p>
+    <h4>What it produces</h4>
+    <p>One or more closed polylines or regions on the current layer, following whatever the native <code>BOUNDARY</code> command produces for the selection.</p>
+    <div class="note"><strong>Note</strong> — Requires the Community LISP tools component to be installed; without it the command isn't defined.</div>
+
+    <h2 id="smt"><code class="cmd">SMT</code></h2>
+    <p>Removes every inline formatting code — colour, font, height, width, oblique, tracking, underline, overline, alignment and paragraph codes, plus stacked fractions and grouping braces — leaving plain content that picks up its appearance from the text style.</p><p>It is a no-dialog strip-everything command by office preference. <code>STRIPMTEXT</code> is registered as an alias and does exactly the same thing.</p>
+    <h4>How to use it</h4>
+    <p>Select the objects first if you like, otherwise it asks for a selection filtered to mtext, multileaders, dimensions and block references. There are no further prompts; it reports <em>StripMtext completed. N objects processed.</em></p>
+    <h4>What it produces</h4>
+    <p>Rewrites the contents of mtext, multileader mtext content, dimension text overrides and block attribute values. Mtext columns are collapsed so the text reflows as one block.</p>
+    <div class="note"><strong>Note</strong> — Line breaks (<code>\P</code>) are kept — they are content, not formatting — as are escaped literals. Stacked fractions become readable <code>a/b</code> text. Background masks are a property rather than an inline code, so they are left alone.</div>
+
+    <h2 id="tadd"><code class="cmd">TADD</code></h2>
+    <p>Bulk-edits a selection of annotation by putting the same string in front of or behind each item — adding units, an <code>approx.</code> qualifier or a diameter symbol across a set of labels in one go.</p>
+    <h4>How to use it</h4>
+    <p>Select the entities first if you like. It asks <em>Add text as</em> [Prefix/Suffix], defaulting to Suffix, then <em>Text to add:</em> (spaces allowed). If nothing was pre-selected you're then asked to <em>Select text entities:</em>, filtered to text, mtext and multileaders. An empty string cancels.</p>
+    <h4>What it produces</h4>
+    <p>Edits the existing entities in place; nothing is created.</p>
+    <div class="note"><strong>Note</strong> — For dimensions, a measurement with no override is represented as the <code>&lt;&gt;</code> placeholder so a prefix or suffix keeps the live measured value rather than freezing it. The engineering and drafting plugins both carry this command; the implementations are identical, so having both installed is harmless.</div>
+
+    <h2 id="vpo"><code class="cmd">VPO</code></h2>
+    <p>Constructs a polyline in model space representing what a paper space viewport actually shows, accounting for the viewport's position, scale, rotation and view direction. Useful for checking coverage before issuing a sheet set, or for building a key plan.</p><p>This is Lee Mac's <em>Viewport Outline</em> routine, carried in the suite's Community LISP tools component. Two variants come with it: <code>VPOL</code> outlines every viewport in the active layout, and <code>VPOA</code> every viewport in every layout.</p>
+    <h4>How to use it</h4>
+    <p>Switch to a layout with no viewport active, then run it and answer <em>Select viewport:</em>. In model space it refuses with <em>Command not available in Modelspace.</em></p>
+    <h4>What it produces</h4>
+    <p>A 2D (LW) polyline in model space tracing the transformed viewport boundary. Rectangular, polygonal and clipped viewports are all handled, including arc segments.</p>
+    <div class="note"><strong>Note</strong> — Requires the Community LISP tools component. The polyline's properties and optional interior offset are fixed in that routine's own parameters section.</div>
+
+    <nav class="page-nav">
+      <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# This site is internal to Beveridge Williams. It is served from GitHub Pages,
+# which cannot enforce access control on a personal account, so the only
+# protection here is that it should not be indexed or discoverable.
+#
+# This is obscurity, NOT security: anyone given the URL can still read the site.
+# If the content ever needs real protection, it has to move to a host that can
+# authenticate (see the notes in README.md).
+
+User-agent: *
+Disallow: /

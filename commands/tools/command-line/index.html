@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commands without a ribbon button — WSY Hub</title>
+<meta name="description" content="Office-tool commands typed at the command line.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Commands without a ribbon button</h1>
+    <p class="lede">Office-tool commands typed at the command line.</p>
+
+    <h2 id="nswlabellots"><code class="cmd">NSWLABELLOTS</code></h2>
+    <p>Adds lot labels to boundaries that the lot loader brought in earlier — useful when you imported without labels, deleted some, or want them back after tidying up. It reads the plan details from the xdata the loader attached rather than going back to the web service.</p>
+    <h4>How to use it</h4>
+    <p>Select the lot boundaries first if you like, otherwise it asks to <em>Select lots to label:</em>, filtered to polylines. It reports <em>[NSWLotLoader] Applied labels to N lot(s).</em></p>
+    <h4>What it produces</h4>
+    <p>One MText per lot at an interior point of the boundary, middle-centre at 1.0 height, holding the lot number, section number and plan label on separate lines. Boundaries on <strong>SUB BDY</strong> are labelled onto <strong>SUB DP</strong> (yellow); everything else goes onto <strong>ADJ DP</strong> (white). The layers are created if they don't exist.</p>
+    <div class="note"><strong>Note</strong> — It only works on polylines carrying <code>NSW_PARCEL</code> xdata — boundaries drawn by hand or brought in another way are silently skipped. It doesn't check whether a lot is already labelled, so running it twice on the same selection doubles the labels up. There is no ribbon button; type the command.</div>
+
+    <nav class="page-nav">
+      <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

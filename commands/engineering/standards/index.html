@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Standards — WSY Hub</title>
+<meta name="description" content="Importing the BW style set and managing annotation scales.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Standards</h1>
+    <p class="lede">Importing the BW style set and managing annotation scales.</p>
+
+    <h2 id="bwscales"><code class="cmd">BWSCALES</code></h2>
+    <p>Replaces whatever annotation scales a drawing has accumulated with the office engineering list — the plain ratios plus the named layout scales used on engineering plan sets.</p><p>It is deliberately a manual command and never runs on its own, because it wipes the list before rebuilding it.</p>
+    <h4>How to use it</h4>
+    <p>No prompts and no confirmation. It runs immediately and reports how many scales it removed and added — <em>Scale list reset: N removed, N added.</em></p>
+    <h4>What it produces</h4>
+    <p>The named presets Layout Plan, Line Marking, Intersection Detail, Parking Plan, Turning 500 / 250 / 200, Sewer Layout, Water, MD Locality and MD Layout, plus the ratio scales 1:10000, 1:5000, 1:2500, 1:2000, 1:1000, 1:500, 1:250, 1:200, 1:100, 1:50, 1:25, 1:20 and 1:10. Scales that already exist by name are left alone.</p>
+    <div class="note"><strong>Note</strong> — Every other scale is removed first. The currently active scale is skipped, and any scale still referenced by annotative objects can't be deleted so it survives — but anything else you had added is gone.</div>
+
+    <h2 id="bwstyleimport"><code class="cmd">BWSTYLEIMPORT</code></h2>
+    <p>Seeds a drawing with the Beveridge Williams standard styles so the engineering annotation commands have everything they need. It is the first thing to run in a drawing that didn't come from a BW template.</p><p>The styles are created on demand and the full specification is re-applied every time, so a style that an older build made wrongly is repaired the next time the command runs.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — run it and the styles are added. It reports <em>[WSYDrafting] BW styles imported (BW_AN family, BWAN_DIM25/35).</em> on the command line when it's finished.</p>
+    <h4>What it produces</h4>
+    <p>The BW_AN text-style family — <code>BW_AN</code> (arial narrow, annotative), <code>BW_AN_Italics</code> (arial italic), <code>BW_BK_Lotno</code> (arial black) and <code>BW_AU</code> (arial unicode ms) — plus the <code>BWAN_DIM25</code> and <code>BWAN_DIM35</code> annotative dimension styles.</p>
+    <div class="note"><strong>Note</strong> — Whatever text style, <code>TEXTSIZE</code> and dimension style were active before you ran it are restored afterwards, so importing the styles never changes what you're currently drawing with.</div>
+
+    <h2 id="cscale"><code class="cmd">CSCALE</code></h2>
+    <p>Adds annotation scales one at a time or in batches, using the office convention for metre drawings: paper units are fixed at 1 and the drawing units are the denominator divided by 1000.</p><p>This is the same tool as the Add New Scale button on the WSY Drafting ribbon — it ships in the shared toolbox assembly, so both ribbons run exactly the same command.</p>
+    <h4>How to use it</h4>
+    <p>Opens a dialog rather than prompting on the command line. Enter the drawing units and a name (which auto-fills to the ratio), and add as many as you need before closing. It reports <em>N scale(s) created.</em></p>
+    <h4>What it produces</h4>
+    <p>Annotation scale entries in the drawing's scale list. Nothing is drawn. A scale whose name already exists is skipped rather than duplicated.</p>
+    <div class="note"><strong>Note</strong> — Scales that arrived through an xref are hidden from the existing-names list — BricsCAD suffixes them <code>_XREF</code> and AutoCAD-style names contain an <code>@</code>. The older prompt-based BWCSCALE has been retired; use <code class="cmd">CSCALE</code>.</div>
+
+    <nav class="page-nav">
+      <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

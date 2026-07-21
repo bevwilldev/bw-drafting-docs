@@ -107,7 +107,7 @@ write("onboarding/index.html", "onboarding", "Onboarding",
       "Getting started: BricsCAD, and the spatial data resources we use.",
       """    <h1>Onboarding</h1>
     <p class="lede">
-      New to the drafting team? Start here. This section covers the software we
+      New to the office? Start here. This section covers the software we
       draw in and the data sources we rely on day to day.
     </p>
 
@@ -119,20 +119,15 @@ write("onboarding/index.html", "onboarding", "Onboarding",
     </div>
 
 
-    <figure class="photo">
-      <img src="../assets/img/drafting-corner-web.jpg" width="1400" height="933"
-           loading="lazy" decoding="async"
-           alt="The drafting area in the Western Sydney office — a row of dual-monitor
-                desks along a window wall, with planted timber storage running down
-                the centre of the floor.">
-      <figcaption>The drafting floor at LPC House, Oran Park.</figcaption>
-    </figure>
-
     <h2 id="where-to-go-next">Where to go next</h2>
     <p>
-      Once you're comfortable with BricsCAD, move on to
-      <a href="../drafting/">Drafting</a> to install the WSY ribbon and learn the
-      toolset, or <a href="../survey/">Survey</a> if you're working on WAE plans.
+      Once you're comfortable with BricsCAD,
+      <a href="../getting-started/">install the suite</a> — everyone runs the same
+      installer, whichever discipline you're in. Then head to the section that
+      matches your work: <a href="../drafting/">Drafting</a> for plans and the
+      command reference, <a href="../survey/">Survey</a> for Works-As-Executed,
+      or <a href="../engineering/">Engineering</a> for standard annotation and
+      plotting.
     </p>
 """ + page_nav(nxt=("bricscad/", "Introduction to BricsCAD")))
 

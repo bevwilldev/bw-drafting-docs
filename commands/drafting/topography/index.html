@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topography — WSY Hub</title>
+<meta name="description" content="Batters and contour labelling.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Topography</h1>
+    <p class="lede">Batters and contour labelling.</p>
+
+<h2 id="batter"><code class="cmd">BATTER</code></h2>
+    <p>Fills the space between a top and toe line with batter ticks, each stretched to span the gap.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Topography → Batter</p>
+    <h4>How to use it</h4>
+    <p><code>Select top batter curve:</code> → <code>Select toe (bottom) batter curve:</code>
+        → then drag to set the tick spacing, with the whole run previewing live. Click to confirm, Esc to cancel.</p>
+    <h4>What it produces</h4>
+    <p>Batter blocks on the <strong>BATTER</strong> layer, each rotated toward the toe and scaled to span the local gap.</p>
+    <div class="note"><strong>Note</strong> — Spacing is adaptive — ticks crowd where the batter narrows. Works on 3D top and toe strings, though the output lands flat.</div>
+
+<h2 id="contlab"><code class="cmd">CONTLAB</code></h2>
+    <p>Labels a contour with its elevation, sitting the text on the line with a mask through it.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Topography → Contour Label</p>
+    <h4>How to use it</h4>
+    <p>Loops: <code>Select contour &lt;exit&gt;:</code> then drag the label along it. Enter or Esc exits.</p>
+    <h4>What it produces</h4>
+    <p>Masked annotative text on your current layer and style, sitting on the contour so the mask reads.</p>
+    <div class="note"><strong>Note</strong> — The elevation comes from the contour's start point.</div>
+
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>

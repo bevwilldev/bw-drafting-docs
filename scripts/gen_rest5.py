@@ -180,13 +180,15 @@ W("quality/checklist/index.html", "quality", "Drawing Checklist",
 W("onboarding/bricscad/index.html", "onboarding", "Introduction to BricsCAD",
   "What BricsCAD is and how it fits our workflow.",
   """    <h1>Introduction to BricsCAD</h1>
-    <p class="lede">BricsCAD is the CAD package we draft in. If you've used AutoCAD you'll find it
-    immediately familiar — same commands, same file format, same way of working.</p>
+    <p class="lede">BricsCAD is the CAD package the office draws in. If you've used AutoCAD you'll
+    find it immediately familiar — same commands, same file format, same way of working.</p>
 
     <h2 id="where-it-fits">Where it fits</h2>
-    <p>Survey data comes in from the field, is processed, and reaches us as points, strings and
-    surfaces. We draft the plan from that data in BricsCAD, annotate it to our standards, and issue
-    it as a PDF. The plugin suite exists to make that middle step fast and consistent.</p>
+    <p>Survey data comes in from the field, is processed, and arrives as points, strings and
+    surfaces. From there the work diverges — a plan drafted and annotated to our standards, a
+    Works-As-Executed set marked up against the design, an engineering detail dimensioned and
+    plotted — but it all passes through BricsCAD and it all goes out as PDF. The plugin suite
+    exists to make that middle step fast and consistent, whichever of those you're doing.</p>
 
     <h2 id="coming-from-autocad">Coming from AutoCAD</h2>
     <p>BricsCAD uses the same DWG format, so files move between the two without conversion. Command
@@ -196,12 +198,13 @@ W("onboarding/bricscad/index.html", "onboarding", "Introduction to BricsCAD",
 
     <h2 id="other-software-in-the-business">Other software in the business</h2>
     <p>Not everyone works in BricsCAD. Survey processing and design work often happen in other
-    packages, and drawings come to us as exports from those. It's worth knowing what a file has
+    packages, and drawings arrive as exports from those. It's worth knowing what a file has
     been through before you start editing it.</p>
 
     <h2 id="next">Next</h2>
-    <p>See <a href="learning/">Learning Resources</a> for structured courses, then move on to
-    <a href="../../drafting/">Drafting</a> to set up the WSY ribbon.</p>
+    <p>See <a href="learning/">Learning Resources</a> for structured courses, then
+    <a href="../../getting-started/">install the suite</a> to set up the ribbons for your
+    discipline.</p>
 """ + page_nav(prev=("../", "Onboarding"), nxt=("learning/", "Learning Resources")))
 
 W("onboarding/bricscad/learning/index.html", "onboarding", "Learning Resources",

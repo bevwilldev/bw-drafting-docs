@@ -13,7 +13,7 @@ Outputs:
                              reaches the copy — see the contrast note on
                              .hero-bg in site.css before changing its width.
     office-og.jpg            1200x630 landscape crop for Teams/Slack previews
-    drafting-corner-web.jpg  1400x933 interior, on the onboarding page
+    drafting-corner-web.jpg  1400x933 interior, on the About page
 
 Both are progressive JPEGs at quality 82, which is the point on this kind of
 architectural subject where further compression starts to show on the sky
@@ -41,7 +41,7 @@ DERIVATIVES = [
     # entrance and street level still read at preview size.
     ("office-source.jpg", "office-hero.jpg", 1200, 900, 0.42),
     ("office-source.jpg", "office-og.jpg", 1200, 630, 0.62),
-    # Interior, for the onboarding page. Already 3:2, so this is a straight
+    # Interior, for the About page. Already 3:2, so this is a straight
     # downscale and recompress rather than a crop.
     ("drafting-corner.jpg", "drafting-corner-web.jpg", 1400, 933, 0.50),
 ]

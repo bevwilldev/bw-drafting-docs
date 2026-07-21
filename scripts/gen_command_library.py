@@ -1,0 +1,159 @@
+"""
+Build the shared command library's index and search data.
+
+ONE SOURCE, ONE HOP. This scans the rendered pages under /commands/ and emits
+both the alphabetical table on /commands/ and assets/js/commands.js (the data
+behind the home-page search). Because both come from the same scan, the index,
+the search and the pages themselves cannot drift apart.
+
+Descriptions are taken from a curated map where one exists, otherwise from the
+first sentence of the entry's own prose. The curated map matters: a first
+sentence written to follow a heading often does not stand alone in an
+alphabetical list beside unrelated commands.
+
+RUN after adding, renaming or refiling a command:
+    python scripts/gen_command_library.py
+"""
+
+import html
+import json
+import pathlib
+import re
+from collections import defaultdict
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+LIB = ROOT / "commands"
+JS = ROOT / "assets" / "js" / "commands.js"
+INDEX = LIB / "index.html"
+
+START, END = "<!-- ALPHA_START", "<!-- ALPHA_END"
+
+TABS = {
+    "drafting": "WSY Drafting",
+    "engineering": "BW Engineering",
+    "wae": "WSY WAE",
+    "tools": "WSY Tools",
+}
+
+TAGS = re.compile(r"<[^>]+>")
+CMD = re.compile(r'<code class="cmd">([^<]+)</code>')
+
+
+def text_of(fragment):
+    return re.sub(r"\s+", " ", html.unescape(TAGS.sub("", fragment))).strip()
+
+
+def summarise(raw):
+    """First sentence, trimmed — the index column is a reminder, not the doc."""
+    s = text_of(raw)
+    s = re.split(r"(?<=[a-z0-9\)])\.\s+", s)[0].rstrip(".").strip()
+    if len(s) > 78:
+        s = s[:75].rsplit(" ", 1)[0] + "…"
+    return s[:1].upper() + s[1:] if s else s
+
+
+def scan():
+    """Every command entry in the library, as {cmd, tab, panel, url, desc}."""
+    rows = []
+    for page in sorted(LIB.glob("*/*/index.html")):
+        panel_slug = page.parent.name
+        tab = page.parent.parent.name
+        if tab not in TABS:
+            continue
+        src = page.read_text(encoding="utf-8")
+        main = src.split("<main", 1)[1].split("</main>", 1)[0]
+        panel = text_of(re.search(r"<h1>(.*?)</h1>", main, re.S).group(1))
+
+        for chunk in re.split(r"(?=<h2 id=)", main)[1:]:
+            chunk = re.split(r'<nav class="page-nav"', chunk)[0]
+            anchor = re.search(r'<h2 id="([^"]+)"', chunk).group(1)
+            head = re.search(r"<h2[^>]*>(.*?)</h2>", chunk, re.S).group(1)
+            body = chunk.split("</h2>", 1)[1]
+
+            names = [c.strip() for c in CMD.findall(head)]
+            # Family entries (one topic, several commands) list their commands
+            # in a table instead of the heading — take those too, with the
+            # row's own description where the table provides one.
+            table_rows = re.findall(
+                r"<tr><td>(.*?)</td><td>(.*?)</td>", body, re.S)
+            extra = []
+            for cell, desc in table_rows:
+                for n in CMD.findall(cell):
+                    extra.append((n.strip(), summarise(desc)))
+
+            url = f"/commands/{tab}/{panel_slug}/#{anchor}"
+            if names:
+                desc = summarise(body.split("<h4")[0])
+                for n in names:
+                    for part in re.split(r"\s*/\s*", n):
+                        rows.append({"n": part.strip(), "tab": tab,
+                                     "panel": panel, "u": url, "d": desc})
+            for n, desc in extra:
+                for part in re.split(r"\s*/\s*", n):
+                    rows.append({"n": part.strip(), "tab": tab, "panel": panel,
+                                 "u": url, "d": desc or summarise(body)})
+    return rows
+
+
+def dedupe(rows):
+    """A command can legitimately appear on two ribbons (ATC, CSCALE). Keep the
+    first, but record the other tab so the index can say so."""
+    seen, out = {}, []
+    for r in sorted(rows, key=lambda r: (r["n"], r["tab"] != "drafting")):
+        if r["n"] in seen:
+            other = seen[r["n"]]
+            if r["tab"] != other["tab"] and r["tab"] not in other.get("also", []):
+                other.setdefault("also", []).append(r["tab"])
+            continue
+        seen[r["n"]] = r
+        out.append(r)
+    return out
+
+
+def render_table(rows):
+    out = ['    <div class="table-wrap">', '    <table id="cmdIndex">',
+           "      <thead><tr><th>Command</th><th>Does</th><th>Where</th></tr></thead>",
+           "      <tbody>"]
+    for r in rows:
+        where = f'<a href="..{r["u"]}">{html.escape(r["panel"])}</a>'
+        tab = TABS[r["tab"]]
+        also = "".join(f" &middot; {TABS[t]}" for t in r.get("also", []))
+        out.append(
+            f'        <tr><td><code class="cmd">{html.escape(r["n"])}</code></td>'
+            f'<td>{html.escape(r["d"])}</td>'
+            f'<td>{where}<span class="cmd-tab">{html.escape(tab)}{also}</span></td></tr>')
+    out += ["      </tbody>", "    </table>", "    </div>"]
+    return "\n".join(out)
+
+
+def main():
+    rows = dedupe(scan())
+    rows.sort(key=lambda r: r["n"])
+
+    JS.write_text(
+        "/* GENERATED by scripts/gen_command_library.py — do not hand-edit.\n"
+        "   Rebuild after adding, renaming or refiling a command. */\n"
+        "window.WSY_COMMANDS = " + json.dumps(
+            [{"n": r["n"], "d": r["d"], "p": r["panel"], "u": r["u"]} for r in rows],
+            ensure_ascii=False, separators=(",", ":")) + ";\n",
+        encoding="utf-8")
+
+    src = INDEX.read_text(encoding="utf-8")
+    head, rest = src.split(START, 1)
+    _, tail = rest.split(END, 1)
+    INDEX.write_text(
+        head + START + " — generated, do not hand-edit -->\n"
+        + render_table(rows) + "\n    " + END + " -->" + tail,
+        encoding="utf-8")
+
+    per_tab = defaultdict(int)
+    for r in rows:
+        per_tab[r["tab"]] += 1
+    print(f"{len(rows)} commands -> {JS.relative_to(ROOT)} and "
+          f"{INDEX.relative_to(ROOT)}")
+    for t, label in TABS.items():
+        print(f"  {label:16} {per_tab[t]:3}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,5 +1,5 @@
 /* ============================================================================
-   BW Western Sydney — Drafting Documentation
+   Western Sydney Hub — Beveridge Williams
    Shared chrome (header/footer/sidenav), TOC scroll-spy, drawer, lightbox.
 
    WHY NAV-AS-DATA, NOT fetch()ed HTML PARTIALS:
@@ -43,17 +43,54 @@
             { href: '/drafting/standards/wsy/', text: 'WSY Drafting Standards' }
           ]
         },
+        /* The command reference is no longer a drafting sub-section — it is a
+           shared, suite-wide library at /commands/. This is the way in from
+           here; the full panel list lives in the `commands` section below. */
+        { href: '/commands/drafting/cadastre/', text: 'Drafting Commands' }
+      ]
+    },
+    /* The shared command library. Grouped by ribbon TAB, then by the panels
+       each tab actually ships — read off the .cui ribbon definitions, not
+       invented here, so the navigation matches what people see in BricsCAD.
+       Every tab also gets a "No ribbon button" page: a large part of the suite
+       is command-line only and would otherwise have nowhere to live. */
+    commands: {
+      title: 'Command Reference',
+      items: [
+        { href: '/commands/', text: 'All Commands' },
         {
-          group: 'Command Reference', items: [
-            { href: '/drafting/commands/', text: 'All Commands' },
-            { href: '/drafting/commands/cadastre/', text: 'Cadastre' },
-            { href: '/drafting/commands/survey/', text: 'Survey' },
-            { href: '/drafting/commands/text/', text: 'Text &amp; Labels' },
-            { href: '/drafting/commands/annotation/', text: 'Annotation &amp; Scales' },
-            { href: '/drafting/commands/sheeting/', text: 'Sheeting' },
-            { href: '/drafting/commands/dimensions/', text: 'Dimensions &amp; Curve Tables' },
-            { href: '/drafting/commands/topography/', text: 'Topography &amp; Earthworks' },
-            { href: '/drafting/commands/utilities/', text: 'Utilities' }
+          group: 'WSY Drafting', items: [
+            { href: '/commands/drafting/cadastre/', text: 'Cadastre' },
+            { href: '/commands/drafting/survey/', text: 'Survey' },
+            { href: '/commands/drafting/occupations/', text: 'Occupations' },
+            { href: '/commands/drafting/topography/', text: 'Topography' },
+            { href: '/commands/drafting/setout/', text: 'Setout &amp; Ident' },
+            { href: '/commands/drafting/text/', text: 'Text' },
+            { href: '/commands/drafting/sheeting/', text: 'Sheeting' },
+            { href: '/commands/drafting/annotation/', text: 'Annotation' },
+            { href: '/commands/drafting/qa/', text: 'QA' },
+            { href: '/commands/drafting/command-line/', text: 'No ribbon button' }
+          ]
+        },
+        {
+          group: 'BW Engineering', items: [
+            { href: '/commands/engineering/standards/', text: 'Standards' },
+            { href: '/commands/engineering/annotation/', text: 'Annotation' },
+            { href: '/commands/engineering/plotting/', text: 'Plotting' },
+            { href: '/commands/engineering/open/', text: 'Open' },
+            { href: '/commands/engineering/toolbox/', text: 'Toolbox' }
+          ]
+        },
+        {
+          group: 'WSY WAE', items: [
+            { href: '/commands/wae/sheeting/', text: 'Sheeting' },
+            { href: '/commands/wae/annotations/', text: 'Annotations' }
+          ]
+        },
+        {
+          group: 'WSY Tools', items: [
+            { href: '/commands/tools/tools/', text: 'Tools' },
+            { href: '/commands/tools/command-line/', text: 'No ribbon button' }
           ]
         }
       ]
@@ -108,23 +145,45 @@
         { href: '/onboarding/glossary/', text: 'Glossary' }
       ]
     },
+    videos: {
+      title: 'Video Guides',
+      items: [
+        { href: '/videos/', text: 'Watch the guides' }
+      ]
+    },
     quality: {
       title: 'Quality',
       items: [
         { href: '/quality/', text: 'Overview' },
         { href: '/quality/checklist/', text: 'Drawing Checklist' }
       ]
+    },
+    about: {
+      title: 'About',
+      items: [
+        { href: '/about/', text: 'About this Hub' }
+      ]
     }
   };
 
+  /* Ordered by how the site is actually used, not by how it grew:
+       entry point   — Getting Started (the CTA; nothing works before it)
+       daily lookup  — Commands, Videos ("how do I do X again?")
+       disciplines   — Drafting, Survey, Engineering, Tools
+       process       — Quality
+       once, at the start — Onboarding
+     Onboarding sat third for historical reasons despite being the thing most
+     people read exactly once. */
   var TOP_NAV = [
     { href: '/getting-started/', text: 'Getting Started', cta: true },
-    { href: '/onboarding/', text: 'Onboarding' },
+    { href: '/commands/', text: 'Commands' },
+    { href: '/videos/', text: 'Videos' },
     { href: '/drafting/', text: 'Drafting' },
     { href: '/survey/', text: 'Survey' },
     { href: '/engineering/', text: 'Engineering' },
     { href: '/tools/', text: 'Tools' },
-    { href: '/quality/', text: 'Quality' }
+    { href: '/quality/', text: 'Quality' },
+    { href: '/onboarding/', text: 'Onboarding' }
   ];
 
   /* ---------- Base-path handling ---------------------------------------
@@ -235,17 +294,32 @@
 
     var key = host.getAttribute('data-sidenav');
     var section = SECTIONS[key];
+
+    host.className = 'sidenav';
+    host.setAttribute('aria-label', section ? section.title + ' navigation' : 'Site navigation');
+
+    /* Below 1000px the header nav is hidden — seven links plus the logo and
+       toggles cannot fit a phone without overflowing the page sideways. The
+       top-level sections are repeated here instead, so the drawer is the single
+       place navigation lives on small screens. Hidden by CSS on desktop. */
+    var top = el('div', { class: 'sidenav-sections' });
+    top.appendChild(el('div', { class: 'sidenav-title', text: 'Sections' }));
+    TOP_NAV.forEach(function (item) {
+      var a = el('a', { href: url(item.href), html: item.text });
+      if (HERE.indexOf(normalise(url(item.href))) === 0) a.setAttribute('aria-current', 'page');
+      top.appendChild(a);
+    });
+    host.appendChild(top);
+
     if (!section) {
-      // No section nav on this page (e.g. the home page): drop the column so
-      // the content isn't left beside an empty grid track.
+      // Home page: no section nav, so the aside is drawer-only. The grid drops
+      // to two columns and CSS hides the aside entirely above the breakpoint.
+      host.classList.add('is-drawer-only');
       var layout = host.closest('.layout');
       if (layout) layout.classList.add('no-nav');
-      host.remove();
       return;
     }
 
-    host.className = 'sidenav';
-    host.setAttribute('aria-label', section.title + ' navigation');
     host.appendChild(el('div', { class: 'sidenav-title', text: section.title }));
 
     section.items.forEach(function (item) {
@@ -300,7 +374,10 @@
     if (!host) return;
     host.className = 'footer';
     host.appendChild(el('div', { class: 'footer-inner' }, [
-      el('span', { text: 'Drafting documentation — Western Sydney Drafting Department' }),
+      el('span', {
+        html: 'Built and maintained by the <a href="' + url('/about/') +
+              '">Western Sydney Drafting department</a>'
+      }),
       el('span', { class: 'copyright', html: '&copy; ' + new Date().getFullYear() + ' Beveridge Williams' })
     ]));
   }
@@ -368,8 +445,7 @@
   function initDrawer() {
     var toggle = document.getElementById('navToggle');
     var nav = document.querySelector('.sidenav');
-    if (!toggle) return;
-    if (!nav) { toggle.style.display = 'none'; return; } // no section nav on this page
+    if (!toggle || !nav) return;
 
     var backdrop = el('div', { class: 'nav-backdrop' });
     document.body.appendChild(backdrop);
@@ -394,9 +470,12 @@
   function initTheme() {
     var btn = document.getElementById('themeToggle');
     if (!btn) return;
+    /* Dark is the site's default, so an unset attribute means dark — NOT
+       "ask the OS". Reading prefers-color-scheme here would report 'light' on a
+       light-themed machine while the page rendered dark, which put the wrong
+       icon in the header and made the first click appear to do nothing. */
     function current() {
-      return document.documentElement.getAttribute('data-theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      return document.documentElement.getAttribute('data-theme') || 'dark';
     }
     function paint() { btn.innerHTML = current() === 'dark' ? SUN : MOON; }
     paint();
@@ -539,6 +618,112 @@
     if (input.value) apply();   // browsers restore search inputs on back-nav
   }
 
+  /* ---------- Home command search ----------------------------------------
+     The reason someone opens this site is usually "what does X do again?".
+     Making them land, find the reference, then filter is three steps for one
+     question — this answers it from the front door.
+
+     Data comes from assets/js/commands.js, generated off the same alphabetical
+     index the reference renders (scripts/gen_command_data.py), so the two can
+     never disagree. If that file is missing the widget stays hidden and the
+     hero buttons still work. */
+
+  function initCommandSearch() {
+    var wrap = document.querySelector('[data-cmd-search]');
+    if (!wrap) return;
+    var data = window.WSY_COMMANDS;
+    if (!data || !data.length) return;      // no data: leave it hidden
+
+    wrap.hidden = false;
+    var input = wrap.querySelector('input');
+    var out = wrap.querySelector('.cmd-search-out');
+    var active = -1, results = [];
+
+    function esc(s) {
+      return s.replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    }
+
+    /* Highlight the match inside already-escaped text. */
+    function mark(s, term) {
+      var at = s.toLowerCase().indexOf(term);
+      if (at < 0) return esc(s);
+      return esc(s.slice(0, at)) + '<span class="cmd-search-hit">' +
+             esc(s.slice(at, at + term.length)) + '</span>' + esc(s.slice(at + term.length));
+    }
+
+    function close() { out.className = 'cmd-search-out'; out.innerHTML = ''; active = -1; results = []; }
+
+    function render(term) {
+      if (!term) return close();
+
+      // Name matches first, and prefix matches above those — typing "AUTO"
+      // should put AUTODIM at the top, not a description that mentions it.
+      var scored = [];
+      data.forEach(function (c) {
+        var n = c.n.toLowerCase(), d = c.d.toLowerCase();
+        var rank = n.indexOf(term) === 0 ? 0 : n.indexOf(term) > 0 ? 1 : d.indexOf(term) > -1 ? 2 : -1;
+        if (rank > -1) scored.push({ c: c, rank: rank });
+      });
+      scored.sort(function (a, b) { return a.rank - b.rank || a.c.n.localeCompare(b.c.n); });
+      results = scored.slice(0, 8).map(function (s) { return s.c; });
+
+      if (!results.length) {
+        out.className = 'cmd-search-out is-open';
+        out.innerHTML = '<div class="cmd-search-empty">No command matches ' +
+                        '“' + esc(input.value.trim()) + '”.</div>';
+        return;
+      }
+      out.className = 'cmd-search-out is-open';
+      out.innerHTML = results.map(function (c) {
+        return '<a href="' + url(c.u) + '" role="option">' +
+               '<span class="n">' + mark(c.n, term) + '</span>' +
+               '<span class="d">' + mark(c.d, term) + '</span>' +
+               '<span class="p">' + esc(c.p) + '</span></a>';
+      }).join('');
+      active = -1;
+    }
+
+    function move(step) {
+      var links = out.querySelectorAll('a');
+      if (!links.length) return;
+      if (active > -1 && links[active]) links[active].classList.remove('is-active');
+      active = (active + step + links.length) % links.length;
+      links[active].classList.add('is-active');
+      links[active].scrollIntoView({ block: 'nearest' });
+    }
+
+    input.addEventListener('input', function () { render(input.value.trim().toLowerCase()); });
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter') {
+        var links = out.querySelectorAll('a');
+        // Enter with nothing highlighted takes the top hit — the common case is
+        // type three letters and go.
+        var target = active > -1 ? links[active] : links[0];
+        if (target) { e.preventDefault(); target.click(); }
+      } else if (e.key === 'Escape') {
+        if (out.className.indexOf('is-open') > -1) { close(); } else { input.value = ''; }
+      }
+    });
+
+    document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(); });
+    input.addEventListener('focus', function () { render(input.value.trim().toLowerCase()); });
+
+    // "/" focuses the search, the convention on every docs site that has one.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var t = e.target, tag = t && t.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || (t && t.isContentEditable)) return;
+      e.preventDefault();
+      input.focus();
+      input.select();
+    });
+  }
+
   /* ---------- Breadcrumb -------------------------------------------------
      Interior pages opened cold — from a ribbon Help button, or a shared deep
      link — gave no clue where you were in the set, and the top of every page
@@ -625,6 +810,7 @@
     initTheme();
     initLightbox();
     initFilter();
+    initCommandSearch();
     initScrollCue();
   }
 

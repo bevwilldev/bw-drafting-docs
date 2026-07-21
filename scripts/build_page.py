@@ -1,5 +1,5 @@
 """
-Page generator for the BW drafting documentation site.
+Page generator for the Western Sydney Hub site.
 
 This is an AUTHORING CONVENIENCE, not a build step: it stamps the shared
 <head>, header/sidenav/footer mount points and script tags around page body
@@ -22,8 +22,9 @@ TEMPLATE = """<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} — BW Drafting Docs</title>
+<title>{title} — WSY Hub</title>
 <meta name="description" content="{description}">
 <link rel="icon" href="{up}assets/img/bw-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,18 +53,26 @@ TEMPLATE = """<!doctype html>
 </div>
 
 <footer data-footer></footer>
-<script src="{up}assets/js/site.js"></script>
+{scripts}<script src="{up}assets/js/site.js"></script>
 </body>
 </html>
 """
 
 
-def write(path, section, title, description, body):
-    """path is repo-relative, e.g. 'drafting/index.html'."""
+def write(path, section, title, description, body, scripts=()):
+    """path is repo-relative, e.g. 'drafting/index.html'.
+
+    `scripts` names extra JS under assets/js/ to load BEFORE site.js — the
+    command search needs its data file present when site.js boots.
+    """
     depth = path.count("/")
     up = "../" * depth
+    tags = "".join(
+        '<script src="{0}assets/js/{1}"></script>\n'.format(up, s) for s in scripts
+    )
     html = TEMPLATE.format(
-        title=title, description=description, section=section, up=up, body=body.rstrip()
+        title=title, description=description, section=section, up=up,
+        body=body.rstrip(), scripts=tags
     )
     full = os.path.join(ROOT, path.replace("/", os.sep))
     os.makedirs(os.path.dirname(full), exist_ok=True)

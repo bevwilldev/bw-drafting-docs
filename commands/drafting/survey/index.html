@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survey — WSY Hub</title>
+<meta name="description" content="Pegs, reference marks, SSMs, ties and traverse lines.">
+<link rel="icon" href="../../../assets/img/bw-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<!-- Brand wordmark (Myriad Pro), served by the Adobe Fonts kit. Kits are
+     domain-locked: add every serving domain to the kit or it falls back. -->
+<link rel="stylesheet" href="https://use.typekit.net/mhc8sjd.css">
+<link rel="stylesheet" href="../../../assets/css/site.css">
+<script>
+  (function () { try { var t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header data-header></header>
+
+<div class="layout">
+  <aside data-sidenav="commands"></aside>
+
+  <main class="content" id="main">
+    <h1>Survey</h1>
+    <p class="lede">Pegs, reference marks, SSMs, ties and traverse lines.</p>
+
+<h2 id="survey-text">Survey text</h2>
+    <p>These follow the same pattern as the cadastre text commands — pre-select to restyle, or run
+    with nothing selected to place new text in a loop.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Command</th><th>Places</th><th>Layer</th></tr></thead>
+      <tbody>
+        <tr><td><code class="cmd">REFT</code></td><td>Reference mark text</td><td>SURV REFERENCE TEXT</td></tr>
+        <tr><td><code class="cmd">TIET</code></td><td>Ties text</td><td>SURV TIES TEXT</td></tr>
+        <tr><td><code class="cmd">SSMT</code></td><td>SSM / MGA text</td><td>SURV SSM TEXT</td></tr>
+        <tr><td><code class="cmd">TRAVT</code></td><td>Traverse text</td><td>SURV TRAVERSE TEXT</td></tr>
+        <tr><td><code class="cmd">OCCST</code></td><td>Occupations text</td><td>SURV OCCS TEXT</td></tr>
+      </tbody>
+    </table></div>
+
+<h2 id="peg"><code class="cmd">PEG</code></h2>
+    <p>Drops peg symbols, either one at a time or on every vertex of chosen polylines.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Survey → Peg</p>
+    <h4>How to use it</h4>
+    <p>Select polylines first and a peg is placed on every vertex. Otherwise:
+        <code>Specify insertion point or [Place]:</code> — pick points one at a time, or type
+        <strong>Place</strong> to select polylines instead. Endpoint snap is forced on.</p>
+    <h4>What it produces</h4>
+    <p>Peg blocks on layer <strong>PEG</strong>, annotative and attached to the current scale.</p>
+    <div class="note"><strong>Note</strong> — Vertex mode skips any vertex that already has a block, so re-running is safe.</div>
+
+<h2 id="ref"><code class="cmd">REF</code></h2>
+    <p>Places reference marks, or swaps existing blocks for reference marks in place.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Survey → Reference Mark</p>
+    <h4>How to use it</h4>
+    <p><code>Specify insertion point or [Replace]:</code>. <strong>Replace</strong>
+        loops asking for blocks to swap; each is erased and a reference mark inserted at its
+        position.</p>
+    <h4>What it produces</h4>
+    <p>Reference Mark blocks on <strong>SURV REFERENCE</strong>, annotative.</p>
+    <div class="note"><strong>Note</strong> — Replace keeps only the position — the old block's rotation and attributes are dropped.</div>
+
+<h2 id="survssm"><code class="cmd">SURVSSM</code></h2>
+    <p>Places SSM (state survey mark) symbols in a loop.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Survey → SSM</p>
+    <h4>How to use it</h4>
+    <p>Loops <code>Specify insertion point:</code> until you press Enter or Esc.</p>
+    <h4>What it produces</h4>
+    <p>SSM blocks on <strong>SURV SSM MARK</strong>, annotative.</p>
+
+<h2 id="ssmx-ssmy"><code class="cmd">SSMX / SSMY</code></h2>
+    <p>Place a single 'X' or 'Y' mark symbol.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Survey → 'X' Symbol / 'Y' Symbol</p>
+    <h4>How to use it</h4>
+    <p>One prompt: <code>Specify insertion point:</code>. Single shot — these don't repeat.</p>
+    <h4>What it produces</h4>
+    <p>X or Y blocks on <strong>SURV SSM MARK</strong>.</p>
+
+<h2 id="tiel"><code class="cmd">TIEL</code></h2>
+    <p>Draws a tie line between two points, labelling the distance on one side and the bearing on the other.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Survey → Ties</p>
+    <h4>How to use it</h4>
+    <p><code>Specify base point for leader:</code> → <code>Specify second point for leader:</code>, with endpoint, intersection and perpendicular snaps forced on.</p>
+    <h4>What it produces</h4>
+    <p>A dashed leader on <strong>SURV TIES</strong> plus two labels on <strong>SURV TIES TEXT</strong> — distance one side, bearing the other. Distance is rounded to the nearest 0.005; the bearing reads to the nearest 5 seconds.</p>
+
+<h2 id="travl"><code class="cmd">TRAVL</code></h2>
+    <p>Draws a traverse line — a dashed annotative leader with no text.</p>
+    <p class="meta"><strong>Ribbon</strong> &middot; Survey → Traverse</p>
+    <h4>How to use it</h4>
+    <p>Runs the native <code>MLEADER</code> command.</p>
+    <h4>What it produces</h4>
+    <p>Layer <strong>SURV TRAVERSE</strong> with the condensed linetype scale.</p>
+
+    <nav class="page-nav">
+      <a href="../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
+    </nav>
+  </main>
+
+  <aside data-toc></aside>
+</div>
+
+<footer data-footer></footer>
+<script src="../../../assets/js/site.js"></script>
+</body>
+</html>
