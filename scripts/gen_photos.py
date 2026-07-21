@@ -44,6 +44,13 @@ DERIVATIVES = [
     # Interior, for the About page. Already 3:2, so this is a straight
     # downscale and recompress rather than a crop.
     ("drafting-corner.jpg", "drafting-corner-web.jpg", 1400, 933, 0.50),
+    # Reception, for the home page's "What this is" band. The lit BW mark sits
+    # in the right third of this frame, which is exactly the strip that band
+    # leaves clear - the brand lands in the open area rather than behind copy.
+    ("front-office-2.jpg", "front-office-2-web.jpg", 1400, 933, 0.50),
+    # Open-plan floor, for the home page's closing band. The drafting-corner
+    # shot moved to the About page, where it belongs with the origin story.
+    ("office-floor.jpg", "office-floor-web.jpg", 1400, 933, 0.50),
 ]
 
 QUALITY = 82

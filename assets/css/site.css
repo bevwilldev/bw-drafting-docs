@@ -831,8 +831,35 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .band-photo-bg {
   position: absolute; inset: 0; z-index: 0;
   width: 100%; height: 100%;
-  object-fit: cover; object-position: 50% 42%;
+  object-fit: cover; object-position: 62% 48%;
   opacity: var(--band-photo-o);
+}
+/* Two photo bands on one page would read as a repeat if treated identically.
+   This one keeps the photo as a clean strip down the right third instead of
+   washing it across the whole band: the prose runs to the 700px measure, so the
+   wash stays fully opaque past where the text ends and only then clears. That
+   lets the image run brighter than the closing band — bright enough to actually
+   read as a photograph — with the copy still on flat --bg. */
+.band-photo-alt { --band-photo-o: .5; }
+/* Weighted right so the lit BW mark and the reception desk sit in the strip the
+   wash leaves open, not behind the copy. */
+.band-photo-alt .band-photo-bg { object-position: 76% 46%; }
+:root[data-theme="light"] .band-photo-alt { --band-photo-o: .5; }
+.band-photo-alt::after {
+  background: linear-gradient(to right,
+    var(--bg) 0%,
+    /* Opaque past the 700px measure (the copy ends at ~66% of a 1440 viewport)
+       so no word ever sits on the ramp, then clears fast. */
+    var(--bg) 67%,
+    color-mix(in srgb, var(--bg) 34%, transparent) 84%,
+    transparent 100%);
+}
+/* Below the 1040px inner width the copy spans the full column, so there is no
+   right-hand strip left to give the photo. */
+@media (max-width: 900px) {
+  .band-photo-alt { --band-photo-o: .16; }
+  .band-photo-alt::after { background: linear-gradient(to right,
+    var(--bg) 0%, color-mix(in srgb, var(--bg) 88%, transparent) 100%); }
 }
 .band-photo::after {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
