@@ -85,6 +85,10 @@
     <p><code class="cmd">NSWLABELLOTS</code> labels lots that were loaded earlier — select the
     boundaries and it reads the plan details stored on them.</p>
 
+    <div class="note warn"><strong>Watch out</strong> — it doesn't check whether a lot is already
+    labelled. Running it twice over the same selection stacks a second set of labels on top of the
+    first, which is easy to miss on screen. Undo rather than trying to pick the duplicates out.</div>
+
     <div class="note warn"><strong>Watch out</strong> — the tool works out the MGA zone from the
     data it fetches. If it can't determine the zone it assumes Zone 56 and says so in the status
     bar. On a Zone 55 job that warning matters, so check the result lands where you expect.</div>

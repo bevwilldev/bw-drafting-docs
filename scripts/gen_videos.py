@@ -6,6 +6,10 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import build_page  # noqa: E402
 
 PLAYLIST = "PLY89dMQ-HooSCCGWvuDYpgNYrdJwJ9emA"
+# The video the page opens on. Embedding /embed/<id>?list=<playlist> loads this
+# one first with the rest of the playlist queued behind it — /embed/videoseries
+# would just play whatever happens to sit at position 1.
+FEATURED = "La2nI5xHnR4"
 
 body = f'''    <h1>Video Guides</h1>
     <p class="lede">
@@ -20,7 +24,7 @@ body = f'''    <h1>Video Guides</h1>
          who opened the docs. loading="lazy" also keeps the player off the wire
          until it is scrolled to. -->
     <div class="video-embed">
-      <iframe src="https://www.youtube-nocookie.com/embed/videoseries?list={PLAYLIST}"
+      <iframe src="https://www.youtube-nocookie.com/embed/{FEATURED}?list={PLAYLIST}"
               title="Western Sydney Hub video guides"
               loading="lazy" allowfullscreen
               referrerpolicy="strict-origin-when-cross-origin"

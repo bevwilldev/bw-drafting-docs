@@ -63,10 +63,17 @@
     <p>Both need the drawing to have been saved.</p>
 
     <h2 id="shared-toolbox">Shared toolbox</h2>
-    <p>The Toolbox panel also carries <code class="cmd">UPDATE</code> (title-block attributes from a
-    CSV), <code class="cmd">ATC</code>, <code class="cmd">OB2WO</code>,
-    <code class="cmd">SMT</code> and <code class="cmd">TADD</code> — the same commands documented
-    under <a href="../../commands/engineering/toolbox/">the drafting command reference</a>.</p>
+    <p>The Toolbox panel carries <code class="cmd">ATC</code>,
+    <code class="cmd">OUTLINE</code>, <code class="cmd">VPO</code>,
+    <code class="cmd">OB2WO</code>, <code class="cmd">SMT</code> (also aliased
+    <code class="cmd">STRIPMTEXT</code>) and <code class="cmd">TADD</code> — all documented in the
+    <a href="../../commands/engineering/toolbox/">command reference</a>.</p>
+    <p><code class="cmd">UPDATE</code>, which fills title-block attributes from a CSV, is on the
+    <strong>Open</strong> panel alongside <code class="cmd">EXCELREG</code> and
+    <code class="cmd">DIROPEN</code> — not Toolbox.</p>
+    <div class="note"><strong>Note</strong> — <code class="cmd">OUTLINE</code> and
+    <code class="cmd">VPO</code> come from the Community LISP component. If it wasn't ticked at
+    install they won't be there, even though the buttons are.</div>
     <nav class="page-nav">
       <a href="../standards/"><div class="dir">Previous</div><div class="ttl">Styles & Scales</div></a>
       <a class="next" href="../../quality/"><div class="dir">Next</div><div class="ttl">Quality</div></a>
