@@ -80,23 +80,34 @@
     </ol>
 
     <h2 id="delivery-modes">Delivery modes</h2>
-    <p>Templates, plot styles and command aliases have to land somewhere. The installer offers
-    three options:</p>
+    <p>Templates, plot styles and command aliases have to be placed into a BricsCAD profile, so
+    the installer asks how. The options, safest first:</p>
+
+    <div class="note"><strong>This only matters if you install the optional content.</strong> The
+    delivery mode affects your BricsCAD profile <em>only</em> because you ticked templates, plot
+    styles or command aliases. The ribbon, commands and tools work in <em>any</em> profile and are
+    unaffected — if you install just those, this step doesn't even appear.</div>
+
     <div class="table-wrap"><table>
-      <thead><tr><th>Mode</th><th>What happens</th><th>Use when</th></tr></thead>
+      <thead><tr><th>Mode</th><th>What happens</th><th>Trade-off</th></tr></thead>
       <tbody>
-        <tr><td>Inject into current profile</td><td>Files are copied into your existing profile's
-          folders and the office alias is added to your alias file.</td><td>You know what you're
-          doing and want everything in your existing setup.</td></tr>
-        <tr><td><strong>Copy profile, then inject</strong></td><td>Your profile is cloned as
-          <em>&lt;name&gt; (WSY)</em> with local copies of its folders, and the WSY content goes
-          into the clone. Your original is untouched.</td><td><strong>Recommended.</strong> Keeps
-          your settings but never contaminates them.</td></tr>
-        <tr><td>Fresh WSY profiles</td><td>New, separate <em>WSY Drafting</em> /
-          <em>WSY Engineering</em> profiles are created.</td><td>You want a clean environment
-          that's entirely separate.</td></tr>
+        <tr><td><strong>Fresh WSY profiles</strong></td><td>New, separate <em>WSY Drafting</em> /
+          <em>WSY Engineering</em> profiles are created for the content. Your own profile is left
+          completely alone.</td><td><strong>Recommended — safest.</strong> Nothing you already
+          have is changed.</td></tr>
+        <tr><td>Copy my profile, use the copy</td><td>Your profile is cloned as
+          <em>&lt;name&gt; (WSY)</em> and the WSY content goes into the clone; your original is
+          untouched.</td><td>Safer than injecting — but the copy uses <strong>local folders</strong>.
+          If your profile points at <strong>network directories</strong> (shared templates / support),
+          the copy takes a local snapshot and won't stay live-linked to them.</td></tr>
+        <tr><td>Inject into current profile</td><td>Files are written into your existing profile's
+          own folders (overwriting same-named files, including on a network) and the office alias is
+          added to your alias file.</td><td><strong>Most invasive</strong> — changes your existing
+          setup. Only if you know what you're doing.</td></tr>
       </tbody>
     </table></div>
+
+    <p>Your choice is remembered: when you update later, the installer defaults to the same mode.</p>
 
     <h2 id="checking-it-worked">Checking it worked</h2>
     <p>Start BricsCAD. You should see a line on the command line naming the plugins that loaded,
