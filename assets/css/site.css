@@ -708,6 +708,86 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .home-hero .lede { font-size: 1.18rem; max-width: 31em; line-height: 1.55; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 
+/* ============================================================
+   Install page — download reveal, prominent warning, modal
+   ============================================================ */
+.dl-hero {
+  margin: 6px 0 30px; padding: 30px 30px 32px;
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line));
+  border-radius: calc(var(--radius) * 2.4);
+  background: radial-gradient(130% 150% at 0% 0%, var(--brand-wash), transparent 62%), var(--bg-raised);
+  position: relative; overflow: hidden;
+}
+.dl-hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: .78rem; font-weight: 650; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--brand);
+}
+.dl-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--brand);
+  animation: dl-pulse 2.4s var(--ease-out) infinite;
+}
+@keyframes dl-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 55%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 7px transparent; }
+}
+.dl-ver {
+  margin-left: 3px; padding: 2px 10px; border-radius: 999px;
+  font-size: .76rem; font-weight: 700; letter-spacing: 0; text-transform: none;
+  color: var(--brand-ink); background: var(--brand);
+}
+.dl-hero-title {
+  font-size: clamp(1.7rem, 4.2vw, 2.5rem); line-height: 1.08; margin: 15px 0 10px;
+  letter-spacing: -.025em; border: 0; padding: 0; color: var(--ink-strong);
+}
+.dl-hero-sub { color: var(--ink-muted); font-size: 1.03rem; line-height: 1.5; max-width: 48ch; margin: 0 0 22px; }
+.dl-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.dl-hero-meta { margin: 15px 0 0; font-size: .85rem; color: var(--ink-faint); }
+.btn-lg { padding: 12px 22px; font-size: 1rem; border-radius: calc(var(--radius) + 1px); }
+.btn-lg svg { width: 17px; height: 17px; }
+
+/* Prominent pre-install warning — stronger than .note.warn */
+.dl-warn {
+  display: flex; gap: 14px; align-items: flex-start; margin: 24px 0; padding: 16px 18px;
+  border: 1px solid color-mix(in srgb, var(--brand) 45%, var(--line));
+  border-left: 4px solid var(--brand);
+  border-radius: var(--radius); background: var(--brand-wash);
+}
+.dl-warn-ico {
+  flex: none; width: 28px; height: 28px; border-radius: 50%; margin-top: 1px;
+  display: grid; place-items: center;
+  background: var(--brand); color: var(--brand-ink); font-weight: 800; font-size: 1.05rem;
+}
+.dl-warn p { margin: 0; }
+.dl-warn strong { color: var(--brand); }
+
+/* Pre-install warning modal */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 200; padding: 20px;
+  background: rgba(0, 0, 0, .55); display: grid; place-items: center;
+  animation: modal-fade .2s var(--ease-out);
+}
+.modal {
+  max-width: 470px; width: 100%; padding: 28px 28px 24px;
+  background: var(--bg-raised); border: 1px solid var(--line-strong);
+  border-radius: calc(var(--radius) * 2.4);
+  box-shadow: 0 30px 90px -24px rgba(0, 0, 0, .6);
+  animation: modal-pop .26s var(--ease-out);
+}
+.modal-ico {
+  width: 48px; height: 48px; border-radius: 50%; margin-bottom: 15px;
+  display: grid; place-items: center;
+  background: var(--brand); color: var(--brand-ink); font-size: 1.5rem; font-weight: 800;
+}
+.modal h2 { border: 0; padding: 0; margin: 0 0 10px; font-size: 1.32rem; letter-spacing: -.02em; }
+.modal p { color: var(--ink-muted); margin: 0; line-height: 1.55; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+@keyframes modal-fade { from { opacity: 0; } }
+@keyframes modal-pop { from { opacity: 0; transform: translateY(10px) scale(.985); } }
+@media (prefers-reduced-motion: reduce) {
+  .dl-dot, .modal-backdrop, .modal { animation: none; }
+}
+
 @media (max-width: 900px) {
   .home-hero-inner { padding: 44px 22px 40px; }
   /* Narrow viewports crop the facade to a smear, and the copy now spans the

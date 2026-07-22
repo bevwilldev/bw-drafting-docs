@@ -31,31 +31,40 @@
     engineering, survey and the shared tools — along with the templates, plot styles and command
     aliases.</p>
 
-    <h2 id="download">Download</h2>
-    <p>Download the installer and run it — no login needed.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary"
-         href="https://github.com/agabanto/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">
-        Download the installer
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 2.5v7M5 7l3 3 3-3M3 13h10"/>
-        </svg>
-      </a>
-      <a class="btn btn-quiet" href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">
-        All releases
-      </a>
-    </div>
-    <p style="margin-top:10px; font-size:.9rem; color:var(--ink-faint)">Direct link to the
-    latest build. If the download doesn't start, refresh and try again, or grab it from the
-    <a href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">releases page</a>
-    (which also lists every version and its notes).</p>
+    <section class="dl-hero" aria-labelledby="download">
+      <span class="dl-hero-eyebrow">
+        <span class="dl-dot" aria-hidden="true"></span> Now available
+        <span class="dl-ver" id="dl-version">v1.0.1</span>
+      </span>
+      <h2 id="download" class="dl-hero-title">The BW BricsCAD Tools are here.</h2>
+      <p class="dl-hero-sub">The complete drafting, engineering and survey suite — every plugin,
+      templates, plot styles and command aliases, in a single installer. No login needed.</p>
+      <div class="dl-hero-actions">
+        <a class="btn btn-primary btn-lg"
+           href="https://github.com/agabanto/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">
+          Download the installer
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 2.5v7M5 7l3 3 3-3M3 13h10"/>
+          </svg>
+        </a>
+        <a class="btn btn-quiet" href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">
+          All releases &amp; notes
+        </a>
+      </div>
+      <p class="dl-hero-meta"><span id="dl-released"></span>Direct link to the latest build. If the
+      download doesn't start, refresh and try again, or use the
+      <a href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">releases page</a>.</p>
+    </section>
 
-    <div class="note warn"><strong>Remove older WSY tools first</strong> — this is the fresh official
-    setup. To avoid conflicts, uninstall or remove <em>any</em> earlier BricsCAD or AutoCAD tools,
-    plugins, macros, LISP or profile setups Western Sydney Drafting has handed out in the past —
-    including any test, beta or legacy build of this suite (Windows Settings &rsaquo; Apps). Older
-    hand-outs can clash with this new setup.</div>
+    <div class="dl-warn">
+      <span class="dl-warn-ico" aria-hidden="true">!</span>
+      <p><strong>Remove older WSY tools first.</strong> This is the fresh official setup. To avoid
+      conflicts, uninstall or remove <em>any</em> earlier BricsCAD or AutoCAD tools, plugins, macros,
+      LISP or profile setups Western Sydney Drafting has handed out in the past — including any test,
+      beta or legacy build of this suite (Windows Settings &rsaquo; Apps). Older hand-outs can clash
+      with this new setup.</p>
+    </div>
 
     <div class="note"><strong>Before you start</strong> — close BricsCAD. It writes its settings
     back when it exits, which would undo the installer's changes. The installer will tell you if
@@ -107,6 +116,65 @@
 </div>
 
 <footer data-footer></footer>
+
+<!-- First-visit pre-install warning -->
+<div class="modal-backdrop" id="warn-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wm-title" aria-describedby="wm-desc">
+    <div class="modal-ico" aria-hidden="true">!</div>
+    <h2 id="wm-title">Before you install</h2>
+    <p id="wm-desc"><strong>Remove any older WSY tools first.</strong> If you have earlier
+    BricsCAD or AutoCAD tools, plugins, macros, LISP or profile setups from Western Sydney Drafting —
+    including any test or beta build of this suite — uninstall them first
+    (Windows Settings &rsaquo; Apps). Old hand-outs can clash with this new setup.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="wm-ok" type="button">Got it — continue</button>
+    </div>
+  </div>
+</div>
+
 <script src="../assets/js/site.js"></script>
+<script>
+(function () {
+  // Live version badge + release date from the public downloads repo.
+  try {
+    fetch('https://api.github.com/repos/agabanto/bw-bricscad-releases/releases/latest',
+          { headers: { 'Accept': 'application/vnd.github+json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.tag_name) return;
+        var v = document.getElementById('dl-version');
+        if (v) v.textContent = d.tag_name;
+        var rel = document.getElementById('dl-released');
+        if (rel && d.published_at) {
+          var s = new Date(d.published_at).toLocaleDateString(undefined,
+            { day: 'numeric', month: 'short', year: 'numeric' });
+          rel.textContent = 'Released ' + s + ' · ';
+        }
+      })
+      .catch(function () {});
+  } catch (e) {}
+
+  // First-visit pre-install warning modal (once per browser).
+  try {
+    var modal = document.getElementById('warn-modal');
+    var ok = document.getElementById('wm-ok');
+    var KEY = 'wsy-install-warned';
+    var seen = false;
+    try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    function close() {
+      modal.hidden = true;
+      document.removeEventListener('keydown', onKey);
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    if (modal && !seen) {
+      modal.hidden = false;
+      if (ok) { ok.addEventListener('click', close); ok.focus(); }
+      document.addEventListener('keydown', onKey);
+      modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
