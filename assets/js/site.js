@@ -17,6 +17,27 @@
 (function () {
   'use strict';
 
+  /* ---------- Analytics -------------------------------------------------- */
+  /* Google Analytics (GA4). Injected here rather than pasted into all 60-odd
+     pages: the site is hand-written HTML with no templating, and site.js is the
+     one file every real page already loads — so this covers them all, and any
+     page added later gets it for free. The legacy redirect stubs deliberately
+     don't load site.js, which conveniently stops them logging a hit before they
+     bounce you to the page that IS tracked. Skipped on file:// (local preview),
+     where it can't report anyway. */
+  (function () {
+    var ID = 'G-WV3S5NWMV7';
+    if (location.protocol === 'file:') return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', ID);
+  })();
+
   /* ---------- Site structure ------------------------------------------- */
 
   var SECTIONS = {
