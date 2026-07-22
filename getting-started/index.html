@@ -40,7 +40,7 @@
       <p class="dl-hero-sub">The complete drafting, engineering and survey suite — every plugin,
       templates, plot styles and command aliases, in a single installer. No login needed.</p>
       <div class="dl-hero-actions">
-        <a class="btn btn-primary btn-lg"
+        <a class="btn btn-primary btn-lg" id="dl-btn"
            href="https://github.com/agabanto/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">
           Download the installer
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
@@ -117,17 +117,19 @@
 
 <footer data-footer></footer>
 
-<!-- First-visit pre-install warning -->
+<!-- Pre-download warning, shown when the download button is pressed -->
 <div class="modal-backdrop" id="warn-modal" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="wm-title" aria-describedby="wm-desc">
     <div class="modal-ico" aria-hidden="true">!</div>
-    <h2 id="wm-title">Before you install</h2>
+    <h2 id="wm-title">One thing before you install</h2>
     <p id="wm-desc"><strong>Remove any older WSY tools first.</strong> If you have earlier
     BricsCAD or AutoCAD tools, plugins, macros, LISP or profile setups from Western Sydney Drafting —
     including any test or beta build of this suite — uninstall them first
     (Windows Settings &rsaquo; Apps). Old hand-outs can clash with this new setup.</p>
     <div class="modal-actions">
-      <button class="btn btn-primary" id="wm-ok" type="button">Got it — continue</button>
+      <button class="btn btn-quiet" id="wm-cancel" type="button">Cancel</button>
+      <a class="btn btn-primary" id="wm-download"
+         href="https://github.com/agabanto/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">Download now</a>
     </div>
   </div>
 </div>
@@ -154,24 +156,27 @@
       .catch(function () {});
   } catch (e) {}
 
-  // First-visit pre-install warning modal (once per browser).
+  // Warn about removing older tools when the user goes to download. The main
+  // download button opens the modal; "Download now" inside it proceeds (its href
+  // does the actual download). No-JS users just download directly.
   try {
     var modal = document.getElementById('warn-modal');
-    var ok = document.getElementById('wm-ok');
-    var KEY = 'wsy-install-warned';
-    var seen = false;
-    try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
-    function close() {
-      modal.hidden = true;
-      document.removeEventListener('keydown', onKey);
-      try { localStorage.setItem(KEY, '1'); } catch (e) {}
-    }
-    function onKey(e) { if (e.key === 'Escape') close(); }
-    if (modal && !seen) {
+    var dlBtn = document.getElementById('dl-btn');
+    var cancel = document.getElementById('wm-cancel');
+    var proceed = document.getElementById('wm-download');
+    function openModal(e) {
+      if (e) e.preventDefault();
       modal.hidden = false;
-      if (ok) { ok.addEventListener('click', close); ok.focus(); }
       document.addEventListener('keydown', onKey);
-      modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+      if (proceed) proceed.focus();
+    }
+    function closeModal() { modal.hidden = true; document.removeEventListener('keydown', onKey); }
+    function onKey(e) { if (e.key === 'Escape') closeModal(); }
+    if (modal && dlBtn) {
+      dlBtn.addEventListener('click', openModal);
+      if (cancel) cancel.addEventListener('click', closeModal);
+      if (proceed) proceed.addEventListener('click', closeModal); // href performs the download
+      modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
     }
   } catch (e) {}
 })();

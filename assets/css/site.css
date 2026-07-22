@@ -762,6 +762,7 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .dl-warn strong { color: var(--brand); }
 
 /* Pre-install warning modal */
+.modal-backdrop[hidden] { display: none; }  /* else the display:grid below beats [hidden] */
 .modal-backdrop {
   position: fixed; inset: 0; z-index: 200; padding: 20px;
   background: rgba(0, 0, 0, .55); display: grid; place-items: center;
