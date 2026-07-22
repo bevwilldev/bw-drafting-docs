@@ -40,8 +40,13 @@
       <p class="dl-hero-sub">The complete drafting, engineering and survey suite — every plugin,
       templates, plot styles and command aliases, in a single installer. No login needed.</p>
       <div class="dl-hero-actions">
+        <!-- href is the RELEASES PAGE, not the .exe, on purpose. JS intercepts this
+             click to show the warning modal, and the real download happens from the
+             modal's "Download now" link. If this pointed at the .exe, Google
+             Analytics' file_download would fire here too (on the modal opening) and
+             double-count downloads. No-JS visitors still land on the releases page. -->
         <a class="btn btn-primary btn-lg" id="dl-btn"
-           href="https://github.com/agabanto/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">
+           href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">
           Download the installer
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
