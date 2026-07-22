@@ -184,6 +184,12 @@
       items: [
         { href: '/about/', text: 'About this Hub' }
       ]
+    },
+    support: {
+      title: 'Support',
+      items: [
+        { href: '/support/', text: 'Support &amp; Requests' }
+      ]
     }
   };
 
@@ -204,7 +210,10 @@
     { href: '/engineering/', text: 'Engineering' },
     { href: '/tools/', text: 'Tools' },
     { href: '/quality/', text: 'Quality' },
-    { href: '/onboarding/', text: 'Onboarding' }
+    { href: '/onboarding/', text: 'Onboarding' },
+    /* Last: it's a "something's wrong / I've got an idea" destination, not daily
+       lookup — but it has to be reachable from anywhere, so it earns a top slot. */
+    { href: '/support/', text: 'Support' }
   ];
 
   /* ---------- Base-path handling ---------------------------------------
@@ -397,7 +406,8 @@
     host.appendChild(el('div', { class: 'footer-inner' }, [
       el('span', {
         html: 'Built and maintained by the <a href="' + url('/about/') +
-              '">Western Sydney Drafting department</a>'
+              '">Western Sydney Drafting department</a> &middot; ' +
+              '<a href="' + url('/support/') + '">Support &amp; requests</a>'
       }),
       el('span', { class: 'copyright', html: '&copy; ' + new Date().getFullYear() + ' Beveridge Williams' })
     ]));
