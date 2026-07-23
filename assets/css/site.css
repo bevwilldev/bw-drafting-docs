@@ -34,10 +34,12 @@
    usually that, not a bug.
 
    CONTRAST — every foreground/background pair meets WCAG AA (4.5:1 for text,
-   3:1 for UI). --brand-ink and --brand-hover INVERT between themes: light mode
-   is white-on-red darkening on hover, dark mode is near-black on the brighter
-   accent, lightening on hover. White on dark-mode #f2555a is 3.4:1 and fails,
-   which is why that inversion exists — don't "simplify" it back to one value.
+   3:1 for UI). FILLED red surfaces (buttons, pills, badge icons) use the
+   constant deep --brand-fill (#d81f21) with WHITE ink in BOTH themes — white on
+   #d81f21 is 4.9:1, so the old light/dark ink inversion is gone (near-black on
+   red read as harsh). The brighter dark-mode --brand (#f2555a) remains for TEXT
+   accents on the dark background, where the deep red would itself fail AA —
+   don't collapse the two reds into one.
    ========================================================================= */
 
 /* ---------- Design tokens ------------------------------------------------ */
@@ -52,10 +54,14 @@
 :root {
   color-scheme: dark;
 
-  /* Brand — used sparingly and deliberately. */
+  /* Brand — used sparingly and deliberately. --brand is the ACCENT red (tuned
+     per theme for AA against the page background); --brand-fill is the FILLED
+     red for buttons/pills/badges, brand-constant across themes with white ink. */
   --brand: #f2555a;
-  --brand-ink: #180a0b;
+  --brand-ink: #ffffff;
   --brand-hover: #f7787c;
+  --brand-fill: #d81f21;
+  --brand-fill-hover: #be1b1d;
   /* The logo's script mark. Deliberately the artwork's own red and NOT --brand,
      and deliberately not overridden per theme — it is brand artwork, not UI
      state. Verified 4.4:1 on white and 4.5:1 on the dark bg, so it clears the
@@ -101,17 +107,18 @@
   --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
 }
 
-/* Light theme — opt in via the header toggle. --brand-ink and --brand-hover
-   INVERT between the themes: light is white-on-red darkening on hover, dark is
-   near-black on the brighter accent, lightening on hover. White on the dark
-   mode's #f2555a is 3.4:1 and fails AA, which is why the inversion exists —
-   don't "simplify" it to one value. */
+/* Light theme — opt in via the header toggle. In light mode the accent red and
+   the fill red coincide (#d81f21); dark mode keeps a brighter accent for text
+   on the dark background while fills stay the same deep red. Ink on fills is
+   white in BOTH themes. */
 :root[data-theme="light"] {
   color-scheme: light;
 
   --brand: #d81f21;
   --brand-ink: #ffffff;
   --brand-hover: #be1b1d;
+  --brand-fill: #d81f21;
+  --brand-fill-hover: #be1b1d;
 
   /* Neutral scale (light). Slightly cool; avoids the muddiness of pure grey. */
   --bg: #ffffff;
@@ -242,7 +249,7 @@ kbd {
 .nav a.nav-cta::after { display: none; }        /* no underline; it's a pill */
 .nav a.nav-cta:hover,
 .nav a.nav-cta[aria-current="page"] {
-  color: var(--brand-ink); background: var(--brand); border-color: var(--brand);
+  color: var(--brand-ink); background: var(--brand-fill); border-color: var(--brand-fill);
 }
 
 .icon-btn {
@@ -743,7 +750,7 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .dl-ver {
   margin-left: 3px; padding: 2px 10px; border-radius: 999px;
   font-size: .76rem; font-weight: 700; letter-spacing: 0; text-transform: none;
-  color: var(--brand-ink); background: var(--brand);
+  color: var(--brand-ink); background: var(--brand-fill);
 }
 .dl-hero-title {
   font-size: clamp(1.7rem, 4.2vw, 2.5rem); line-height: 1.08; margin: 15px 0 10px;
@@ -765,7 +772,7 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .dl-warn-ico {
   flex: none; width: 28px; height: 28px; border-radius: 50%; margin-top: 1px;
   display: grid; place-items: center;
-  background: var(--brand); color: var(--brand-ink); font-weight: 800; font-size: 1.05rem;
+  background: var(--brand-fill); color: var(--brand-ink); font-weight: 800; font-size: 1.05rem;
 }
 .dl-warn p { margin: 0; }
 .dl-warn strong { color: var(--brand); }
@@ -787,7 +794,7 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .modal-ico {
   width: 48px; height: 48px; border-radius: 50%; margin-bottom: 15px;
   display: grid; place-items: center;
-  background: var(--brand); color: var(--brand-ink); font-size: 1.5rem; font-weight: 800;
+  background: var(--brand-fill); color: var(--brand-ink); font-size: 1.5rem; font-weight: 800;
 }
 .modal h2 { border: 0; padding: 0; margin: 0 0 10px; font-size: 1.32rem; letter-spacing: -.02em; }
 .modal p { color: var(--ink-muted); margin: 0; line-height: 1.55; }
@@ -907,7 +914,7 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .feature-go {
   flex: none; display: grid; place-items: center;
   width: 40px; height: 40px; border-radius: 50%;
-  background: var(--brand); color: var(--brand-ink);
+  background: var(--brand-fill); color: var(--brand-ink);
   transition: transform .2s var(--ease-out);
 }
 .feature-go svg { width: 17px; height: 17px; }
@@ -1113,24 +1120,33 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .btn:active { transform: translateY(0); transition-duration: .08s; }
 .btn:hover svg { transform: translateX(2px); }
 
-/* --brand-ink and --brand-hover are per-theme, and they invert. Light mode is
-   white-on-red and darkens on hover. Dark mode's accent (#f2555a) is far too
-   bright for white text — 3.4:1, a genuine AA failure — so it takes near-black
-   text and LIGHTENS on hover, since darkening would drop the ratio instead. */
-.btn-primary { background: var(--brand); border-color: var(--brand); }
+/* Filled buttons use --brand-fill (the deep, theme-constant red): white text is
+   4.9:1 on it in both themes, so no per-theme ink inversion is needed. Hover
+   darkens. The brighter dark-mode --brand stays for text accents only. */
+.btn-primary { background: var(--brand-fill); border-color: var(--brand-fill); }
 .btn-primary:hover {
-  background: var(--brand-hover); border-color: var(--brand-hover);
-  box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--brand) 70%, transparent);
+  background: var(--brand-fill-hover); border-color: var(--brand-fill-hover);
+  box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--brand-fill) 70%, transparent);
 }
 .btn-quiet { border-color: var(--line-accent); background: var(--bg-raised); }
 .btn-quiet:hover { background: var(--bg-subtle); border-color: var(--ink-faint); }
 
-/* Button text colour must beat `.content a:hover` (0,2,1), which otherwise
-   repaints the label brand-red — red-on-red at 1.2:1, i.e. unreadable. The
-   :hover/:focus-visible selectors here are (0,3,0) and win. */
+/* Button text colour. Two selector sets on purpose:
+   — the bare ones cover buttons OUTSIDE .content (the home hero, the modal),
+     where the .content-scoped rules never matched and the label silently fell
+     back to the page ink — black-on-red on the home page's primary CTA;
+   — the .content-scoped ones stay because they must beat `.content a:hover`
+     (0,2,1), which otherwise repaints the label brand-red — red-on-red at
+     1.2:1, i.e. unreadable. Those are (0,3,0) and win. */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus-visible,
 .content .btn-primary,
 .content .btn-primary:hover,
 .content .btn-primary:focus-visible { color: var(--brand-ink); }
+.btn-quiet,
+.btn-quiet:hover,
+.btn-quiet:focus-visible,
 .content .btn-quiet,
 .content .btn-quiet:hover,
 .content .btn-quiet:focus-visible { color: var(--ink); }
