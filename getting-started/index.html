@@ -78,15 +78,19 @@
     <h2 id="running-the-installer">Running the installer</h2>
     <ol>
       <li>Run the installer.</li>
-      <li><strong>Choose components.</strong> Pick a workstation preset from the drop-down, or tick
-        components individually. Every component is optional and each works on its own.</li>
-      <li><strong>Choose how the environment is delivered</strong> (see below).</li>
-      <li>Finish, then start BricsCAD. The ribbons load automatically.</li>
+      <li><strong>Answer one question — which workstation is this?</strong> Full suite, Drafting,
+        Engineering or Surveyor. That's it: the right components install and the environment goes
+        into fresh dedicated WSY profiles (your own profile is untouched). Choosing
+        <em>Advanced</em> instead opens the detailed pages — individual components, delivery mode
+        and profiles. (Keyboard shortcuts are Advanced-only — no preset rebinds your keys.)</li>
+      <li>Finish, then start BricsCAD. The ribbons load automatically — and from here on,
+        <a href="#updating">updates install themselves</a>.</li>
     </ol>
 
-    <h2 id="delivery-modes">Delivery modes</h2>
-    <p>Templates, plot styles and command aliases have to be placed into a BricsCAD profile, so
-    the installer asks how. The options, safest first:</p>
+    <h2 id="delivery-modes">Delivery modes (Advanced only)</h2>
+    <p>Templates, plot styles and command aliases have to be placed into a BricsCAD profile.
+    A workstation choice applies the safest option (fresh WSY profiles) automatically — this page
+    only appears if you chose <em>Advanced</em>. The options, safest first:</p>
 
     <div class="note"><strong>This only matters if you install the optional content.</strong> The
     delivery mode affects your BricsCAD profile <em>only</em> because you ticked templates, plot
@@ -119,10 +123,13 @@
     and the ribbon tabs should be present. If a tab is missing, see
     <a href="../drafting/interface/troubleshooting/">Troubleshooting</a>.</p>
 
-    <h2 id="updating">Updating</h2>
-    <p>Once the suite is installed, updating is easy: when a new version is released you'll be
-    notified inside BricsCAD, and re-running the installer over the top preserves your settings
-    and profiles.</p>
+    <h2 id="updating">Updating — it's automatic</h2>
+    <p>You never need to come back here for updates. When a new version is released, the suite
+    downloads it quietly in the background and a small status-bar bubble tells you it's ready.
+    <strong>Just close BricsCAD</strong> — the update installs itself, no wizard, no clicking —
+    and the next time you open BricsCAD you're on the new version, with all your settings and
+    profiles exactly as they were. Want it immediately? Type <code>WSYUPDATE</code>: BricsCAD
+    closes, updates and reopens on its own.</p>
     <nav class="page-nav">
       <a href="../"><div class="dir">Previous</div><div class="ttl">Home</div></a>
     </nav>
