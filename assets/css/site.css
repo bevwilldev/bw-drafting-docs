@@ -1524,3 +1524,20 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   .content a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .78em; color: #666; }
   .note, .table-wrap { break-inside: avoid; }
 }
+
+/* Self-hosted tutorial video (install page) */
+.video-frame {
+  margin: 18px 0 28px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  overflow: hidden;
+  background: #000;
+}
+.video-frame video { display: block; width: 100%; height: auto; }
+.video-frame figcaption {
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  background: var(--bg, transparent);
+  border-top: 1px solid var(--line);
+}
