@@ -23,7 +23,7 @@ write("drafting/index.html", "drafting", "Drafting",
     <h2 id="new-to-the-toolset">New to the toolset?</h2>
     <p>
       Start with the <a href="interface/">introduction to the interface</a>, then
-      <a href="interface/installation/">install it</a>. Once the ribbon is loaded,
+      <a href="../../getting-started/">install it</a>. Once the ribbon is loaded,
       <a href="interface/using/">Using the Ribbon</a> walks through each panel.
     </p>
     <p>

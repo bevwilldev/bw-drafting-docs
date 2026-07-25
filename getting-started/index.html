@@ -96,19 +96,26 @@
     <h2 id="running-the-installer">Running the installer</h2>
     <ol>
       <li>Run the installer.</li>
-      <li><strong>Answer one question — which workstation is this?</strong> Full suite, Drafting,
-        Engineering or Surveyor. That's it: the right components install and the environment goes
-        into fresh dedicated WSY profiles (your own profile is untouched). Choosing
-        <em>Advanced</em> instead opens the detailed pages — individual components, delivery mode
-        and profiles. (Keyboard shortcuts are Advanced-only — no preset rebinds your keys.)</li>
+      <li><strong>Answer one question — what is this workstation used for?</strong> Tick every
+        discipline that applies: Drafting, Engineering, Surveying — one, two, or all three for the
+        full suite. Departments borrow each other's tools, so any mix is valid; the tools all
+        coexist in one environment while each discipline keeps its own templates.</li>
+      <li><strong>Optionally, keep your own setup.</strong> Tick <em>Keep my toolbars, panels and
+        settings</em> and your existing BricsCAD setup comes across into an office copy of it,
+        using the office templates — nothing of yours is changed or copied. Leave it unticked and
+        the office environment is set up separately, with your own setup untouched either way.
+        (Choosing <em>Advanced</em> instead opens the detailed pages — individual components,
+        delivery and profiles. Keyboard shortcuts are Advanced-only — no preset rebinds your
+        keys.)</li>
       <li>Finish, then start BricsCAD. The ribbons load automatically — and from here on,
         <a href="#updating">updates install themselves</a>.</li>
     </ol>
 
     <h2 id="delivery-modes">Delivery modes (Advanced only)</h2>
     <p>Templates, plot styles and command aliases have to be placed into a BricsCAD profile.
-    A workstation choice applies the safest option (fresh WSY profiles) automatically — this page
-    only appears if you chose <em>Advanced</em>. The options, safest first:</p>
+    A workstation choice handles this for you — the safest option, or the second one below if you
+    ticked <em>Keep my toolbars, panels and settings</em> — so this page only appears if you chose
+    <em>Advanced</em>. The options, safest first:</p>
 
     <div class="note"><strong>This only matters if you install the optional content.</strong> The
     delivery mode affects your BricsCAD profile <em>only</em> because you ticked templates, plot
@@ -118,19 +125,27 @@
     <div class="table-wrap"><table>
       <thead><tr><th>Mode</th><th>What happens</th><th>Trade-off</th></tr></thead>
       <tbody>
-        <tr><td><strong>Fresh WSY profiles</strong></td><td>New, separate <em>WSY Drafting</em> /
-          <em>WSY Engineering</em> profiles are created for the content. Your own profile is left
-          completely alone.</td><td><strong>Recommended — safest.</strong> Nothing you already
-          have is changed.</td></tr>
-        <tr><td>Copy my profile, use the copy</td><td>Your profile is cloned as
-          <em>&lt;name&gt; (WSY)</em> and the WSY content goes into the clone; your original is
-          untouched.</td><td>Safer than injecting — but the copy uses <strong>local folders</strong>.
-          If your profile points at <strong>network directories</strong> (shared templates / support),
-          the copy takes a local snapshot and won't stay live-linked to them.</td></tr>
-        <tr><td>Inject into current profile</td><td>Files are written into your existing profile's
-          own folders (overwriting same-named files, including on a network) and the office alias is
-          added to your alias file.</td><td><strong>Most invasive</strong> — changes your existing
-          setup. Only if you know what you're doing.</td></tr>
+        <tr><td><strong>Set up a separate office environment</strong></td><td>New, separate
+          <em>WSY Drafting</em> / <em>WSY Engineering</em> profiles are created for the content.
+          Your own setup is left completely alone.</td><td><strong>Recommended — safest.</strong>
+          Nothing you already have is changed, but you start with BricsCAD's standard toolbars
+          and panels.</td></tr>
+        <tr><td><strong>Keep my setup, use the office templates</strong></td><td>Your setup is
+          copied as <em>&lt;name&gt; (WSY)</em> — every toolbar, panel and setting comes across —
+          and that copy points at the <strong>installed office files</strong>. Your original is
+          untouched and nothing of yours is copied.</td><td>The office content stays
+          <strong>linked</strong>, so updates reach it on their own and
+          <strong>network folders keep working</strong>. Your template folder becomes the office
+          one (browse to your own any time).</td></tr>
+        <tr><td>Keep my setup and my own templates as well</td><td>The same copy, but it also gets
+          a local copy of your own templates and plot styles with the office ones merged in, so
+          both sets sit side by side.</td><td>Keeps your templates in the same folder — but it's a
+          <strong>local snapshot</strong>. If yours live on <strong>network directories</strong>,
+          the copy won't pick up later changes to them.</td></tr>
+        <tr><td>Add the office files to my current setup</td><td>Files are written into your
+          existing profile's own folders (overwriting same-named files, including on a network) and
+          the office alias is added to your alias file.</td><td><strong>Most invasive</strong> —
+          changes your existing setup. Only if you know what you're doing.</td></tr>
       </tbody>
     </table></div>
 

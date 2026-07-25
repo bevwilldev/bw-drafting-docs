@@ -48,54 +48,10 @@ W("drafting/interface/index.html", "drafting", "Custom CAD Interface",
     <a href="installation/">Installation</a>.</p>
 """ + page_nav(prev=("../", "Drafting"), nxt=("installation/", "Installation")))
 
-W("drafting/interface/installation/index.html", "drafting", "Installation",
-  "Installing the BW BricsCAD Tools suite.",
-  """    <h1>Installation</h1>
-    <p class="lede">The suite ships as a single installer covering every plugin, the templates,
-    plot styles and command aliases.</p>
-
-    <div class="note"><strong>Before you start</strong> — close BricsCAD. It writes its settings
-    back when it exits, which would undo the installer's changes. The installer will tell you if
-    it's still running.</div>
-
-    <h2 id="running-the-installer">Running the installer</h2>
-    <ol>
-      <li>Run the installer. It checks you're on the company network before proceeding.</li>
-      <li><strong>Choose components.</strong> Pick a workstation preset from the drop-down, or tick
-        components individually. Every component is optional and each works on its own.</li>
-      <li><strong>Choose how the environment is delivered</strong> (see below).</li>
-      <li>Finish, then start BricsCAD. The ribbons load automatically.</li>
-    </ol>
-
-    <h2 id="delivery-modes">Delivery modes</h2>
-    <p>Templates, plot styles and command aliases have to land somewhere. The installer offers
-    three options:</p>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Mode</th><th>What happens</th><th>Use when</th></tr></thead>
-      <tbody>
-        <tr><td>Inject into current profile</td><td>Files are copied into your existing profile's
-          folders and the office alias is added to your alias file.</td><td>You know what you're
-          doing and want everything in your existing setup.</td></tr>
-        <tr><td><strong>Copy profile, then inject</strong></td><td>Your profile is cloned as
-          <em>&lt;name&gt; (WSY)</em> with local copies of its folders, and the WSY content goes
-          into the clone. Your original is untouched.</td><td><strong>Recommended.</strong> Keeps
-          your settings but never contaminates them.</td></tr>
-        <tr><td>Fresh WSY profiles</td><td>New, separate <em>WSY Drafting</em> /
-          <em>WSY Engineering</em> profiles are created.</td><td>You want a clean environment
-          that's entirely separate.</td></tr>
-      </tbody>
-    </table></div>
-
-    <h2 id="checking-it-worked">Checking it worked</h2>
-    <p>Start BricsCAD. You should see a line on the command line naming the plugins that loaded,
-    and the ribbon tabs should be present. If a tab is missing, see
-    <a href="../troubleshooting/">Troubleshooting</a>.</p>
-
-    <h2 id="updating">Updating</h2>
-    <p>The suite checks for new releases in the background and tells you on the command line when
-    one is available. Type <code class="cmd">WSYUPDATE</code> to launch the installer for the new
-    version.</p>
-""" + page_nav(prev=("../", "Custom CAD Interface"), nxt=("../using/", "Using the Ribbon")))
+# The installation page is NOT generated here any more: the live install guide is
+# /getting-started/, hand-maintained, and this block had drifted badly out of date
+# (it still described the pre-2.0 wizard and recommended a delivery mode that is no
+# longer the recommended one). Removed rather than updated so it cannot mislead.
 
 W("drafting/interface/using/index.html", "drafting", "Using the Ribbon",
   "A tour of the WSY Drafting ribbon panels.",
