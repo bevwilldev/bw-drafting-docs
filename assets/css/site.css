@@ -739,7 +739,9 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
    Install page — download reveal, prominent warning, modal
    ============================================================ */
 .dl-hero {
-  margin: 6px 0 30px; padding: 30px 30px 32px;
+  /* Sits below the "Before you install" checklist now, not under the h1 —
+     it needs a real gap above, roughly matching the one below. */
+  margin: 28px 0 30px; padding: 30px 30px 32px;
   border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line));
   border-radius: calc(var(--radius) * 2.4);
   background: radial-gradient(130% 150% at 0% 0%, var(--brand-wash), transparent 62%), var(--bg-raised);
