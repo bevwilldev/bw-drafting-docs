@@ -311,7 +311,12 @@
     });
 
     host.className = 'header';
-    host.appendChild(el('div', { class: 'header-inner' }, [burger, logo, nav, theme]));
+    // Early-access framing: the suite is in daily use but actively evolving —
+    // the badge keeps that honest on every page, not just the install page.
+    var ea = el('a', { class: 'ea-badge', href: url('/getting-started/#early-access'),
+                       text: 'Early Access', title: 'The suite is in daily use and actively evolving — click for what that means' });
+
+    host.appendChild(el('div', { class: 'header-inner' }, [burger, logo, ea, nav, theme]));
   }
 
   /* ---------- Sidebar --------------------------------------------------- */
