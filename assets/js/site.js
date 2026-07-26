@@ -290,8 +290,50 @@
       el('span', { class: 'logo-text', text: 'Beveridge Williams Western Sydney' })
     );
 
+    /* Ten flat links crowded the strip. The six section guides fold into one
+       "Guides" dropdown, so the header carries five items: Getting Started,
+       Commands, Videos, Guides and Support. The mobile drawer keeps the flat
+       list — vertical space is cheap there. */
+    var GUIDE_HREFS = ['/drafting/', '/survey/', '/engineering/', '/tools/',
+                       '/quality/', '/onboarding/'];
     var nav = el('nav', { class: 'nav', 'aria-label': 'Sections' });
+
+    function makeDrop(items) {
+      var wrap = el('div', { class: 'nav-drop' });
+      var btn = el('button', {
+        class: 'nav-drop-btn', type: 'button',
+        'aria-haspopup': 'true', 'aria-expanded': 'false',
+        html: 'Guides <svg class="drop-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'
+      });
+      var menu = el('div', { class: 'nav-menu' });
+      items.forEach(function (item) {
+        var a = el('a', { href: url(item.href), html: item.text });
+        if (HERE.indexOf(normalise(url(item.href))) === 0) {
+          a.setAttribute('aria-current', 'page');
+          btn.setAttribute('aria-current', 'page');  // the open section lives in here
+        }
+        menu.appendChild(a);
+      });
+      function close() { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = wrap.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+      wrap.appendChild(btn); wrap.appendChild(menu);
+      return wrap;
+    }
+
+    var grouped = TOP_NAV.filter(function (i) { return GUIDE_HREFS.indexOf(i.href) !== -1; });
+    var drop = null;
     TOP_NAV.forEach(function (item) {
+      if (GUIDE_HREFS.indexOf(item.href) !== -1) {
+        // The dropdown sits where the first grouped link sat, once.
+        if (!drop) { drop = makeDrop(grouped); nav.appendChild(drop); }
+        return;
+      }
       var a = el('a', { href: url(item.href), html: item.text });
       if (item.cta) a.className = 'nav-cta';   // stands out as the entry point
       // Mark the section active for any page beneath it.
