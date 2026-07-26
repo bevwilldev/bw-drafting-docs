@@ -45,7 +45,7 @@
           <circle cx="7.2" cy="7.2" r="4.4"/><path d="m10.6 10.6 3 3"/>
         </svg>
         <input id="cmdSearch" type="search" autocomplete="off" spellcheck="false"
-               placeholder="Search all 119 commands &mdash; try &quot;curve&quot; or AUTODIM">
+               placeholder="Search all 126 commands &mdash; try &quot;curve&quot; or AUTODIM">
       </div>
       <div class="cmd-search-out" role="listbox" aria-label="Command results"></div>
     </div>
@@ -164,7 +164,12 @@
         <tr><td><code class="cmd">DPWALL</code></td><td>Inserts a wall symbol at a point and rotation</td><td><a href="../commands/drafting/occupations/#dpwall">Occupations</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASEA</code></td><td>Draws or converts easement outlines on the dashed easement layer</td><td><a href="../commands/drafting/cadastre/#easea">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASEARROW</code></td><td>Places an easement dimension arrow between two snapped points</td><td><a href="../commands/drafting/cadastre/#easearrow">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">EASEDB</code></td><td>Opens your personal easement description list for editing</td><td><a href="../commands/drafting/command-line/#easedb">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">EASEDESC</code></td><td>Words the drawing&#x27;s easements without placing or touching a schedule</td><td><a href="../commands/drafting/command-line/#easedesc">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASEL</code></td><td>Draws easement boundary lines by hand</td><td><a href="../commands/drafting/cadastre/#easel">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">EASELEG</code></td><td>Places a schedule of the easements a chosen viewport can actually show — e.g</td><td><a href="../commands/drafting/command-line/#easeleg">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">EASELEGAUTO</code></td><td>Turns live easement-schedule tracking on or off</td><td><a href="../commands/drafting/command-line/#easelegauto">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">EASELEGUPDATE</code></td><td>Resyncs every placed easement schedule with the drawing</td><td><a href="../commands/drafting/command-line/#easelegupdate">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASEP</code></td><td>Easement label leader — a spline leader with a dot arrowhead</td><td><a href="../commands/drafting/cadastre/#easep">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASET</code></td><td>Easement text</td><td><a href="../commands/drafting/cadastre/#lot-text">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EXCELREG</code></td><td>A shortcut to the register that sits beside the drawings, so you don&#x27;t…</td><td><a href="../commands/engineering/open/#excelreg">Open</a><span class="cmd-tab">BW Engineering</span></td></tr>
@@ -182,6 +187,7 @@
         <tr><td><code class="cmd">IMPORTSHEET</code></td><td>Turns a folder of scanned or exported design sheets into a set of layouts…</td><td><a href="../commands/wae/sheeting/#importsheet">Sheeting</a><span class="cmd-tab">WSY WAE</span></td></tr>
         <tr><td><code class="cmd">INCBLOCK</code></td><td>Turns each lot into a numbered annotative block that&#x27;s only visible at its…</td><td><a href="../commands/drafting/command-line/#incblock">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">LANDXML</code></td><td>Imports an NSW ePlan / LandXML file — lot boundaries, lot numbers with…</td><td><a href="../commands/drafting/command-line/#landxml">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">LAYREN</code></td><td>Bulk layer rename — add or remove a prefix or suffix, or find-and-replace,…</td><td><a href="../commands/drafting/command-line/#layren">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">LEVTOTXT</code></td><td>Writes surface levels into existing text by picking points</td><td><a href="../commands/drafting/command-line/#levtotxt">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">LRGTXT</code></td><td>LARGE LABEL</td><td><a href="../commands/drafting/text/#text-styles">Text</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">MEDTXT</code></td><td>MEDIUM LABEL</td><td><a href="../commands/drafting/text/#text-styles">Text</a><span class="cmd-tab">WSY Drafting</span></td></tr>
@@ -204,6 +210,7 @@
         <tr><td><code class="cmd">ROADLM</code></td><td>Measures a road width between two points and writes (X.XX WIDE) at the…</td><td><a href="../commands/drafting/cadastre/#roadlm">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ROADN</code></td><td>Road name</td><td><a href="../commands/drafting/cadastre/#lot-text">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">RROUND</code></td><td>Rounds the number in selected text — up, down or to nearest</td><td><a href="../commands/drafting/command-line/#rround">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">SETBYBLOCK</code></td><td>Normalises the entities inside blocks to layer 0 / ByBlock, so the…</td><td><a href="../commands/drafting/command-line/#setbyblock">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">SETLAYOUT</code></td><td>Builds a complete set of per-lot sales layouts — one sheet per lot, each…</td><td><a href="../commands/drafting/command-line/#setlayout">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">SMALLTXT</code></td><td>SMALL LABEL</td><td><a href="../commands/drafting/text/#text-styles">Text</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">SMT</code></td><td>Strips all inline formatting out of text, leaving the plain words</td><td><a href="../commands/drafting/command-line/#smt-stripmtext">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting &middot; BW Engineering</span></td></tr>
@@ -238,7 +245,7 @@
       </tbody>
     </table>
     </div>
-    <!-- ALPHA_END --> --> -->
+    <!-- ALPHA_END --> --> --> -->
     <nav class="page-nav">
       <a href="../"><div class="dir">Previous</div><div class="ttl">Home</div></a>
     </nav>

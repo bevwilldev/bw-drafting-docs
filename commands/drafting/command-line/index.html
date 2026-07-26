@@ -117,6 +117,64 @@
     <p>Pre-select, or <code>Select the curve schedule text (window the whole table):</code>.</p>
     <div class="note"><strong>Note</strong> — Built for reading surveyor curve schedules. It expects the standard columns: number, bearing, chord, arc, radius.</div>
 
+<h2 id="easeleg"><code class="cmd">EASELEG</code></h2>
+    <p>Places a schedule of the easements a chosen viewport can actually show — e.g.
+    <em>(A1) EASEMENT TO DRAIN WATER 3 WIDE</em>, one line per designation.</p>
+    <h4>How to use it</h4>
+    <p>Run it on a <strong>layout tab</strong> (on Model it tells you to switch — the schedule
+    belongs on the sheet). <code>Select viewport for the schedule:</code> → a dialog lists every
+    designation found and you word each one: pick a standard description, take the suggestion the
+    code letters offer (label an easement <em>(A1)</em> and it proposes <em>EASEMENT TO DRAIN
+    WATER</em> — one click, then type the width), or type your own. <strong>Create</strong> stays
+    greyed until every designation has wording — the button counts down what's left. Then
+    <code>Schedule insertion point:</code>.</p>
+    <h4>What it produces</h4>
+    <p>A text schedule on the sheet, always in CAPITALS, linked to its viewport. It reads
+    designations from the <strong>EASEMENT LABEL</strong> layer, so labels placed with
+    <a href="../cadastre/#lot-text">EASET</a>, <a href="../cadastre/#easep">EASEP</a> and
+    <a href="../cadastre/#easearrow">EASEARROW</a> all count. A sheet with two details lists only
+    what each viewport shows. The wording is stored in the drawing itself, so a re-issued plan
+    reproduces exactly as drawn.</p>
+    <div class="note"><strong>You can't type into a schedule</strong> — it's generated text, so a
+    hand edit is undone and the schedule goes back to saying what the drawing says. Change the
+    wording with EASEDESC instead. If nothing's found, the command says why — how many labels it
+    checked, and how many were at another annotation scale, outside the view, or unlabelled. No
+    ribbon button.</div>
+
+<h2 id="easelegupdate"><code class="cmd">EASELEGUPDATE</code></h2>
+    <p>Resyncs every placed easement schedule with the drawing.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — it refreshes all schedules and reports how many changed.</p>
+    <div class="note"><strong>Note</strong> — with EASELEGAUTO on (the default) you'll rarely need
+    it; it's the manual catch-up for when tracking has been turned off.</div>
+
+<h2 id="easelegauto"><code class="cmd">EASELEGAUTO</code></h2>
+    <p>Turns live easement-schedule tracking on or off.</p>
+    <h4>How to use it</h4>
+    <p>A toggle — no prompts. The setting is remembered between sessions.</p>
+    <div class="note"><strong>Note</strong> — On by default: schedules follow the drawing as you
+    lay a sheet out, so one is never quietly stale. Turn it off if the redraw gets in the way on a
+    heavy sheet.</div>
+
+<h2 id="easedesc"><code class="cmd">EASEDESC</code></h2>
+    <p>Words the drawing's easements without placing or touching a schedule.</p>
+    <h4>How to use it</h4>
+    <p>The same wording dialog as EASELEG, but covering the <strong>whole drawing</strong> rather
+    than one viewport — so you can describe an easement before the sheet that shows it exists, or
+    fix a description later without placing anything. Placed schedules pick the change up
+    straight away.</p>
+    <div class="note"><strong>Note</strong> — designations you've worded before stay editable here
+    even if their label has since been deleted, so a stale entry can always be corrected.</div>
+
+<h2 id="easedb"><code class="cmd">EASEDB</code></h2>
+    <p>Opens your personal easement description list for editing.</p>
+    <h4>How to use it</h4>
+    <p>No prompts — the list opens in Notepad. One description per line; save, and it's offered
+    next time.</p>
+    <div class="note"><strong>Note</strong> — the office standard set (with its code-letter
+    suggestions) ships with the suite; your own additions merge over it. EASEDB edits your
+    personal <em>suggestion list</em> — EASEDESC edits what a particular <em>drawing</em> says.</div>
+
 <h2 id="alab"><code class="cmd">ALAB</code></h2>
     <p>Labels each selected lot with its area.</p>
     <h4>How to use it</h4>
@@ -209,6 +267,33 @@
     <h4>How to use it</h4>
     <p>Pre-select, or select mtext, leaders, dimensions or blocks with attributes.</p>
     <div class="note"><strong>Note</strong> — Line breaks are kept. Background masks aren't touched — use TBG for those.</div>
+
+<h2 id="layren"><code class="cmd">LAYREN</code></h2>
+    <p>Bulk layer rename — add or remove a prefix or suffix, or find-and-replace, across many
+    layers at once.</p>
+    <h4>How to use it</h4>
+    <p><code>Bulk layer rename — operation: [AddPrefix/AddSuffix/RemovePrefix/RemoveSuffix/Replace]</code>
+    → the text to add, remove or find (Replace also asks
+    <code>Replace with (blank to delete it):</code>) → <code>Apply to layers matching &lt;*&gt;:</code>
+    — a wildcard filter, so <code>SURV*</code> touches only the survey layers.</p>
+    <div class="note"><strong>Note</strong> — layer 0 and xref layers are always skipped, and a
+    rename that would collide with an existing name is skipped and reported rather than failing
+    the run. No ribbon button.</div>
+
+<h2 id="setbyblock"><code class="cmd">SETBYBLOCK</code></h2>
+    <p>Normalises the entities <em>inside</em> blocks to layer 0 / ByBlock, so the insert's own
+    layer and properties control how the block looks.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select block references, or <code>Blocks to normalise [Select/All] &lt;Select&gt;:</code>
+    (<strong>All</strong> covers every block definition in the drawing) →
+    <code>Also change entities in nested blocks? [Yes/No] &lt;Yes&gt;:</code>.</p>
+    <h4>What it produces</h4>
+    <p>Every entity inside the chosen block definitions moves to layer <strong>0</strong> with
+    colour, linetype and lineweight set to <strong>ByBlock</strong> — from then on, changing the
+    insert changes the block.</p>
+    <div class="note"><strong>Note</strong> — dynamic blocks are handled through their real
+    definition, so the change survives parameter edits. Xrefs are left alone. Every insert of an
+    edited definition is affected — it changes the block, not one insert. No ribbon button.</div>
 
 <h2 id="wsyupdate"><code class="cmd">WSYUPDATE</code></h2>
     <p>Checks for a newer release of the suite and launches the installer.</p>

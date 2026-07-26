@@ -48,7 +48,7 @@ body = ["""    <h1>Command Reference</h1>
           <circle cx="7.2" cy="7.2" r="4.4"/><path d="m10.6 10.6 3 3"/>
         </svg>
         <input id="cmdSearch" type="search" autocomplete="off" spellcheck="false"
-               placeholder="Search all 119 commands &mdash; try &quot;curve&quot; or AUTODIM">
+               placeholder="Search all 126 commands &mdash; try &quot;curve&quot; or AUTODIM">
       </div>
       <div class="cmd-search-out" role="listbox" aria-label="Command results"></div>
     </div>
