@@ -27,24 +27,53 @@
 
   <main class="content" id="main">
     <h1>Troubleshooting</h1>
-    <p class="lede">For the whole suite — any ribbon tab, any tool. Most problems are a
-    ribbon that didn't load or a component that wasn't installed. Work through these in
-    order.</p>
+    <p class="lede">For the whole suite — any ribbon tab, any tool. Nearly everything is
+    fixed by reinstalling, so start there and only work down the list if it persists.</p>
+
+    <h2 id="reinstall">Start here: uninstall and reinstall</h2>
+    <p>This fixes most problems, and it is safe: uninstalling reverses exactly what the
+    installer did — it removes the plugins, the office alias it added to your alias file,
+    and any profile it created, and it puts back the profile you were using before.
+    <strong>Your drawings are never touched.</strong></p>
+    <ol>
+      <li><strong>Close BricsCAD.</strong> It writes its settings back when it exits, so
+        uninstalling underneath it leaves the old registrations behind.</li>
+      <li>Open <strong>Windows Settings &rsaquo; Apps &rsaquo; Installed apps</strong>, find
+        <strong>BW BricsCAD Tools</strong>, and choose <strong>Uninstall</strong>.</li>
+      <li>Install it again from the <a href="../../getting-started/">install page</a> —
+        always take the current version rather than an installer you saved earlier.</li>
+      <li>Start BricsCAD. The ribbons load themselves.</li>
+    </ol>
+
+    <figure class="img-todo">
+      <span class="img-todo-tag">Screenshot to come</span>
+      <span class="img-todo-what">Windows Settings &rsaquo; Apps &rsaquo; Installed apps, with
+        &ldquo;BW BricsCAD Tools&rdquo; found and the &hellip; menu open on Uninstall.</span>
+    </figure>
+
+    <div class="note"><strong>Reinstalling is not how you update.</strong> Updates install
+    themselves — you'll get a small bubble in the corner, and the update applies next time
+    you close BricsCAD. Reinstall only to fix something that's broken. To force an update now,
+    type <code class="cmd">WSYUPDATE</code>.</div>
 
     <h2 id="a-ribbon-tab-is-missing">A ribbon tab is missing</h2>
-    <p>First, restart BricsCAD — the ribbons load at startup and a tab can be missed if BricsCAD
-    was busy. If it's still missing, reset the customisation:</p>
-    <ol>
-      <li>Run <code class="cmd">CUSTOMIZE</code>.</li>
-      <li>Open the <strong>Manage Your Customizations</strong> panel.</li>
-      <li>Revert to defaults, then restart BricsCAD.</li>
-    </ol>
-    <figure><img src="../../assets/img/customize.png" alt="Customize dialog"></figure>
-    <figure><img src="../../assets/img/manage-customizations.png" alt="Manage customizations"></figure>
+    <p>Restart BricsCAD first — ribbons load at startup, and a tab can be missed if BricsCAD
+    was busy. If it is still missing, the usual cause is that the component isn't installed:
+    each ribbon is optional, so a machine set up for Drafting has no BW Engineering tab.
+    <a href="#reinstall">Reinstall</a> and tick the discipline you need.</p>
+    <p>If the tab is still absent after a clean reinstall, the customisation may be holding a
+    stale menu group. Run <code class="cmd">CUSTOMIZE</code>, find the group in
+    <strong>Manage Your Customizations</strong> and unload it, then restart BricsCAD so the
+    plugin loads it fresh.</p>
+    <figure><img src="../../assets/img/customize.png" alt="The BricsCAD Customize dialog"></figure>
+    <figure><img src="../../assets/img/manage-customizations.png" alt="The Manage Your Customizations panel"></figure>
+    <div class="note"><strong>Don't revert customisation to defaults</strong> unless you're
+    prepared to lose your own toolbars and panels — it resets far more than this suite, and
+    it is almost never what fixes a missing tab.</div>
 
-    <h2 id="a-command-says-unknown-command">A command says "unknown command"</h2>
-    <p>That component probably isn't installed. Commands are grouped by plugin, and each is
-    optional at install time:</p>
+    <h2 id="a-command-says-unknown-command">A command says &ldquo;unknown command&rdquo;</h2>
+    <p>That part of the suite isn't installed. Everything is optional at install time, so
+    commands only exist if their component was ticked:</p>
     <div class="table-wrap"><table>
       <thead><tr><th>If this fails</th><th>You need</th></tr></thead>
       <tbody>
@@ -52,23 +81,35 @@
         <tr><td><code class="cmd">NSWLOTS</code></td><td>The NSW Lot Loader component</td></tr>
         <tr><td><code class="cmd">PCDIG</code></td><td>The Point Cloud Digitizer component</td></tr>
         <tr><td><code>OUTLINE</code> / <code>VPO</code></td><td>The Community LISP tools component</td></tr>
-        <tr><td>Engineering or WAE commands</td><td>The matching ribbon component</td></tr>
+        <tr><td>Engineering or WAE commands</td><td>The matching discipline — Engineering or Surveying</td></tr>
       </tbody>
     </table></div>
-    <p>Re-run the installer and tick the missing component.</p>
+    <p>Run the installer again and tick the discipline that carries it. The wizard remembers
+    what you chose last time, so you are adding to your setup, not starting over. For an
+    individual component rather than a whole discipline, tick <strong>Advanced</strong> on the
+    first page and choose it from the component list.</p>
+
+    <figure class="img-todo">
+      <span class="img-todo-tag">Screenshot to come</span>
+      <span class="img-todo-what">The installer's first page with the discipline tickboxes,
+        and the same page with Advanced ticked showing the component list.</span>
+    </figure>
 
     <h2 id="lines-look-wrong-fences-and-easements-draw-solid">Lines look wrong — fences and easements draw solid</h2>
-    <p>The linetype file didn't resolve. You'll see a message on the command line saying so. Re-run
-    the installer to restore the Support files.</p>
+    <p>The linetype file didn't resolve, and the command line will have said so when you drew.
+    <a href="#reinstall">Reinstall</a> to restore the Support files.</p>
+    <p>If it only happens in one drawing, that drawing is missing the linetype rather than the
+    machine — draw the object again with the suite loaded and it will be pulled in.</p>
 
     <h2 id="plot-commands-dont-produce-a-pdf">Plot commands don't produce a PDF</h2>
     <p>The plot device isn't installed. The engineering and WAE plot commands need the BW plot
-    configurations, which ship with those components — re-run the installer.</p>
+    configurations, which ship with those disciplines —
+    <a href="#reinstall">reinstall</a> with Engineering or Surveying ticked.</p>
 
     <h2 id="text-is-the-wrong-size">Text is the wrong size</h2>
-    <p>Text height is the drawing's <code>TEXTSIZE</code> divided by the current annotation scale.
-    If text comes out too large or small, check the annotation scale is set correctly before
-    placing it.</p>
+    <p>Text is sized for the sheet, so it depends on the annotation scale that was current when
+    you placed it. If it comes out too large or too small, set the annotation scale first, then
+    place the text.</p>
 
     <h2 id="still-stuck">Still stuck</h2>
     <p>Send it through the <a href="../">Support &amp; Requests</a> form — or hit

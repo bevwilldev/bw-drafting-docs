@@ -648,6 +648,24 @@ figure img {
 figure img:hover { border-color: var(--line-strong); }
 figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 
+/* Image placeholder - a screenshot that's wanted but not taken yet. Deliberately
+   obvious (dashed, labelled) so an un-filled slot can't be mistaken for a design
+   choice, and greppable: search the repo for "img-todo" to list every shot still
+   outstanding. When the image lands, replace the whole <figure> with a normal
+   <figure><img ...><figcaption>...</figcaption></figure>. */
+.img-todo {
+  display: grid; place-items: center; gap: 6px;
+  min-height: 150px; padding: 22px;
+  border: 2px dashed color-mix(in srgb, var(--brand) 38%, var(--line));
+  border-radius: calc(var(--radius) * 1.4);
+  background: var(--brand-wash); text-align: center;
+}
+.img-todo .img-todo-tag {
+  font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--brand);
+}
+.img-todo .img-todo-what { font-size: .9rem; color: var(--ink-muted); max-width: 46ch; }
+
 .embed { position: relative; aspect-ratio: 16 / 9; }
 .embed iframe {
   position: absolute; inset: 0; width: 100%; height: 100%;
