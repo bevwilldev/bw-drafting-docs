@@ -102,7 +102,7 @@ W("drafting/interface/using/index.html", "drafting", "Using the Ribbon",
     Checklist</a>.</p>
 """ + page_nav(prev=("../installation/", "Installation"), nxt=("../troubleshooting/", "Troubleshooting")))
 
-W("drafting/interface/troubleshooting/index.html", "drafting", "Troubleshooting",
+W("support/troubleshooting/index.html", "support", "Troubleshooting",
   "Fixing a missing ribbon tab or a command that won't run.",
   """    <h1>Troubleshooting</h1>
     <p class="lede">Most problems are a ribbon that didn't load or a component that wasn't
@@ -188,7 +188,7 @@ W("drafting/standards/index.html", "drafting", "Drafting Standards",
     <h2 id="rotated-views">Rotated views</h2>
     <p>Where a plan is rotated in a viewport, annotation should read horizontally on the sheet.
     Commands that place text account for the viewport twist and the current UCS.</p>
-""" + page_nav(prev=("../interface/troubleshooting/", "Troubleshooting"), nxt=("wsy/", "WSY Drafting Standards")))
+""" + page_nav(prev=("../interface/using/", "Using the Ribbon"), nxt=("wsy/", "WSY Drafting Standards")))
 
 W("drafting/standards/wsy/index.html", "drafting", "WSY Drafting Standards",
   "The concrete WSY standard: colours, line weights, text styles and page setup.",

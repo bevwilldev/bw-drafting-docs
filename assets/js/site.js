@@ -54,8 +54,7 @@
         {
           group: 'Custom CAD Interface', items: [
             { href: '/drafting/interface/', text: 'Introduction' },
-            { href: '/drafting/interface/using/', text: 'Using the Ribbon' },
-            { href: '/drafting/interface/troubleshooting/', text: 'Troubleshooting' }
+            { href: '/drafting/interface/using/', text: 'Using the Ribbon' }
           ]
         },
         {
@@ -191,7 +190,8 @@
     support: {
       title: 'Support',
       items: [
-        { href: '/support/', text: 'Support &amp; Requests' }
+        { href: '/support/', text: 'Support &amp; Requests' },
+        { href: '/support/troubleshooting/', text: 'Troubleshooting' }
       ]
     }
   };
