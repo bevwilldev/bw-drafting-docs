@@ -116,7 +116,7 @@ W("engineering/plotting/index.html", "engineering", "Plotting",
     <p>The Toolbox panel also carries <code class="cmd">UPDATE</code> (title-block attributes from a
     CSV), <code class="cmd">ATC</code>, <code class="cmd">OB2WO</code>,
     <code class="cmd">SMT</code> and <code class="cmd">TADD</code> — the same commands documented
-    under <a href="../../drafting/commands/">the drafting command reference</a>.</p>
+    under <a href="../../commands/drafting/">the drafting command reference</a>.</p>
 """ + page_nav(prev=("../standards/", "Styles & Scales"), nxt=("../../quality/", "Quality")))
 
 # =============================================================== QUALITY
@@ -230,7 +230,7 @@ W("onboarding/bricscad/learning/index.html", "onboarding", "Learning Resources",
     </ul>
 
     <h2 id="then">Then</h2>
-    <p>Once you're comfortable, the <a href="../../../drafting/commands/">command reference</a> covers
+    <p>Once you're comfortable, the <a href="../../../commands/drafting/">command reference</a> covers
     our own toolset — that's where the office-specific work happens.</p>
 """ + page_nav(prev=("../", "Introduction to BricsCAD"), nxt=("../../resources/", "Spatial Data Resources")))
 

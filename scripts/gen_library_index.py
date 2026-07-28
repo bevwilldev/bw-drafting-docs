@@ -11,18 +11,18 @@ import build_page  # noqa: E402
 
 TABS = [
     ("WSY Drafting", "drafting", "Deposited, detail and sales plans.", [
-        ("cadastre", "Cadastre"), ("survey", "Survey"),
+        ("support", "Support"), ("cadastre", "Cadastre"), ("survey", "Survey"),
         ("occupations", "Occupations"), ("topography", "Topography"),
         ("setout", "Setout &amp; Ident"), ("text", "Text"),
         ("sheeting", "Sheeting"), ("annotation", "Annotation"),
         ("qa", "QA"), ("command-line", "No ribbon button"),
     ]),
     ("BW Engineering", "engineering", "Engineering plans and standard annotation.", [
-        ("standards", "Standards"), ("annotation", "Annotation"),
+        ("support", "Support"), ("standards", "Standards"), ("annotation", "Annotation"),
         ("plotting", "Plotting"), ("open", "Open"), ("toolbox", "Toolbox"),
     ]),
     ("WSY WAE", "wae", "Works-As-Executed plans.", [
-        ("sheeting", "Sheeting"), ("annotations", "Annotations"),
+        ("support", "Support"), ("sheeting", "Sheeting"), ("annotations", "Annotations"),
     ]),
     ("WSY Tools", "tools", "In-office data utilities.", [
         ("tools", "Tools"), ("command-line", "No ribbon button"),
@@ -48,7 +48,7 @@ body = ["""    <h1>Command Reference</h1>
           <circle cx="7.2" cy="7.2" r="4.4"/><path d="m10.6 10.6 3 3"/>
         </svg>
         <input id="cmdSearch" type="search" autocomplete="off" spellcheck="false"
-               placeholder="Search all 126 commands &mdash; try &quot;curve&quot; or AUTODIM">
+               placeholder="Search all 140 commands &mdash; try &quot;curve&quot; or AUTODIM">
       </div>
       <div class="cmd-search-out" role="listbox" aria-label="Command results"></div>
     </div>

@@ -81,6 +81,7 @@
         { href: '/commands/', text: 'All Commands' },
         {
           group: 'WSY Drafting', items: [
+            { href: '/commands/drafting/support/', text: 'Support' },
             { href: '/commands/drafting/cadastre/', text: 'Cadastre' },
             { href: '/commands/drafting/survey/', text: 'Survey' },
             { href: '/commands/drafting/occupations/', text: 'Occupations' },
@@ -95,6 +96,7 @@
         },
         {
           group: 'BW Engineering', items: [
+            { href: '/commands/engineering/support/', text: 'Support' },
             { href: '/commands/engineering/standards/', text: 'Standards' },
             { href: '/commands/engineering/annotation/', text: 'Annotation' },
             { href: '/commands/engineering/plotting/', text: 'Plotting' },
@@ -104,6 +106,7 @@
         },
         {
           group: 'WSY WAE', items: [
+            { href: '/commands/wae/support/', text: 'Support' },
             { href: '/commands/wae/sheeting/', text: 'Sheeting' },
             { href: '/commands/wae/annotations/', text: 'Annotations' }
           ]

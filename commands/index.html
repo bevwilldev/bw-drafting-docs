@@ -45,7 +45,7 @@
           <circle cx="7.2" cy="7.2" r="4.4"/><path d="m10.6 10.6 3 3"/>
         </svg>
         <input id="cmdSearch" type="search" autocomplete="off" spellcheck="false"
-               placeholder="Search all 126 commands &mdash; try &quot;curve&quot; or AUTODIM">
+               placeholder="Search all 140 commands &mdash; try &quot;curve&quot; or AUTODIM">
       </div>
       <div class="cmd-search-out" role="listbox" aria-label="Command results"></div>
     </div>
@@ -65,6 +65,7 @@
     <h3>WSY Drafting</h3>
     <p>Deposited, detail and sales plans.</p>
     <div class="card-grid">
+      <a href="drafting/support/"><span class="t">Support</span></a>
       <a href="drafting/cadastre/"><span class="t">Cadastre</span></a>
       <a href="drafting/survey/"><span class="t">Survey</span></a>
       <a href="drafting/occupations/"><span class="t">Occupations</span></a>
@@ -80,6 +81,7 @@
     <h3>BW Engineering</h3>
     <p>Engineering plans and standard annotation.</p>
     <div class="card-grid">
+      <a href="engineering/support/"><span class="t">Support</span></a>
       <a href="engineering/standards/"><span class="t">Standards</span></a>
       <a href="engineering/annotation/"><span class="t">Annotation</span></a>
       <a href="engineering/plotting/"><span class="t">Plotting</span></a>
@@ -90,6 +92,7 @@
     <h3>WSY WAE</h3>
     <p>Works-As-Executed plans.</p>
     <div class="card-grid">
+      <a href="wae/support/"><span class="t">Support</span></a>
       <a href="wae/sheeting/"><span class="t">Sheeting</span></a>
       <a href="wae/annotations/"><span class="t">Annotations</span></a>
     </div>
@@ -120,6 +123,7 @@
         <tr><td><code class="cmd">ADDNORTH</code></td><td>Drops a north point already rotated to match a viewport&#x27;s twist</td><td><a href="../commands/drafting/sheeting/#addnorth">Sheeting</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ADJBDY</code></td><td>The same thing for adjoining lots</td><td><a href="../commands/drafting/cadastre/#adjbdy">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ADJLN</code></td><td>Adjoining lot number</td><td><a href="../commands/drafting/cadastre/#lot-text">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">ADJTXT</code></td><td>Places adjoining-lot text in the office&#x27;s adjoining style</td><td><a href="../commands/drafting/command-line/#adjtxt">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ALAB</code></td><td>Labels each selected lot with its area</td><td><a href="../commands/drafting/command-line/#alab">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ALIGNA</code></td><td>Stacks one text neatly under another at a fixed gap — typically an area…</td><td><a href="../commands/drafting/cadastre/#aligna">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ANNONEXT</code></td><td>Step forward or back through the drawing&#x27;s annotation scales</td><td><a href="../commands/drafting/annotation/#annonext-annoprev">Annotation</a><span class="cmd-tab">WSY Drafting</span></td></tr>
@@ -172,17 +176,22 @@
         <tr><td><code class="cmd">EASELEGUPDATE</code></td><td>Resyncs every placed easement schedule with the drawing</td><td><a href="../commands/drafting/command-line/#easelegupdate">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASEP</code></td><td>Easement label leader — a spline leader with a dot arrowhead</td><td><a href="../commands/drafting/cadastre/#easep">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">EASET</code></td><td>Easement text</td><td><a href="../commands/drafting/cadastre/#lot-text">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">ENGBUG</code></td><td>Opens the Support &amp; Requests form — the ribbon&#x27;s Report a Bug button</td><td><a href="../commands/engineering/support/#engbug">Support</a><span class="cmd-tab">BW Engineering</span></td></tr>
+        <tr><td><code class="cmd">ENGHELP</code></td><td>Opens the engineering documentation in your browser — the ribbon&#x27;s Help button</td><td><a href="../commands/engineering/support/#enghelp">Support</a><span class="cmd-tab">BW Engineering</span></td></tr>
         <tr><td><code class="cmd">EXCELREG</code></td><td>A shortcut to the register that sits beside the drawings, so you don&#x27;t…</td><td><a href="../commands/engineering/open/#excelreg">Open</a><span class="cmd-tab">BW Engineering</span></td></tr>
         <tr><td><code class="cmd">FILL1</code></td><td>0.0 – 0.5</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
-        <tr><td><code class="cmd">FILL11</code></td><td>4, 5, 6 and 7</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">FILL10</code></td><td>6</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">FILL11</code></td><td>7</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FILL2</code></td><td>0.5 – 1.0</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FILL3</code></td><td>1.0 – 1.5</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FILL4</code></td><td>1.5 – 2.0</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FILL5</code></td><td>2.0 – 2.5</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FILL6</code></td><td>2.5 – 3.0</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FILL7</code></td><td>Over 3</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
-        <tr><td><code class="cmd">FILL8</code></td><td>4, 5, 6 and 7</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">FILL8</code></td><td>4</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">FILL9</code></td><td>5</td><td><a href="../commands/drafting/command-line/#fill-plans">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">FLIPTEXT</code></td><td>Fixes annotation that has ended up upside down — usually after a marked-up…</td><td><a href="../commands/wae/annotations/#fliptext">Annotations</a><span class="cmd-tab">WSY WAE</span></td></tr>
+        <tr><td><code class="cmd">HDIM</code></td><td>An aligned dimension for house measurements, with the value in parentheses</td><td><a href="../commands/drafting/command-line/#hdim">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">HTXT</code></td><td>Quick annotation on a WAE sheet at a fixed horizontal rotation, so you can…</td><td><a href="../commands/wae/annotations/#htxt">Annotations</a><span class="cmd-tab">WSY WAE</span></td></tr>
         <tr><td><code class="cmd">IMPORTSHEET</code></td><td>Turns a folder of scanned or exported design sheets into a set of layouts…</td><td><a href="../commands/wae/sheeting/#importsheet">Sheeting</a><span class="cmd-tab">WSY WAE</span></td></tr>
         <tr><td><code class="cmd">INCBLOCK</code></td><td>Turns each lot into a numbered annotative block that&#x27;s only visible at its…</td><td><a href="../commands/drafting/command-line/#incblock">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
@@ -194,6 +203,7 @@
         <tr><td><code class="cmd">MODTEXT</code></td><td>Bulk-edits marked-up annotation by adding the same string to the front or…</td><td><a href="../commands/wae/annotations/#modtext">Annotations</a><span class="cmd-tab">WSY WAE</span></td></tr>
         <tr><td><code class="cmd">MOFFSET</code></td><td>Offsets a whole selection at once, with a live preview, repeating until…</td><td><a href="../commands/drafting/command-line/#moffset">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">MTC</code></td><td>Drops each selected label into the middle of its lot</td><td><a href="../commands/drafting/text/#mtc">Text</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">NOPLOT</code></td><td>Moves objects to the non-plotting layer</td><td><a href="../commands/drafting/command-line/#noplot">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">NSWLABELLOTS</code></td><td>Adds lot labels to boundaries that the lot loader brought in earlier —…</td><td><a href="../commands/tools/command-line/#nswlabellots">Commands without a ribbon button</a><span class="cmd-tab">WSY Tools</span></td></tr>
         <tr><td><code class="cmd">NSWLOTS</code></td><td>Opens the lot loader, which pulls cadastral boundaries, lot labels, road…</td><td><a href="../commands/tools/tools/#nswlots">Tools</a><span class="cmd-tab">WSY Tools</span></td></tr>
         <tr><td><code class="cmd">OB2WO</code></td><td>Turns closed shapes into wipeouts</td><td><a href="../commands/drafting/command-line/#ob2wo">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting &middot; BW Engineering</span></td></tr>
@@ -209,7 +219,9 @@
         <tr><td><code class="cmd">ROADL</code></td><td>Road label</td><td><a href="../commands/drafting/cadastre/#lot-text">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ROADLM</code></td><td>Measures a road width between two points and writes (X.XX WIDE) at the…</td><td><a href="../commands/drafting/cadastre/#roadlm">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">ROADN</code></td><td>Road name</td><td><a href="../commands/drafting/cadastre/#lot-text">Cadastre</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">ROUNDBRG</code></td><td>Rounds bearings in selected text to the nearest 5 seconds — the office…</td><td><a href="../commands/drafting/command-line/#roundbrg">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">RROUND</code></td><td>Rounds the number in selected text — up, down or to nearest</td><td><a href="../commands/drafting/command-line/#rround">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">SETBACK</code></td><td>An aligned dimension prefixed SETBACK</td><td><a href="../commands/drafting/command-line/#setback">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">SETBYBLOCK</code></td><td>Normalises the entities inside blocks to layer 0 / ByBlock, so the…</td><td><a href="../commands/drafting/command-line/#setbyblock">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">SETLAYOUT</code></td><td>Builds a complete set of per-lot sales layouts — one sheet per lot, each…</td><td><a href="../commands/drafting/command-line/#setlayout">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">SMALLTXT</code></td><td>SMALL LABEL</td><td><a href="../commands/drafting/text/#text-styles">Text</a><span class="cmd-tab">WSY Drafting</span></td></tr>
@@ -240,12 +252,17 @@
         <tr><td><code class="cmd">VCOPY</code></td><td>Copies blocks or text to every vertex of the chosen polylines</td><td><a href="../commands/drafting/command-line/#vcopy">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">VPO</code></td><td>Constructs a polyline in model space representing what a paper space…</td><td><a href="../commands/engineering/toolbox/#vpo">Toolbox</a><span class="cmd-tab">BW Engineering</span></td></tr>
         <tr><td><code class="cmd">VTXT</code></td><td>The vertical companion to HTXT — for labelling down the side of a sheet or…</td><td><a href="../commands/wae/annotations/#vtxt">Annotations</a><span class="cmd-tab">WSY WAE</span></td></tr>
+        <tr><td><code class="cmd">WAEBUG</code></td><td>Opens the Support &amp; Requests form — the ribbon&#x27;s Report a Bug button</td><td><a href="../commands/wae/support/#waebug">Support</a><span class="cmd-tab">WSY WAE</span></td></tr>
+        <tr><td><code class="cmd">WAEHELP</code></td><td>Opens the Works-As-Executed documentation in your browser — the ribbon&#x27;s…</td><td><a href="../commands/wae/support/#waehelp">Support</a><span class="cmd-tab">WSY WAE</span></td></tr>
         <tr><td><code class="cmd">WAETICK</code></td><td>Drops the standard WAE tick — the mark used to sign off items checked…</td><td><a href="../commands/wae/annotations/#waetick">Annotations</a><span class="cmd-tab">WSY WAE</span></td></tr>
+        <tr><td><code class="cmd">WSYBUG</code></td><td>Opens the Support &amp; Requests form — the ribbon&#x27;s Report a Bug button</td><td><a href="../commands/drafting/support/#wsybug">Support</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">WSYHELP</code></td><td>Opens the drafting documentation in your browser — the ribbon&#x27;s Help button</td><td><a href="../commands/drafting/support/#wsyhelp">Support</a><span class="cmd-tab">WSY Drafting</span></td></tr>
         <tr><td><code class="cmd">WSYUPDATE</code></td><td>Checks for a newer release of the suite and launches the installer</td><td><a href="../commands/drafting/command-line/#wsyupdate">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
+        <tr><td><code class="cmd">WTB</code></td><td>Wall-to-boundary: measures between two points and labels the distance…</td><td><a href="../commands/drafting/command-line/#wtb">Commands without a ribbon button</a><span class="cmd-tab">WSY Drafting</span></td></tr>
       </tbody>
     </table>
     </div>
-    <!-- ALPHA_END --> --> --> -->
+    <!-- ALPHA_END --> -->
     <nav class="page-nav">
       <a href="../"><div class="dir">Previous</div><div class="ttl">Home</div></a>
     </nav>

@@ -53,7 +53,10 @@
         <tr><td><code class="cmd">FILL5</code></td><td>2.0 – 2.5</td></tr>
         <tr><td><code class="cmd">FILL6</code></td><td>2.5 – 3.0</td></tr>
         <tr><td><code class="cmd">FILL7</code></td><td>Over 3</td></tr>
-        <tr><td><code class="cmd">FILL8</code> – <code class="cmd">FILL11</code></td><td>4, 5, 6 and 7</td></tr>
+        <tr><td><code class="cmd">FILL8</code></td><td>4</td></tr>
+        <tr><td><code class="cmd">FILL9</code></td><td>5</td></tr>
+        <tr><td><code class="cmd">FILL10</code></td><td>6</td></tr>
+        <tr><td><code class="cmd">FILL11</code></td><td>7</td></tr>
       </tbody>
     </table></div>
     <div class="note"><strong>Note</strong> — none of the fill commands has a ribbon button.</div>
@@ -109,7 +112,7 @@
     <p>Turns live curve-table refreshing on or off.</p>
     <h4>How to use it</h4>
     <p>A toggle — no prompts. The setting is remembered between sessions.</p>
-    <div class="note"><strong>Note</strong> — Off by default. When on, a placed curve table refreshes shortly after you edit the labels it's built from.</div>
+    <div class="note"><strong>Note</strong> — On by default, so a placed curve table keeps itself current as you edit the labels it's built from. Turn it off if the redraw gets in the way on a heavy sheet.</div>
 
 <h2 id="dimdata"><code class="cmd">DIMDATA</code></h2>
     <p>The inverse of CURVETABLE — reads a hand-drawn or imported curve schedule and writes its values back into the matching numbered labels.</p>
@@ -174,6 +177,50 @@
     <div class="note"><strong>Note</strong> — the office standard set (with its code-letter
     suggestions) ships with the suite; your own additions merge over it. EASEDB edits your
     personal <em>suggestion list</em> — EASEDESC edits what a particular <em>drawing</em> says.</div>
+
+<h2 id="adjtxt"><code class="cmd">ADJTXT</code></h2>
+    <p>Places adjoining-lot text in the office's adjoining style.</p>
+    <h4>How to use it</h4>
+    <p>Sets the <strong>ADJOINING LABEL</strong> style and the text layer, then places text the usual way.</p>
+    <div class="note"><strong>Note</strong> — the adjoining sibling of the lot-text commands. No ribbon button.</div>
+
+<h2 id="hdim"><code class="cmd">HDIM</code></h2>
+    <p>An aligned dimension for house measurements, with the value in parentheses.</p>
+    <h4>How to use it</h4>
+    <p>Places an aligned dimension; the measurement is written as <em>(12.34)</em>.</p>
+    <h4>What it produces</h4>
+    <p>An annotative dimension in the <strong>HOUSE DIMENSION</strong> style (SMALL LABEL text), created if the drawing doesn't have it.</p>
+    <div class="note"><strong>Note</strong> — No ribbon button.</div>
+
+<h2 id="setback"><code class="cmd">SETBACK</code></h2>
+    <p>An aligned dimension prefixed <em>SETBACK</em>.</p>
+    <h4>How to use it</h4>
+    <p>Same as HDIM, but the measurement reads <em>SETBACK 6.00</em>.</p>
+    <h4>What it produces</h4>
+    <p>An annotative dimension in the <strong>SETBACK</strong> style.</p>
+    <div class="note"><strong>Note</strong> — No ribbon button.</div>
+
+<h2 id="wtb"><code class="cmd">WTB</code></h2>
+    <p>Wall-to-boundary: measures between two points and labels the distance along the line.</p>
+    <h4>How to use it</h4>
+    <p><code>First point:</code> → <code>Second point:</code>. Perpendicular and nearest snaps are turned on for the picks and restored afterwards.</p>
+    <h4>What it produces</h4>
+    <p>Text reading <em>Wall to / Bdy X.XX</em> at the midpoint of the measured line, rounded to the nearest 0.005, in SMALL LABEL on the text layer.</p>
+    <div class="note"><strong>Note</strong> — No ribbon button.</div>
+
+<h2 id="noplot"><code class="cmd">NOPLOT</code></h2>
+    <p>Moves objects to the non-plotting layer.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select and it moves them all at once; otherwise select when asked.</p>
+    <h4>What it produces</h4>
+    <p>The selection lands on <strong>NO PLOT</strong> with properties ByLayer — visible on screen, absent from the plot.</p>
+    <div class="note"><strong>Note</strong> — Handy for construction lines and working notes. No ribbon button.</div>
+
+<h2 id="roundbrg"><code class="cmd">ROUNDBRG</code></h2>
+    <p>Rounds bearings in selected text to the nearest 5 seconds — the office survey convention.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select bearing text to round:</code>. Works on both text and mtext.</p>
+    <div class="note"><strong>Note</strong> — Understands both the ° character and the <code>%%d</code> degree code, and writes back whichever the text already used. No ribbon button.</div>
 
 <h2 id="alab"><code class="cmd">ALAB</code></h2>
     <p>Labels each selected lot with its area.</p>
