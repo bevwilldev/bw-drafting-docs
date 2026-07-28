@@ -1,5 +1,5 @@
 /* ============================================================================
-   Western Sydney Hub — Beveridge Williams
+   BW CAD Hub — Beveridge Williams
    Shared chrome (header/footer/sidenav), TOC scroll-spy, drawer, lightbox.
 
    WHY NAV-AS-DATA, NOT fetch()ed HTML PARTIALS:
@@ -211,8 +211,8 @@
     { href: '/commands/', text: 'Commands' },
     { href: '/videos/', text: 'Videos' },
     { href: '/drafting/', text: 'Drafting' },
-    { href: '/survey/', text: 'Survey' },
     { href: '/engineering/', text: 'Engineering' },
+    { href: '/survey/', text: 'Survey' },
     { href: '/tools/', text: 'Tools' },
     { href: '/quality/', text: 'Quality' },
     { href: '/onboarding/', text: 'Onboarding' },
@@ -292,7 +292,7 @@
 
     var logo = el('a', { class: 'logo', href: url('/'), html: LOGO_SVG }, []);
     logo.appendChild(
-      el('span', { class: 'logo-text', text: 'Beveridge Williams Western Sydney' })
+      el('span', { class: 'logo-text', text: 'Beveridge Williams' })
     );
 
     /* All ten links stay VISIBLE — a "Guides" dropdown was tried and reverted.
@@ -420,7 +420,7 @@
     host.appendChild(el('div', { class: 'footer-inner' }, [
       el('span', {
         html: 'Built and maintained by the <a href="' + url('/about/') +
-              '">Western Sydney Drafting department</a> &middot; ' +
+              '">Western Sydney Drafting team</a> &middot; ' +
               '<a href="' + url('/support/') + '">Support &amp; requests</a>'
       }),
       el('span', { class: 'copyright', html: '&copy; ' + new Date().getFullYear() + ' Beveridge Williams' })
