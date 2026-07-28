@@ -116,8 +116,6 @@ W("support/troubleshooting/index.html", "support", "Troubleshooting",
       <li>Open the <strong>Manage Your Customizations</strong> panel.</li>
       <li>Revert to defaults, then restart BricsCAD.</li>
     </ol>
-    <figure><img src="../../../assets/img/customize.png" alt="Customize dialog"></figure>
-    <figure><img src="../../../assets/img/manage-customizations.png" alt="Manage customizations"></figure>
 
     <h2 id="a-command-says-unknown-command">A command says "unknown command"</h2>
     <p>That component probably isn't installed. Commands are grouped by plugin, and each is
