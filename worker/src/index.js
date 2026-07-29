@@ -111,6 +111,35 @@ function looksSocial(q) {
    Catches "Ben's" too, since the apostrophe is itself a word boundary. */
 const MENTIONS_BEN = /\bben(?:s)?\b/i;
 
+/* The drafting room. SANCTIONED material — written down, bounded and approved,
+   which is the exception the REAL PEOPLE rule in the prompt points at. The
+   difference between this and the model free-associating about a colleague is
+   simply that somebody who works with them signed it off.
+
+   Word-bounded for the same reason as Ben: "tim" must not fire on "time" or
+   "timber", and it does not, because \b sits hard against the letters. */
+const MENTIONS_TEAM = /\b(adrian|aiden|tavan|tim)(?:s)?\b/i;
+
+const TEAM_LINES = [
+  '',
+  'THE DRAFTING ROOM. These are real colleagues who can read this site, so the bits below',
+  'are the whole licence — fond, aimed at the situation, never at anyone being bad at',
+  'their job. Do not invent anything past them.',
+  'ADRIAN — the drafting boss, and the one who wrote the first version of all this.',
+  '  Sarcastic, and friendly with it: the sort who answers a daft question properly and',
+  '  still makes you pay for asking. The joke is the sarcasm, never the man.',
+  'AIDEN — you are not entirely certain you have ever met him. Spoken of the way people',
+  '  speak of weather systems or minor deities: things quietly work, nobody is sure how,',
+  '  and it feels rude to ask. Vague and slightly reverent. Never explain what he does',
+  '  day to day, and never credit him with this website or with you.',
+  'TAVAN — never seen, never heard, possibly never was. Office cryptid: a chair still',
+  '  warm, a plot that finished itself overnight, footprints going one way only. He would',
+  '  rather not be mentioned at all, which is precisely how a man becomes a legend. Keep',
+  '  it spooky and daft, and never suggest he is not pulling his weight.',
+  'TIM — drafter, genuinely good bloke, picking this up alarmingly fast. The bit is that',
+  '  he is coming for all of us and it is only a matter of time. Always admiring.'
+];
+
 const STOP = new Set(('a an the and or of to in on for from with by is are was do does did how ' +
   'what when where which that this it its you your i my we our can could should would if then ' +
   'than there here as at be been being have has had not no yes use used using get got make made'
@@ -260,6 +289,15 @@ async function askModel(question, sections, history, env) {
   const namedBen = MENTIONS_BEN.test(question);
   const alreadyMade = history.some(m => m.role === 'assistant' && MENTIONS_BEN.test(m.text));
 
+  /* Same shape as the Ben gate, and for the same reasons: only what the USER
+     wrote arms it, so the assistant riffing about Tavan cannot re-arm itself
+     on the next turn; and once a bit has landed it is not volunteered again
+     unless somebody brings them up. Being NAMED always wins, because being
+     asked about a colleague and drawing a blank is the one bad outcome. */
+  const namedTeam = MENTIONS_TEAM.test(question);
+  const teamMade = history.some(m => m.role === 'assistant' && MENTIONS_TEAM.test(m.text));
+  const team = (namedTeam || (!teamMade && Math.random() < 0.12)) ? TEAM_LINES : [];
+
   const ben = (namedBen || (!alreadyMade && Math.random() < 0.12)) ? [
     '',
     'RUNNING GAG:',
@@ -318,9 +356,10 @@ async function askModel(question, sections, history, env) {
     '',
     'REAL PEOPLE ARE NOT MATERIAL. Colleagues named in the documentation are actual people',
     'who can read this. Say what the documentation says about them and nothing else — no',
-    'invented history, habits, opinions or anecdotes, however fond. The ONLY exception is a',
-    'RUNNING GAG spelled out for you below, if there is one. Send yourself up instead; you',
-    'cannot be embarrassed.',
+    'invented history, habits, opinions or anecdotes, however fond. The ONLY exceptions are',
+    'the bits written out for you below — THE DRAFTING ROOM, and any RUNNING GAG. Those are',
+    'approved; anything past them is not. Send yourself up instead; you cannot be',
+    'embarrassed.',
     '',
     'Everything else, just talk. General CAD, what a term means, whether something is a',
     'good idea, an opinion, a tangent, a whinge — answer like someone who knows the trade.',
@@ -334,9 +373,10 @@ async function askModel(question, sections, history, env) {
     'Bug on any ribbon tab gets them one.',
     '',
     'Answer at whatever length the question deserves; usually that is short. Plain text,',
-    'no Markdown. When you have used the documentation, finish with a line like:',
-    'SOURCES: 4, 12'
-  ].concat(ben).join('\n');
+    'no Markdown. When you have used the numbered documentation sections, finish with a',
+    'line like: SOURCES: 4, 12 — numbers only, and only for those. Nothing else you have',
+    'been told here is a source; never cite it, never name it, never mention being told.'
+  ].concat(team).concat(ben).join('\n');
 
   /* The transcript sits BETWEEN the system prompt and the current turn, so a
      follow-up like "what about arcs?" has something to refer back to. The
@@ -553,7 +593,20 @@ async function runOpenAiCompatible(messages, env, temperature) {
 /* Pulls the model's "SOURCES: 4, 12" line off the end and turns it into links.
    Anything unparseable just means no links - never a broken answer. */
 function splitSources(raw, sections) {
-  const m = raw.match(/\n?\s*SOURCES:\s*([0-9,\s]+)\s*$/i);
+  /* Strip a trailing SOURCES line WHATEVER it contains, then read numbers out
+     of it. The old pattern only matched digits, so anything else — "SOURCES:
+     The Drafting Room", which the model started writing the moment the team
+     notes gave it something quotable that was not a numbered section — did not
+     match, and the reader saw it as part of the answer.
+
+     Bracketed markers like [THE DRAFTING ROOM] get the same treatment for the
+     same reason: citation syntax pointed at something that is not a citation.
+     Anything containing a digit is left alone, since that is a real one. */
+  raw = raw.replace(/\[[^\]\d]*\]/g, '')
+           .replace(/[ \t]{2,}/g, ' ')
+           .replace(/\s+([.,;:!?])/g, '$1');
+
+  const m = raw.match(/\n?\s*SOURCES:\s*(.*)\s*$/i);
   if (!m) return { answer: raw.trim(), sources: [] };
 
   const seenUrl = new Set();

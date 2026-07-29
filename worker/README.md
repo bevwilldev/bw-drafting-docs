@@ -233,6 +233,31 @@ The hard-coded opening line in `site.js` counts as part of this. It says
 "Gday" — no exclamation mark — because it sets the register before the model
 says a word, and that register is a person talking, not a performance.
 
+**The drafting room.** There is a short roster in `index.js` — Adrian, Aiden,
+Tavan, Tim — with one approved bit each: Adrian is the sarcastic boss who
+answers a daft question properly and still makes you pay for asking, Aiden is
+spoken of like a weather system, Tavan is the office cryptid, Tim is coming for
+all of us. It fires the same way the Ben gag does: always when somebody names
+them, otherwise ~1 in 8, once per conversation, armed only by what the USER
+wrote.
+
+This is the exception the *real people* rule points at, and the distinction is
+the whole point — **approved, bounded material rather than improvisation.** The
+model is not being trusted to be tactful about a colleague; it is being handed
+the two sentences it may use. Adding someone means writing their bit, not
+loosening the rule.
+
+Two things learned wiring it up, both worth keeping in mind if you extend it:
+
+- **It will try to cite the roster.** Given something quotable that is not a
+  numbered section, the model wrote `SOURCES: The Drafting Room` and inline
+  `[THE DRAFTING ROOM]` markers, and the old `splitSources` only matched digits
+  — so the reader saw them. It now strips a trailing SOURCES line whatever it
+  contains, and bracketed markers with no digit in them.
+- **Word boundaries matter more with four names.** `tim` must not fire on
+  "time" or "timber". It does not, but the next name added should be checked
+  against ordinary drafting vocabulary before it goes in.
+
 **The Ben gag.** There is a running in-joke about the boss handing work out late
 and wanting it back instantly. It is injected at random into ~1 in 8 requests,
 and lands less often than that, since the model also declines when the question
