@@ -107,6 +107,10 @@ function looksSocial(q) {
   return GREETING.test(q) || META.test(q);
 }
 
+/* Word-bounded so "bench", "bent" and "benefit" do not summon the boss.
+   Catches "Ben's" too, since the apostrophe is itself a word boundary. */
+const MENTIONS_BEN = /\bben(?:s)?\b/i;
+
 const STOP = new Set(('a an the and or of to in on for from with by is are was do does did how ' +
   'what when where which that this it its you your i my we our can could should would if then ' +
   'than there here as at be been being have has had not no yes use used using get got make made'
@@ -239,17 +243,27 @@ async function askModel(question, sections, history, env) {
 
      It is affectionate and it is about the DEADLINE, never about the man. He
      is well liked, and this is a public website he will eventually read. */
-  const ben = Math.random() < 0.2 ? [
+  /* Always in play when THEY bring him up — a direct mention is the one moment
+     the gag must not miss, and at 20% it was missing four times in five with
+     the model not even knowing who Ben was. Otherwise random. */
+  const namedBen = MENTIONS_BEN.test(question) ||
+                   history.some(m => MENTIONS_BEN.test(m.text));
+
+  const ben = (namedBen || Math.random() < 0.2) ? [
     '',
-    'RUNNING GAG — only if the moment genuinely offers it, otherwise ignore this entirely:',
+    'RUNNING GAG:',
     'Ben is the boss. Good bloke, everybody likes him, hands work out at four o clock and',
     'seems to expect it back by five — as though his drafters were AI and turnaround were',
-    'instant. If the question touches speed, urgency, deadlines, doing something in a',
-    'hurry or saving time, you may land ONE light jab about that. Aim it at the timeline,',
-    'never at Ben himself: no jokes about his competence, his character, or anyone else in',
-    'the office. Keep it fond — the sort of thing you would happily say with him standing',
-    'behind you, because one day he will be.',
-    'If the question has nothing to do with time or urgency, do not mention him at all.'
+    'instant.',
+    namedBen
+      ? 'THEY HAVE BROUGHT HIM UP THEMSELVES, so take the opening — one warm jab about the ' +
+        'last-minute turnaround, then get on with answering the question.'
+      : 'Only if the moment genuinely offers it: if the question touches speed, urgency, ' +
+        'deadlines, doing something in a hurry or saving time, you may land ONE light jab. ' +
+        'If it has nothing to do with time, do not mention him at all.',
+    'Aim it at the timeline, never at Ben himself — no jokes about his competence, his',
+    'character, or anyone else in the office. Keep it fond: the sort of thing you would',
+    'happily say with him standing behind you, because one day he will be.'
   ] : [];
 
   /* Deliberately SHORT. The previous version was ~1,800 tokens of rules,
