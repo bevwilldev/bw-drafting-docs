@@ -1,18 +1,33 @@
 # Cloudflare Worker — the assistant endpoint.
 #
-# The API key is NOT in this file and must never be. It is set once with
-#   wrangler secret put OPENAI_API_KEY
-# which stores it with Cloudflare, not in the repo.
+# As configured there is NO API KEY anywhere: the model runs on Cloudflare via
+# the AI binding below. If you ever switch to a paid provider, the key is set
+# once with
+#   wrangler secret put API_KEY
+# which stores it with Cloudflare, never in this file and never in the repo.
 
 name = "bw-cad-hub-assistant"
 main = "src/index.js"
 compatibility_date = "2026-01-01"
 
+# Workers AI. This binding is what makes env.AI.run() work; without it the
+# Worker deploys fine and fails on the first question.
+[ai]
+binding = "AI"
+
 [vars]
-# Which model to call. Set it here rather than in code so it can be changed
-# without touching the Worker — check the current model names and pricing when
-# you set this up rather than trusting a default.
-OPENAI_MODEL = "gpt-4o-mini"
+# "workers-ai" (default) or "openai-compatible" — the latter covers both
+# OpenAI and Groq, which share a wire format, via BASE_URL + an API_KEY secret.
+PROVIDER = "workers-ai"
+
+# Which model. Check the current Workers AI catalogue rather than trusting
+# this default — the list changes and names carry version numbers.
+MODEL = "@cf/meta/llama-3.1-8b-instruct"
+
+# Documentation sections sent per question. 0 = the whole corpus, which is
+# better but needs a big context window; see the long note in src/index.js
+# before changing it.
+SECTIONS = 40
 
 # Keep the free tier honest: no analytics engine, no KV, no durable objects.
 # This Worker holds no state that matters between requests.

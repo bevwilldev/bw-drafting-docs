@@ -2,8 +2,13 @@
    BW CAD Hub — assistant endpoint (Cloudflare Worker)
 
    Answers questions about the BW BricsCAD tools from THIS site's documentation
-   and nothing else. It exists for one reason: an API key cannot live in the
-   browser. Everything else here is guard rails.
+   and nothing else. Everything else here is guard rails.
+
+   IT RUNS ON WORKERS AI BY DEFAULT — Cloudflare's own models, called through
+   the `AI` binding. That means NO API KEY, no second vendor and no separate
+   bill: the model runs on the same platform as this Worker. Swapping to a
+   paid provider later is one variable (see PROVIDER below), because the
+   quality ceiling of a small open model is the one real cost of this choice.
 
    WHAT CROSSES THE WIRE: the visitor's question, and the published
    documentation. Nothing about a drawing, a job or a client — the corpus IS the
@@ -28,18 +33,25 @@ const ALLOWED = [
 ];
 
 /* How many documentation sections to send. 0 sends the whole corpus.
-   
-   It sends everything ON PURPOSE. The corpus is only ~28k tokens, and cutting
-   it to a dozen sections was measured against real questions: it saves about
-   80% of the tokens and loses answers. "How do I label lot areas" did not
-   reach ALAB, because command sections are HEADED by the command name, so a
-   plain-English question never matches the heading, while a page titled
-   "Labelling loaded lots" wins on its title alone. Tuning got it close and
-   never to reliable.
-   
-   A wrong answer costs a drafter far more than the tokens. Set this to a
-   number only if the bill ever justifies re-opening that trade. */
-const SECTIONS = 0;
+
+   THIS IS A CONTEXT-WINDOW DECISION, not a cost one. The whole corpus is only
+   ~28k tokens and sending all of it is strictly better for accuracy — with a
+   big-context model (gpt-4o-mini and the like) set this to 0 and stop
+   thinking about retrieval.
+
+   Workers AI runs open models with much smaller windows, often 8k, so the
+   whole corpus does not fit and sections must be picked. The number matters:
+   a dozen was measured against real questions and LOSES answers. "How do I
+   label lot areas" did not reach ALAB, because command sections are HEADED by
+   the command name, so a plain-English question never matches the heading
+   while a page titled "Labelling loaded lots" wins on its title alone.
+
+   40 is the compromise — roughly 4.6k tokens, comfortably inside an 8k window
+   even with the system prompt, and wide enough that the right section does not
+   have to rank in the top few, only somewhere in the top forty. Raise it if
+   the model you pick has room; a wrong answer costs a drafter far more than
+   the tokens ever will. */
+const DEFAULT_SECTIONS = 40;
 
 const MAX_QUESTION = 400;      // characters; a question, not a pasted document
 
@@ -91,15 +103,19 @@ export default {
                   200, cors);
     }
 
-    const picked = SECTIONS > 0 ? search(question, corpus, SECTIONS) : corpus;
+    const limit = Number(env.SECTIONS ?? DEFAULT_SECTIONS);
+    const picked = limit > 0 ? search(question, corpus, limit) : corpus;
     if (!picked.length) return json({ answer: NOT_FOUND, sources: [] }, 200, cors);
 
     try {
       const raw = await askModel(question, picked, env);
 
       /* The model is told to say exactly this when the docs do not cover it.
-         Offering sources for a non-answer would imply they contain something. */
-      if (raw.trim().startsWith('NOT_IN_DOCS')) {
+         Offering sources for a non-answer would imply they contain something.
+         Matched loosely in the opening words rather than at position 0: a
+         small model often wraps the token in a sentence, and treating that as
+         a real answer would show the reader the literal string NOT_IN_DOCS. */
+      if (/NOT_IN_DOCS/.test(raw.slice(0, 60))) {
         return json({ answer: NOT_FOUND, sources: [] }, 200, cors);
       }
 
@@ -148,20 +164,47 @@ async function askModel(question, sections, env) {
     'Only list sections you actually drew on.'
   ].join('\n');
 
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+  const messages = [
+    { role: 'system', content: system },
+    { role: 'user', content: `Documentation:\n\n${context}\n\nQuestion: ${question}` }
+  ];
+
+  /* One switch, so changing provider is a wrangler.toml edit and a redeploy
+     rather than a code change. Both branches take the same messages and
+     return the same plain string; everything downstream is provider-blind. */
+  return (env.PROVIDER || 'workers-ai') === 'workers-ai'
+    ? runWorkersAi(messages, env)
+    : runOpenAiCompatible(messages, env);
+}
+
+/* Cloudflare's own models, via the `AI` binding declared in wrangler.toml.
+   No key, no fetch, no external host — the call never leaves the platform. */
+async function runWorkersAi(messages, env) {
+  const out = await env.AI.run(env.MODEL || '@cf/meta/llama-3.1-8b-instruct', {
+    messages,
+    max_tokens: 400,
+    temperature: 0.2             // documentation answers, not creative writing
+  });
+  return String(out?.response || '').trim();
+}
+
+/* OpenAI and Groq speak the SAME wire format, so one function covers both —
+   only BASE_URL and the key differ (api.openai.com/v1 vs api.groq.com/openai/v1).
+   Google Gemini does NOT: it has its own request and response shape, so it
+   would need a third branch here rather than a different URL. */
+async function runOpenAiCompatible(messages, env) {
+  const base = env.BASE_URL || 'https://api.openai.com/v1';
+  const res = await fetch(`${base}/chat/completions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${env.OPENAI_API_KEY}`
+      Authorization: `Bearer ${env.API_KEY}`
     },
     body: JSON.stringify({
-      model: env.OPENAI_MODEL || 'gpt-4o-mini',
+      model: env.MODEL || 'gpt-4o-mini',
       max_tokens: 400,
-      temperature: 0.2,          // documentation answers, not creative writing
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: `Documentation:\n\n${context}\n\nQuestion: ${question}` }
-      ]
+      temperature: 0.2,
+      messages
     })
   });
 
