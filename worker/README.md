@@ -14,13 +14,36 @@ this Worker. So there is **no API key, no second vendor and no separate bill**.
 You need a Cloudflare account (free) and Node.js, because `wrangler` is a Node
 tool. Nothing else — no API key, no card.
 
+**Node without admin rights.** The MSI installer needs an administrator; the
+zip does not. Either works, and neither touches Program Files:
+
+```powershell
+# Option A - scoop, if you have it
+scoop install nodejs-lts
+
+# Option B - the plain zip, no package manager, no admin
+$v = 'v24.18.0'                                  # check nodejs.org/dist for current LTS
+iwr "https://nodejs.org/dist/$v/node-$v-win-x64.zip" -OutFile "$env:TEMP\node.zip"
+Expand-Archive "$env:TEMP\node.zip" "$env:TEMP\node-x" -Force
+Move-Item "$env:TEMP\node-x\node-$v-win-x64" "$env:LOCALAPPDATA\node"
+
+# Put node AND npm's global shims on the user PATH (HKCU - no admin)
+$p = [Environment]::GetEnvironmentVariable('Path','User')
+[Environment]::SetEnvironmentVariable('Path',
+  "$p;$env:LOCALAPPDATA\node;$env:APPDATA\npm", 'User')
 ```
-winget install OpenJS.NodeJS.LTS     # once, then reopen the terminal
-npm install -g wrangler              # once
+
+Reopen the terminal so the new PATH is picked up, then:
+
+```
+npm install -g wrangler              # once; lands in %APPDATA%\npm, no admin
 cd worker
 wrangler login                       # opens a browser
 wrangler deploy
 ```
+
+To undo it all: delete `%LOCALAPPDATA%\node` and `%APPDATA%\npm`, and remove
+those two entries from the user PATH. Nothing else was changed.
 
 Workers AI may need to be enabled once on the account — if `wrangler deploy`
 complains about the `[ai]` binding, turn it on in the Cloudflare dashboard
