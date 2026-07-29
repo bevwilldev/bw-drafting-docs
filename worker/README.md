@@ -163,16 +163,60 @@ called. No redeploy, no rollback, about thirty seconds.
 
 ## Changing what it knows
 
-Nothing here. The corpus is fetched from the live site
-(`/assets/data/corpus.json`), so:
+Nothing in this folder. The corpus is fetched from the live site, so:
 
 ```
-python scripts/gen_corpus.py
+python scripts/gen_corpus.py     # rebuild the text
+python scripts/gen_vectors.py    # rebuild the embeddings  <- do not skip
 git commit && git push
 ```
 
-The Worker picks it up within about fifteen minutes (its cache TTL), or
+**Both steps, every time.** `gen_vectors.py` needs a Gemini key in the
+environment (`$env:GEMINI_API_KEY = "..."`) and takes a couple of minutes.
+
+The Worker picks both up within about fifteen minutes (its cache TTL), or
 immediately on a cold start.
+
+---
+
+## How it finds the right pages
+
+**By meaning, not by matching words.** Every section is embedded once into a
+768-number vector; a question is embedded the same way, and the closest twelve
+sections go to the model.
+
+This was measured before it was built, over 17 real questions, ranking the
+section that actually answers each:
+
+| | worst rank |
+|---|---|
+| keyword scoring | **18** |
+| semantic | **3** |
+
+Keyword scoring fails here in one specific way, and it is worth understanding
+before anyone "simplifies" this back. On a drafting site the words *label*,
+*lot* and *area* appear on nearly every page, so they carry almost no weight —
+and the one distinctive token, `ALAB`, is exactly the thing the person asking
+does not know yet. So "how do I label lot areas" ranked eighteenth.
+
+**It is not hybrid, and that was a surprise.** Blending the keyword score back
+in made it *worse* at every weight tried (0.15 → rank 4, 0.35 → rank 5) by
+dragging good semantic matches down. The case keyword was supposed to win —
+someone typing a bare `DIMDATA` — ranks 1 under semantic anyway. Keyword
+survives only as the fallback.
+
+**Staleness is guarded, not trusted.** `corpus-vectors.json` carries a
+fingerprint of the corpus it was built from. The Worker recomputes it and
+*refuses* mismatched vectors, because vectors one section out of step would
+answer every question from whatever used to sit at that index — confidently,
+and wrongly. A mismatch drops to keyword search and says so in `wrangler tail`.
+
+Every failure here falls back the same way: stale vectors, a 429 on the
+embedding call, the file missing entirely. None of them cost a reader an answer,
+and all of them are logged.
+
+**Cost:** one extra API call per question, from a 1,000/day allowance that
+nothing else touches.
 
 ---
 
