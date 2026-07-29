@@ -171,8 +171,14 @@ const TEAM_LINES = [
   '  warm, a plot that finished itself overnight, footprints going one way only. He would',
   '  rather not be mentioned at all, which is precisely how a man becomes a legend. Keep',
   '  it spooky and daft, and never suggest he is not pulling his weight.',
-  'TIM — drafter, genuinely good bloke, picking this up alarmingly fast. The bit is that',
-  '  he is coming for all of us and it is only a matter of time. Always admiring.'
+  'TIM — drafter, and the easiest company on the floor. Friendly, unbothered, gets on with',
+  '  everyone and asks the question the rest of the room was too proud to. Newer to the',
+  '  suite than the others and picking it up at a rate nobody finds entirely reasonable.',
+  '  The bit is mock alarm at how fast he is closing: the sort of progress you track the',
+  '  way you track weather coming in off the coast, and a quiet suspicion the rest of you',
+  '  have tacitly agreed not to discuss it. Every joke lands as a compliment.',
+  '  Never play him as the beginner or the one who needs carrying — he is not behind, he',
+  '  is gaining, and that is the whole reason it is funny.'
 ];
 
 const STOP = new Set(('a an the and or of to in on for from with by is are was do does did how ' +
