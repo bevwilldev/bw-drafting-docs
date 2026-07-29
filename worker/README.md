@@ -139,6 +139,35 @@ third branch in `askModel()` rather than just a different `BASE_URL`.
 
 ---
 
+## The voice
+
+The system prompt in `askModel()` is in three parts, and the split is the point:
+**the rules bind, the voice decorates.** Command names, layer names and numbers
+come straight from the documentation; the personality lives only in the sentence
+around them. Being funny is never a licence to be vague.
+
+Tuning it is a prompt edit and `wrangler deploy`. Two things learned doing it:
+
+- **Examples beat adjectives.** "Be charming" produced nothing; a FLAT/RIGHT pair
+  for the same answer produced the voice immediately.
+- **Put the rules that keep slipping at the END.** The middle of a long prompt
+  gets skimmed. The closing "check before you send" list is there because
+  banning `"To label lot areas, ..."` in the middle simply did not take.
+
+**A limit worth knowing:** each question is a fresh request with no memory of the
+last one, so the model always reaches for its highest-probability opening. Expect
+`"X is the command you want"` to recur across answers no matter how firmly the
+prompt asks for variety — it cannot see what it said to the previous person. It
+reads fine one answer at a time, which is how anyone actually meets it. Only a
+stronger model really moves this.
+
+**Temperature is 0.5**, up from 0.2. A voice needs room to phrase things
+differently, and the facts are pinned by the supplied sections rather than by
+sampling. Higher than 0.5 and the flourishes start reaching for detail the
+documentation never gave it.
+
+---
+
 ## Two settings worth knowing
 
 Both are in `wrangler.toml`, explained at length in `src/index.js`:
