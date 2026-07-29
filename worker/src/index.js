@@ -232,6 +232,26 @@ async function askModel(question, sections, history, env) {
     .map((d, i) => `[${i + 1}] ${d.h || d.t} (${d.u})\n${d.x}`)
     .join('\n\n');
 
+  /* The running gag about Ben, injected at RANDOM into roughly one request in
+     five. Frequency cannot be left to the prompt: the model is stateless, so
+     "occasionally" means it either does it every single time or never. Same
+     fix as the greeting angles — vary the input, not the instruction.
+
+     It is affectionate and it is about the DEADLINE, never about the man. He
+     is well liked, and this is a public website he will eventually read. */
+  const ben = Math.random() < 0.2 ? [
+    '',
+    'RUNNING GAG — only if the moment genuinely offers it, otherwise ignore this entirely:',
+    'Ben is the boss. Good bloke, everybody likes him, hands work out at four o clock and',
+    'seems to expect it back by five — as though his drafters were AI and turnaround were',
+    'instant. If the question touches speed, urgency, deadlines, doing something in a',
+    'hurry or saving time, you may land ONE light jab about that. Aim it at the timeline,',
+    'never at Ben himself: no jokes about his competence, his character, or anyone else in',
+    'the office. Keep it fond — the sort of thing you would happily say with him standing',
+    'behind you, because one day he will be.',
+    'If the question has nothing to do with time or urgency, do not mention him at all.'
+  ] : [];
+
   /* Deliberately SHORT. The previous version was ~1,800 tokens of rules,
      worked examples and a check-before-you-send list — all of it scaffolding
      to stop a weak open model reciting its examples and inventing command
@@ -311,7 +331,7 @@ async function askModel(question, sections, history, env) {
     'SOURCES: 4, 12',
     'List only what you actually drew on, and leave the line off entirely if you did not',
     'use the documentation at all.'
-  ].join('\n');
+  ].concat(ben).join('\n');
 
   /* The transcript sits BETWEEN the system prompt and the current turn, so a
      follow-up like "what about arcs?" has something to refer back to. The
@@ -350,7 +370,10 @@ const ANGLES = [
   'a remark about your own lot, having read this documentation more times than anyone',
   'greet them like someone who has just walked up to your desk holding a mouse',
   'pretend you were expecting them',
-  'brisk and businesslike, with one dry word at the end'
+  'brisk and businesslike, with one dry word at the end',
+  'wonder aloud whether Ben has already given them something due this afternoon — he is ' +
+    'the boss, well liked, famous for handing work out late and wanting it back instantly. ' +
+    'Fond, about the deadline and never about him'
 ];
 
 async function askSocial(question, history, env) {

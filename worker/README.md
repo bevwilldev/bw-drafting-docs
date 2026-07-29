@@ -169,6 +169,15 @@ Two guardrails make that safe rather than annoying:
   not a joke, it is a claim. That line is in the prompt verbatim, because an
   earlier version invented a limitation to round one off.
 
+**The Ben gag.** There is a running in-joke about the boss handing work out late
+and wanting it back instantly. It is injected at random into ~1 in 5 requests
+(observed landing about 1 in 8, since the model also declines when the question
+has nothing to do with time). Frequency is mechanical for the same reason the
+greetings are: the model is stateless, so "occasionally" becomes always or
+never. It is aimed at the deadline and never at the man, and this is a **public
+site he can read** — keep it that way, or delete the `ben` block in
+`askModel()` and the matching entry in `ANGLES` to remove it entirely.
+
 The system prompt is deliberately **short** (~650 tokens). An earlier version ran
 to ~1,800: worked examples, an anti-recitation rule, a punctuation lecture and a
 six-point "check before you send" list. All of it was scaffolding to stop a weak
