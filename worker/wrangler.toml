@@ -25,10 +25,19 @@ binding = "AI"
 #                         MODEL    = "claude-haiku-4-5-20251001"
 PROVIDER = "gemini"
 
-# Gemini 2.5 Flash: strong instruction-following for roughly $2/month at this
-# volume. Workers AI was the free starting point but had to be talked out of
-# inventing command limitations, which is the one thing this must never do.
-MODEL = "gemini-2.5-flash"
+# Roughly $2/month at this volume ($0.30 in / $2.50 out per MTok). Workers AI
+# was the free starting point but had to be talked out of inventing command
+# limitations, which is the one thing this must never do.
+#
+# NOT 2.5 — the entire 2.5 generation returns 404 "no longer available to new
+# users" on a key created today, whatever the model list says it contains. The
+# list is not the same as what a key may call; probe before trusting it.
+#
+# Do not "upgrade" this to gemini-3.5-flash without checking the price: at
+# $1.50/$9.00 it costs about $9.45/month here, MORE than Claude Haiku 4.5, and
+# Haiku is the better instruction-follower. Flash-Lite or Haiku — the middle is
+# the worst of both.
+MODEL = "gemini-3.5-flash"
 
 # Documentation sections sent per question. 0 = the whole corpus (~28k tokens),
 # which Gemini has room for and which removes retrieval — and therefore every
