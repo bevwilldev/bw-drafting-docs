@@ -181,18 +181,24 @@ knowing. Three guardrails make that safe rather than annoying:
   exaggerate what a command does. If a joke would have to be TRUE to work, it is
   not a joke, it is a claim. That line is in the prompt verbatim, because an
   earlier version invented a limitation to round one off.
-- **It does not perform Australian.** The prompt used to say "be Australian",
+- **It does not PERFORM Australian.** The prompt used to say "be Australian",
   which a model reads as an instruction to do the accent — so it reached for
-  vocabulary (gday, mate, crikey) and the whole thing read as someone trying
-  too hard. The register is understatement and timing, not word choice, and
-  that is now what the prompt asks for: throw the line away, no punchline
-  announced, no exclamation marks, say less than you could. The banned words
-  are listed explicitly, because "do not overdo it" is not actionable and a
-  short list is.
+  vocabulary (gday, mate, crikey, champion, sticky beak) and the whole thing
+  read as someone trying far too hard. The register is understatement and
+  timing, not word choice: throw the line away, no punchline announced, no
+  exclamation marks, say less than you could.
 
-The hard-coded opening line in `site.js` counts as part of this. It used to
-start "Gday", which set the register before the model said a word and invited
-it to keep performing.
+  **Banning the words was tried and reverted.** An explicit list is tempting
+  because it is actionable, but it treats the symptom — and a weak model obeys
+  the list to the letter while evading its spirit, swapping "gday" for
+  "champion" and carrying on exactly as before. The lingo was never the fault.
+  What the prompt asks now is that it be *how you talk* rather than *the bit*:
+  welcome when it is simply how the sentence came out, never laid on thick,
+  never doing the work of the joke.
+
+The hard-coded opening line in `site.js` counts as part of this. It says
+"Gday" — no exclamation mark — because it sets the register before the model
+says a word, and that register is a person talking, not a performance.
 
 **The Ben gag.** There is a running in-joke about the boss handing work out late
 and wanting it back instantly. It is injected at random into ~1 in 8 requests,
