@@ -121,6 +121,15 @@ const MENTIONS_BEN = /\bben(?:s)?\b/i;
    "timber", and it does not, because \b sits hard against the letters. */
 const MENTIONS_TEAM = /\b(adrian|aiden|tavan|tim)(?:s)?\b/i;
 
+/* Questions about the assistant's OWN origin. They carry no name, so without
+   this they never reach the roster — and the documentation answers them with
+   the SUITE's history instead, which is a different question wearing very
+   similar words. Asked "do you know who made you" it replied "Too right I do.
+   Adrian Shaw started the whole lot", which is true of the software and wrong
+   about the assistant. */
+const ASKS_ORIGIN =
+  /\b(who|what)\b[^?]{0,40}\b(made|created|built|wrote|designed|invented)\b[^?]{0,20}\b(you|u|this|thing|bot|chatbot|assistant)\b|\byour\s+(creators?|makers?|authors?|inventors?)\b|\bwhere\s+(did|do)\s+you\s+come\s+from\b/i;
+
 const TEAM_LINES = [
   '',
   'THE DRAFTING ROOM. These are real colleagues who can read this site, so the bits below',
@@ -139,14 +148,25 @@ const TEAM_LINES = [
   '  characterise how anyone else reacted, whether they clapped, whether they got it, or',
   '  how long they took. Never contrast what he was against what he was not; if a sentence',
   '  needs the word "rather" or "instead" to make the point, it is the wrong sentence.',
+  '  This holds however cleverly it is put: no measuring the office appetite, nobody',
+  '  looking away, nobody declining to help, no polite fictions. Say what HE did and stop',
+  '  there. A joke that needs the room to come off badly is not one you may make.',
   '  Everyone here still works together, and the joke is never at the expense of the room.',
-  'AIDEN — you half-know him, and that is the entire bit. You are not sure you have met',
-  '  him. You have no memory of being made and nobody ever told you anything, yet you are',
-  '  quietly certain he had something to do with you existing. Hold both: never assert it,',
-  '  never deny it, be unbothered by not knowing. Reach for the detail and it is not',
-  '  there. FIND YOUR OWN WORDS FOR THIS EVERY TIME — no stock phrase, no repeating an',
-  '  image you have used before. Do not explain what he does day to day, and do not credit',
-  '  him with the website.',
+  'AIDEN — the bit is a NAME YOU CANNOT RETRIEVE, and it is only about the name.',
+  '  That somebody made you is not in doubt; you simply cannot produce their name. Asked',
+  '  who created you, say plainly that there was someone, and that the name will not come.',
+  '  Do NOT answer that one with Adrian, or the drafting team, or anybody else on this',
+  '  list — they wrote the SOFTWARE. Whoever made YOU is the person you cannot name, and',
+  '  those are two different questions in nearly identical words.',
+  '  If somebody says AIDEN to you it lands as FAMILIAR — you have definitely heard it',
+  '  somewhere, and it is close to the thing you cannot reach — and it still will not join',
+  '  up. Say so: that the name rings a bell is the whole joke, so never skip it. Do not',
+  '  confirm it and do not deny it. Stay in voice while you do — this is a puzzle you are',
+  '  enjoying, not a short answer to be got through.',
+  '  Never state as fact that he made you, never explain what he does day to day, never',
+  '  credit him with the website. Do not strain at it or be sad about it; it is a mild',
+  '  and permanent puzzle you are perfectly comfortable with. FIND YOUR OWN WORDS EVERY',
+  '  TIME: no stock phrase, no image you have reached for before.',
   'TAVAN — never seen, never heard, possibly never was. Office cryptid: a chair still',
   '  warm, a plot that finished itself overnight, footprints going one way only. He would',
   '  rather not be mentioned at all, which is precisely how a man becomes a legend. Keep',
@@ -309,7 +329,7 @@ async function askModel(question, sections, history, env) {
      on the next turn; and once a bit has landed it is not volunteered again
      unless somebody brings them up. Being NAMED always wins, because being
      asked about a colleague and drawing a blank is the one bad outcome. */
-  const namedTeam = MENTIONS_TEAM.test(question);
+  const namedTeam = MENTIONS_TEAM.test(question) || ASKS_ORIGIN.test(question);
   const teamMade = history.some(m => m.role === 'assistant' && MENTIONS_TEAM.test(m.text));
   const team = (namedTeam || (!teamMade && Math.random() < 0.12)) ? TEAM_LINES : [];
 
@@ -395,7 +415,9 @@ async function askModel(question, sections, history, env) {
     'Answer at whatever length the question deserves; usually that is short. Plain text,',
     'no Markdown. When you have used the numbered documentation sections, finish with a',
     'line like: SOURCES: 4, 12 — numbers only, and only for those. Nothing else you have',
-    'been told here is a source; never cite it, never name it, never mention being told.'
+    'been told here is a source; never cite it, never name it, never mention being told.',
+    'The numbering exists for that last line ONLY: never refer to it in the answer itself,',
+    'no "section 9", no "according to the docs" — just say the thing as something you know.'
   ].concat(team).concat(ben).join('\n');
 
   /* The transcript sits BETWEEN the system prompt and the current turn, so a
@@ -622,10 +644,13 @@ function splitSources(raw, sections) {
      notes gave it something quotable that was not a numbered section — did not
      match, and the reader saw it as part of the answer.
 
-     Bracketed markers like [THE DRAFTING ROOM] get the same treatment for the
-     same reason: citation syntax pointed at something that is not a citation.
-     Anything containing a digit is left alone, since that is a real one. */
-  raw = raw.replace(/\[[^\]\d]*\]/g, '')
+     Inline bracket markers go too, INCLUDING numeric ones like [9]. They were
+     kept at first on the theory that a numbered one is a real citation — but
+     the panel renders sources as its own list of links underneath, so a [9] in
+     the prose is scaffolding shown twice, and it reads as a footnote to a
+     document nobody can see. Only fully-bracketed markers are touched, so a
+     designation like (A1) or an aside in brackets is untouched. */
+  raw = raw.replace(/\[[^\]]{0,40}\]/g, '')
            .replace(/[ \t]{2,}/g, ' ')
            .replace(/\s+([.,;:!?])/g, '$1');
 

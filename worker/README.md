@@ -247,7 +247,25 @@ model is not being trusted to be tactful about a colleague; it is being handed
 the two sentences it may use. Adding someone means writing their bit, not
 loosening the rule.
 
-Two things learned wiring it up, both worth keeping in mind if you extend it:
+**Aiden is the odd one out**, and worth understanding before touching it. The
+bit is not that the assistant does not know who made it — it knows perfectly
+well that somebody did. What it cannot do is produce the NAME, which sits
+permanently just out of reach; and when somebody says "Aiden" it rings a loud
+bell and still refuses to join up. It never confirms and never denies.
+
+That needs `ASKS_ORIGIN` as well as the name regex. "Who made you" contains no
+name, so it missed the roster entirely and got answered from the documentation
+— confidently, with *"Too right I do. Adrian Shaw started the whole lot"*,
+which is true of the software and wrong about the assistant. The two questions
+are nearly identical in words and completely different in meaning, so the
+prompt now says so in as many words.
+
+Three things learned wiring it up, all worth keeping in mind if you extend it:
+
+- **Never put a simile in the prompt.** Every image written into these notes
+  came back verbatim: a house having a builder, a person you have met twice,
+  "early rather than embattled". Describe the STATE and demand its own words;
+  the moment you write the good line, that becomes the only line it uses.
 
 - **It will try to cite the roster.** Given something quotable that is not a
   numbered section, the model wrote `SOURCES: The Drafting Room` and inline
