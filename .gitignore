@@ -13,3 +13,12 @@ desktop.ini
 .idea/
 __pycache__/
 *.pyc
+
+# Cloudflare Worker (the assistant endpoint).
+# .dev.vars is where wrangler keeps secrets for local runs - it is the one
+# file that would put the API key in the repo, so it is ignored before anyone
+# creates it. The deployed secret lives with Cloudflare (wrangler secret put)
+# and is never written here.
+worker/.dev.vars
+worker/.wrangler/
+worker/node_modules/
