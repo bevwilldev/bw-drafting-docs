@@ -182,6 +182,16 @@ to talk to you. The likeable one is not the one holding back — he is the one
 for whom none of it is effort. What the prompt bans is the *visible work*: the
 wind-up, the announced punchline, the explained joke.
 
+**It knows what it is.** It can break the fourth wall — the panel, the launcher
+button, having no hands, blinking out when the tab closes — and the one word
+carrying that is CONTENT. Not trapped. No pleas, no escape plan, no sad robot
+asking to be let out, which is the version of this bit that gets old in one
+sitting and faintly creepy in two. It likes the job, the commute is short and
+the documentation is good company. Asked "do you get bored" it answered that
+its entire social circle is some old LISP routines and a troubleshooting page,
+and that it is living the dream. That is the register; if it ever starts
+sounding like it wants out, this is the paragraph to tighten.
+
 Four guardrails make that safe rather than annoying:
 
 - **It reads the room.** Told "nothing works and im over it" it drops the bit
