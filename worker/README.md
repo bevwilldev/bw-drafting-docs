@@ -4,15 +4,32 @@ The Worker takes a question, finds the documentation sections that best match
 it, asks a model to answer **from those sections only**, and returns the answer
 with links. It holds no state and stores nothing.
 
-It runs on **Workers AI** — Cloudflare's own models, on the same platform as
-this Worker. So there is **no API key, no second vendor and no separate bill**.
+It runs on **Google Gemini 2.5 Flash** — about **$2/month** at this volume.
+
+It started on Workers AI, which is free and needs no key. That was the right
+place to start and the wrong place to stay: the open model had to be argued out
+of reciting its own prompt examples, and could not be argued out of inventing
+command limitations at all, which is the one thing this must never do.
+
+Switching backend is `PROVIDER` in `wrangler.toml` and a redeploy. Three are
+wired up: `gemini`, `workers-ai` (free, no key) and `openai-compatible`, the
+last covering OpenAI, Groq **and Anthropic**, which all share a wire format.
 
 ---
 
 ## Deploying it
 
-You need a Cloudflare account (free) and Node.js, because `wrangler` is a Node
-tool. Nothing else — no API key, no card.
+You need a Cloudflare account (free), Node.js (because `wrangler` is a Node
+tool), and a Gemini API key from **aistudio.google.com**.
+
+**On the key:** the free tier works, but Google's terms say free-tier content
+may be used to improve their products. Enable billing so the key runs on the
+PAID tier, where that is excluded — the bill will be a couple of dollars a
+month and the distinction is the first thing anyone will ask about.
+
+```
+wrangler secret put API_KEY      # paste the Gemini key; it is never in the repo
+```
 
 **Node without admin rights.** The MSI installer needs an administrator; the
 zip does not. Either works, and neither touches Program Files:

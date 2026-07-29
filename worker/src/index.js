@@ -501,10 +501,62 @@ async function askSocial(question, history, env) {
    rather than a code change. Both branches take the same messages and
    return the same plain string; everything downstream is provider-blind. */
 function runModel(messages, env, temperature) {
-  const out = (env.PROVIDER || 'workers-ai') === 'workers-ai'
-    ? runWorkersAi(messages, env, temperature)
-    : runOpenAiCompatible(messages, env, temperature);
+  const provider = env.PROVIDER || 'workers-ai';
+  const out =
+    provider === 'gemini' ? runGemini(messages, env, temperature) :
+    provider === 'workers-ai' ? runWorkersAi(messages, env, temperature) :
+    runOpenAiCompatible(messages, env, temperature);
   return out.then(tidy);
+}
+
+/* Google Gemini. The only provider here that does NOT speak the OpenAI wire
+   format, so it gets its own translation rather than a different BASE_URL:
+     - the system prompt is a separate `system_instruction`, not a message
+     - the assistant role is called "model"
+     - text is wrapped in parts[], and settings live in generationConfig
+   The key travels as a header rather than the documented ?key= query
+   parameter, so it cannot end up in a URL that something decides to log. */
+async function runGemini(messages, env, temperature) {
+  const model = env.MODEL || 'gemini-2.5-flash';
+
+  const system = messages.filter(m => m.role === 'system').map(m => m.content).join('\n');
+  const turns = messages.filter(m => m.role !== 'system');
+
+  /* Gemini requires the conversation to START with a user turn. Ours always
+     does, but a truncated history could in principle lead with an assistant
+     reply, and that is a 400 rather than a degraded answer. */
+  while (turns.length && turns[0].role !== 'user') turns.shift();
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': env.API_KEY
+      },
+      body: JSON.stringify({
+        system_instruction: system ? { parts: [{ text: system }] } : undefined,
+        contents: turns.map(m => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }]
+        })),
+        generationConfig: { temperature, maxOutputTokens: 400 }
+      })
+    });
+
+  if (!res.ok) throw new Error('model ' + res.status + ' ' + (await res.text()).slice(0, 300));
+
+  const data = await res.json();
+
+  /* No candidate means a safety filter or a recitation block rather than an
+     outage, and the reason is worth having in the log — it looks identical to
+     a broken key from the outside. */
+  const parts = data?.candidates?.[0]?.content?.parts;
+  if (!parts) {
+    throw new Error('gemini returned no candidate: ' +
+      JSON.stringify(data?.promptFeedback || data?.candidates?.[0]?.finishReason || data).slice(0, 300));
+  }
+  return parts.map(p => p.text || '').join('').trim();
 }
 
 /* One thing the prompt could not be argued into: starting a sentence with a

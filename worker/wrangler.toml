@@ -16,23 +16,29 @@ compatibility_date = "2026-01-01"
 binding = "AI"
 
 [vars]
-# "workers-ai" (default) or "openai-compatible" — the latter covers both
-# OpenAI and Groq, which share a wire format, via BASE_URL + an API_KEY secret.
-PROVIDER = "workers-ai"
+# Which backend. One of:
+#   "gemini"            Google, key in the API_KEY secret
+#   "workers-ai"        Cloudflare's own models, no key (the AI binding above)
+#   "openai-compatible" OpenAI, Groq OR Anthropic — they share a wire format,
+#                       so it is BASE_URL + an API_KEY secret. For Claude Haiku:
+#                         BASE_URL = "https://api.anthropic.com/v1"
+#                         MODEL    = "claude-haiku-4-5-20251001"
+PROVIDER = "gemini"
 
-# Which model. Verify against `wrangler ai models` rather than trusting a
-# name from memory — the catalogue changes and near-misses exist (there is an
-# @cf/meta/llama-3.1-8b-instruct-fp8 but no plain -instruct, which is exactly
-# the mistake that made the first deploy fail).
+# Gemini 2.5 Flash: strong instruction-following for roughly $2/month at this
+# volume. Workers AI was the free starting point but had to be talked out of
+# inventing command limitations, which is the one thing this must never do.
+MODEL = "gemini-2.5-flash"
+
+# Documentation sections sent per question. 0 = the whole corpus (~28k tokens),
+# which Gemini has room for and which removes retrieval — and therefore every
+# "the right section did not rank high enough" failure — as a concept.
 #
-# 70B rather than the 8B first tried: this answers from supplied documentation,
-# where following "only use these sections, never invent a command" matters
-# more than raw speed, and -fast keeps it responsive.
-MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-
-# Documentation sections sent per question. 0 = the whole corpus, which is
-# better but needs a big context window; see the long note in src/index.js
-# before changing it.
+# Left at 40 because it was MEASURED as sufficient: replaying the real corpus
+# against twelve realistic questions, the answering section made the top 40
+# every time (ALAB, the worst, ranks 19th). 0 costs about 5x more per question
+# for insurance against a failure not yet observed at 40. Raise it if one turns
+# up. See the long note in src/index.js.
 SECTIONS = 40
 
 # Keep the free tier honest: no analytics engine, no KV, no durable objects.
