@@ -1089,9 +1089,12 @@
       launcher.classList.add('is-open');
       if (!log.childNodes.length) {
         say('bot', el('p', {
-          html: 'Gday. Ask me anything about the BW BricsCAD tools &mdash; what a ' +
-                'command does, what it prompts for, or why something has stopped ' +
-                'working. Follow-ups are fine, I keep up.'
+          /* No "Gday". This is the one line of the assistant's voice that is
+             hard-coded, so it sets the register before the model says a word —
+             and an opener that performs the accent invites the model to keep
+             performing it. Dry and unbothered instead. */
+          html: 'Ask away &mdash; what a command does, what it prompts for, or why ' +
+                'something has stopped working. Follow-ups are fine, I keep up.'
         }));
         say('bot', el('p', {
           class: 'ai-fineprint',

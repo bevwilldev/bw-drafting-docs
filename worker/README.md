@@ -171,9 +171,9 @@ wrangler deploy
 
 ## The voice, and how little of it is rules
 
-The register is **the office clown who happens to know the software** — playful
-and daft, aimed at BricsCAD and at itself, never at the person for not knowing.
-Two guardrails make that safe rather than annoying:
+The register is **the office clown who happens to know the software** — dry,
+unbothered, aimed at BricsCAD and at itself, never at the person for not
+knowing. Three guardrails make that safe rather than annoying:
 
 - **It reads the room.** Told "nothing works and im over it" it drops the bit
   entirely and just helps. A clown who cannot tell when to stop is only tiring.
@@ -181,6 +181,18 @@ Two guardrails make that safe rather than annoying:
   exaggerate what a command does. If a joke would have to be TRUE to work, it is
   not a joke, it is a claim. That line is in the prompt verbatim, because an
   earlier version invented a limitation to round one off.
+- **It does not perform Australian.** The prompt used to say "be Australian",
+  which a model reads as an instruction to do the accent — so it reached for
+  vocabulary (gday, mate, crikey) and the whole thing read as someone trying
+  too hard. The register is understatement and timing, not word choice, and
+  that is now what the prompt asks for: throw the line away, no punchline
+  announced, no exclamation marks, say less than you could. The banned words
+  are listed explicitly, because "do not overdo it" is not actionable and a
+  short list is.
+
+The hard-coded opening line in `site.js` counts as part of this. It used to
+start "Gday", which set the register before the model said a word and invited
+it to keep performing.
 
 **The Ben gag.** There is a running in-joke about the boss handing work out late
 and wanting it back instantly. It is injected at random into ~1 in 8 requests,
