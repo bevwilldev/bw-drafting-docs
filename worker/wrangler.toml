@@ -76,4 +76,34 @@ SECTIONS = 40
 binding = "ASK_LOG"
 id = "01dfb5474fcd4da3b73207e3e621928d"
 
+# THE RATE LIMIT. The endpoint is public the moment it deploys, and every
+# request spends model quota, so an unmetered one is somebody else's free AI.
+#
+# This is NOT done in the dashboard. WAF rate limiting rules are configured per
+# ZONE, and a *.workers.dev subdomain is not a zone on this account — there is
+# nothing to attach a rule to. This binding enforces it inside the Worker
+# instead, and works regardless of domain.
+#
+# 20 a minute per IP: generous for a person reading documentation, useless for
+# a script. `period` accepts only 10 or 60.
+#
+# HEALTH WARNING — this did NOT enforce when tested. 26 requests from one IP
+# inside the 60-second window all came back success=true, with no error thrown,
+# so the binding is wired and simply permissive here (counters are per
+# Cloudflare location and eventually consistent). Neither did the per-isolate
+# throttle in src/index.js: 20 requests against a limit of 12, zero throttled,
+# because the requests landed on different isolates.
+#
+# In other words THERE IS NO EFFECTIVE RATE LIMIT right now. What bounds the
+# damage is the model being on a FREE key — a script can exhaust the daily
+# quota and silence the assistant, but cannot run up a bill. Fix this properly
+# (Durable Object counter, needs Workers Paid) BEFORE enabling billing.
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 20
+  period = 60
+
 # Otherwise the free tier stays honest: no analytics engine, no durable objects.

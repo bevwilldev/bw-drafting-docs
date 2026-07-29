@@ -62,10 +62,35 @@ const MAX_QUESTION = 400;      // characters; a question, not a pasted document
    thought, short enough that an old topic does not haunt the retrieval. */
 const MAX_HISTORY = 6;
 
-/* Best-effort per-isolate throttle. This is NOT the real rate limit — isolates
-   come and go, so it only blunts a hot loop. Set a proper per-IP rule in the
-   Cloudflare dashboard (Security → WAF → Rate limiting); it is free and it is
-   what actually protects the key. */
+/* Per-isolate throttle. Meant as the fallback, currently doing the real work,
+   which is worth knowing before trusting this setup.
+
+   MEASURED, not assumed: the RATE_LIMITER binding IS bound, IS called with the
+   client IP, and returned success=true on every one of 26 requests inside a
+   60-second window configured for 20. It never threw, so it is wired correctly
+   and simply is not enforcing here — most likely because counters are per
+   Cloudflare location and eventually consistent. Left in place because it costs
+   nothing and may well bite under real distributed load; just not relied on.
+
+   And NOT the WAF: rate limiting rules in the dashboard are configured per
+   ZONE, and a *.workers.dev subdomain is not a zone on this account, so there
+   is nothing there to attach a rule to. That option only appears if this ever
+   moves behind a custom domain.
+
+   AND THIS ONE DOES NOT ENFORCE EITHER, also measured: 20 sequential requests
+   from one IP against PER_WINDOW=12 produced zero throttles, because Cloudflare
+   spread them across isolates and each keeps its own Map. It only bites when
+   requests happen to land on a warm isolate, which a burst mostly does not.
+
+   SO THERE IS CURRENTLY NO EFFECTIVE RATE LIMIT. Be honest about that rather
+   than reassured by two mechanisms that both look present. What actually bounds
+   the damage today is the MODEL: the Gemini key is on the free tier, so the
+   worst a script achieves is exhausting the daily quota and making the
+   assistant go quiet — irritating, and costing nothing.
+
+   That stops being true the moment billing is enabled on the model key. Before
+   that: a Durable Object gives a single authoritative counter (needs Workers
+   Paid), or KV gives a crude shared one within its consistency limits. */
 const WINDOW_MS = 60_000;
 const PER_WINDOW = 12;
 const seen = new Map();
@@ -206,8 +231,21 @@ export default {
        is most likely to see twice in a row while getting nowhere. If you find
        yourself adding a fifth, check first whether the model could just say
        it. */
+    /* The real limit: Cloudflare's rate limiting binding, which works on a
+       workers.dev URL where a WAF rule cannot. Counters are per Cloudflare
+       location and eventually consistent, so the effective ceiling is a bit
+       looser than the number suggests — fine here, where the job is stopping a
+       script from draining the day's model quota, not exact accounting. */
     const ip = request.headers.get('CF-Connecting-IP') || 'anon';
-    if (throttled(ip)) {
+    let overLimit = false;
+    if (env.RATE_LIMITER) {
+      try {
+        overLimit = !(await env.RATE_LIMITER.limit({ key: ip })).success;
+      } catch (e) {
+        console.error('rate limiter failed:', e && (e.message || e));
+      }
+    }
+    if (overLimit || throttled(ip)) {
       return json({ answer: 'Steady on. That is a lot of questions in a very short space ' +
                             'of time, even for me. Give it a minute — I am not going anywhere.' },
                   200, cors);
