@@ -33,16 +33,15 @@ PROVIDER = "gemini"
 # Probe a model before adding it here.
 MODELS = "gemini-3.6-flash,gemini-3.5-flash,gemini-3-flash-preview,gemini-3.5-flash-lite,gemini-3.1-flash-lite"
 
-# Documentation sections sent per question. 0 = the whole corpus (~29k tokens),
-# which Gemini has room for and which removes retrieval — and therefore every
-# "the right section did not rank high enough" failure — as a concept.
+# Documentation sections sent per question. 0 = the whole corpus (~29k tokens).
 #
-# Left at 40 because it was MEASURED as sufficient: replaying the real corpus
-# against twelve realistic questions, the answering section made the top 40
-# every time (ALAB, the worst, ranks 19th). 0 costs about 5x more per question
-# for insurance against a failure not yet observed at 40. Raise it if one turns
-# up. See the long note in src/index.js.
-SECTIONS = 40
+# 12, down from 40, because retrieval is now SEMANTIC. Measured over 17 real
+# questions, the section that answers them ranked worst-case 18th under keyword
+# scoring and worst-case 3rd under embeddings — so the wide net was insurance
+# against a problem that no longer exists. Twelve is 4x the observed worst case
+# and hands the model ~1.2k tokens of relevant material instead of ~3.9k mostly
+# irrelevant. See the long note in src/index.js.
+SECTIONS = 12
 
 # WHAT PEOPLE ASK, and nothing else. This is the one piece of state the Worker
 # keeps, and it exists to improve the DOCUMENTATION rather than to measure

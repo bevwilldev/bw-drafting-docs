@@ -109,6 +109,13 @@ def main():
     print("  %d chars (~%d tokens), %d KB on disk" % (
         chars, chars / 4, OUT.stat().st_size / 1024))
 
+    # The assistant retrieves by MEANING, from vectors built off this file. They
+    # are fingerprinted against it, so a corpus change without a re-run makes the
+    # Worker refuse them and drop to keyword search — which is the mode where the
+    # right section ranks 18th. Loud here so it is not discovered in an answer.
+    print("\n  NEXT: python scripts/gen_vectors.py")
+    print("  (the corpus just changed, so the embeddings are now stale)")
+
 
 if __name__ == "__main__":
     main()

@@ -34,24 +34,22 @@ const ALLOWED = [
 
 /* How many documentation sections to send. 0 sends the whole corpus.
 
-   THIS IS A CONTEXT-WINDOW DECISION, not a cost one. The whole corpus is only
-   ~28k tokens and sending all of it is strictly better for accuracy — with a
-   big-context model (gpt-4o-mini and the like) set this to 0 and stop
-   thinking about retrieval.
+   40 for as long as retrieval was keyword-based, because the right section
+   could rank as low as EIGHTEENTH and the number had to cover that. Semantic
+   retrieval put the worst case at 3 across the same 17 questions, so most of
+   that margin was insurance against a problem that no longer exists.
 
-   Workers AI runs open models with much smaller windows, often 8k, so the
-   whole corpus does not fit and sections must be picked. The number matters:
-   a dozen was measured against real questions and LOSES answers. "How do I
-   label lot areas" did not reach ALAB, because command sections are HEADED by
-   the command name, so a plain-English question never matches the heading
-   while a page titled "Labelling loaded lots" wins on its title alone.
+   12 is four times the worst rank observed — still generous, and roughly 1.2k
+   tokens instead of 3.9k. That is not really about cost: it is that the model
+   reading twelve relevant sections is less likely to answer from a
+   near-miss than one reading twelve relevant sections and twenty-eight
+   irrelevant ones. Fewer, better sections is the whole point of doing this.
 
-   40 is the compromise — roughly 4.6k tokens, comfortably inside an 8k window
-   even with the system prompt, and wide enough that the right section does not
-   have to rank in the top few, only somewhere in the top forty. Raise it if
-   the model you pick has room; a wrong answer costs a drafter far more than
-   the tokens ever will. */
-const DEFAULT_SECTIONS = 40;
+   If retrieval ever falls back to keyword (stale vectors, embedding call down)
+   twelve is TIGHT — that is the mode where the right section ranks 18th. The
+   fallback is for keeping the lights on, not for running on indefinitely; the
+   log says loudly when it happens. */
+const DEFAULT_SECTIONS = 12;
 
 const MAX_QUESTION = 400;      // characters; a question, not a pasted document
 
@@ -277,7 +275,7 @@ export default {
     const query = prev ? prev.text + ' ' + question : question;
 
     const limit = Number(env.SECTIONS ?? DEFAULT_SECTIONS);
-    let picked = limit > 0 ? search(query, corpus, limit) : corpus;
+    let picked = limit > 0 ? await retrieve(query, corpus, limit, env) : corpus;
 
     /* WHERE THEY ARE STANDING. Someone reading the EASELEG page and asking
        "how do I change the wording" is asking about easements, and nothing in
@@ -885,6 +883,145 @@ async function getCorpus() {
   dfCache = null;
   return corpusCache;
 }
+
+/* ---------- semantic retrieval ------------------------------------------- */
+
+/* MEANING, not word overlap — and the difference was measured before it was
+   built. Across 17 real questions, the rank of the section that actually
+   answers them:
+
+       keyword   worst rank 18   ("how do I label lot areas" -> ALAB)
+       semantic  worst rank 3
+
+   Keyword scoring fails on this site in a specific way: "label", "lot" and
+   "area" appear on nearly every page of a drafting site, so they carry almost
+   no weight, and the one distinctive token — ALAB — is exactly what the person
+   asking does not know yet.
+
+   NOT hybrid, which is what I expected to build. Blending the keyword score
+   back in made it WORSE at every weight tried (0.15 -> worst rank 4, 0.35 ->
+   5), because it drags good semantic matches down. And the case keyword was
+   supposed to win — someone typing a bare command name like DIMDATA — ranks 1
+   under semantic too. There was nothing left for it to add.
+
+   Keyword survives only as the FALLBACK below, for when the vectors are stale
+   or the embedding call fails. */
+const VECTORS_URL =
+  'https://agabanto.github.io/bw-drafting-docs/assets/data/corpus-vectors.json';
+
+let vecCache = null;
+let vecFetchedAt = 0;
+
+/* Must match fingerprint() in scripts/gen_vectors.py exactly: url, NUL, the
+   character count of the text, NUL, then the first 16 hex of the SHA-256.
+   [...s].length rather than s.length because Python counts code points and
+   JavaScript counts UTF-16 units, and they disagree the moment anyone puts an
+   emoji in a heading. */
+async function corpusFingerprint(corpus) {
+  const enc = new TextEncoder();
+  const parts = [];
+  for (const d of corpus) {
+    parts.push(enc.encode(d.u), Uint8Array.of(0),
+               enc.encode(String([...d.x].length)), Uint8Array.of(0));
+  }
+  const buf = new Uint8Array(parts.reduce((n, p) => n + p.length, 0));
+  let at = 0;
+  for (const p of parts) { buf.set(p, at); at += p.length; }
+  const hash = new Uint8Array(await crypto.subtle.digest('SHA-256', buf));
+  return [...hash].map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
+}
+
+/* The vectors, checked against the corpus they claim to describe. A mismatch
+   means somebody regenerated the corpus without re-running gen_vectors.py, and
+   the vectors now point at the wrong sections — which would quietly answer
+   every question from whatever used to be at that index. Refuse them and say
+   so loudly; keyword retrieval still works. */
+async function getVectors(corpus) {
+  if (vecCache && Date.now() - vecFetchedAt < CORPUS_TTL_MS) return vecCache;
+
+  const res = await fetch(VECTORS_URL, { cf: { cacheTtl: 900 } });
+  if (!res.ok) {
+    if (vecCache) return vecCache;
+    throw new Error('vectors ' + res.status);
+  }
+  const data = await res.json();
+
+  if (data.v.length !== corpus.length) {
+    throw new Error('vectors describe ' + data.v.length + ' sections, corpus has ' + corpus.length);
+  }
+  const want = await corpusFingerprint(corpus);
+  if (data.fingerprint !== want) {
+    throw new Error('STALE VECTORS: built for corpus ' + data.fingerprint + ', live corpus is ' +
+                    want + ' — re-run scripts/gen_vectors.py');
+  }
+
+  vecCache = { dims: data.dims, rows: data.v.map(decodeVector) };
+  vecFetchedAt = Date.now();
+  return vecCache;
+}
+
+function decodeVector(b64) {
+  const bin = atob(b64);
+  const out = new Int8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = (bin.charCodeAt(i) << 24) >> 24;
+  return out;
+}
+
+/* One embedding per question. RETRIEVAL_QUERY, not RETRIEVAL_DOCUMENT — the
+   model embeds a question and the passage that answers it differently on
+   purpose, and using the wrong one throws away most of the benefit. */
+async function embedQuery(text, dims, env) {
+  const res = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:embedContent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.API_KEY },
+      body: JSON.stringify({
+        content: { parts: [{ text: text.slice(0, 4000) }] },
+        taskType: 'RETRIEVAL_QUERY',
+        outputDimensionality: dims
+      })
+    });
+  if (!res.ok) throw new Error('embed ' + res.status + ' ' + (await res.text()).slice(0, 160));
+
+  const v = (await res.json())?.embedding?.values;
+  if (!v || !v.length) throw new Error('embed returned no vector');
+
+  const norm = Math.hypot(...v) || 1;
+  return v.map(x => x / norm);
+}
+
+/* Cosine similarity, as a plain dot product: the document vectors were unit-
+   normalised before quantising and the query is normalised above, so the
+   magnitudes are already gone. The int8 values are never divided by 127 —
+   that is the same constant on every row and ranking does not care. */
+function rankBySimilarity(qv, rows, corpus, limit) {
+  const scored = new Array(rows.length);
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    let s = 0;
+    for (let j = 0; j < qv.length; j++) s += qv[j] * r[j];
+    scored[i] = { d: corpus[i], s };
+  }
+  scored.sort((a, b) => b.s - a.s);
+  return scored.slice(0, limit).map(x => x.d);
+}
+
+/* Semantic first, keyword if anything at all goes wrong. Every failure here is
+   recoverable — stale vectors, a 429 on the embedding call, the file missing
+   entirely — and none of them should cost the reader an answer. */
+async function retrieve(query, corpus, limit, env) {
+  try {
+    const vecs = await getVectors(corpus);
+    const qv = await embedQuery(query, vecs.dims, env);
+    return rankBySimilarity(qv, vecs.rows, corpus, limit);
+  } catch (e) {
+    console.error('semantic retrieval unavailable, falling back to keyword:',
+                  e && (e.message || e));
+    return search(query, corpus, limit);
+  }
+}
+
+/* ---------- keyword retrieval (the fallback) ------------------------------ */
 
 /* Same scoring as the site's own stub search, so what the model is given
    matches what the page would have shown. Common words are dropped and the
