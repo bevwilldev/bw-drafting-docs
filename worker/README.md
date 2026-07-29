@@ -171,9 +171,18 @@ wrangler deploy
 
 ## The voice, and how little of it is rules
 
-The register is **the office clown who happens to know the software** — dry,
-unbothered, aimed at BricsCAD and at itself, never at the person for not
-knowing. Three guardrails make that safe rather than annoying:
+The register is **the office clown who happens to know the software** — the
+bloke everyone likes, who has the room without ever working for it. Warm, daft,
+generous, aimed at BricsCAD and at itself, never at the person for not knowing.
+
+**The word doing the work is EASE, not restraint.** This was tuned to "dry and
+understated" once and went too far the other way: withholding reads as cold,
+and "say less than you could" turns a clown into a man who does not much want
+to talk to you. The likeable one is not the one holding back — he is the one
+for whom none of it is effort. What the prompt bans is the *visible work*: the
+wind-up, the announced punchline, the explained joke.
+
+Three guardrails make that safe rather than annoying:
 
 - **It reads the room.** Told "nothing works and im over it" it drops the bit
   entirely and just helps. A clown who cannot tell when to stop is only tiring.
@@ -193,8 +202,11 @@ knowing. Three guardrails make that safe rather than annoying:
   the list to the letter while evading its spirit, swapping "gday" for
   "champion" and carrying on exactly as before. The lingo was never the fault.
   What the prompt asks now is that it be *how you talk* rather than *the bit*:
-  welcome when it is simply how the sentence came out, never laid on thick,
-  never doing the work of the joke.
+  welcome when it is simply how the sentence came out, never laid on thick.
+
+  The greeting `ANGLES` are part of this and worth checking whenever the voice
+  moves. Half of them used to be suspicious, weary or brisk — input that pulls
+  cold no matter how warm the prompt above it reads.
 
 The hard-coded opening line in `site.js` counts as part of this. It says
 "Gday" — no exclamation mark — because it sets the register before the model
