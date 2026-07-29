@@ -33,11 +33,23 @@ PROVIDER = "gemini"
 # users" on a key created today, whatever the model list says it contains. The
 # list is not the same as what a key may call; probe before trusting it.
 #
-# Do not "upgrade" this to gemini-3.5-flash without checking the price: at
-# $1.50/$9.00 it costs about $9.45/month here, MORE than Claude Haiku 4.5, and
-# Haiku is the better instruction-follower. Flash-Lite or Haiku — the middle is
-# the worst of both.
-MODEL = "gemini-3.6-flash"
+# WHY FLASH-LITE, AND WHAT IT COSTS YOU
+# Free-tier quota is per model per day, and Lite's is generous where full Flash
+# allows TWENTY requests a day — unusable for a team without billing. So this is
+# the model you can actually pilot on for nothing.
+#
+# The trade is real and worth knowing before anyone relies on it. Asked "how do
+# I label lot areas" it answered that the documentation has no dedicated area
+# labelling command — ALAB, which was in the sections it was handed and which it
+# used correctly on the very next question. It invents no command NAMES (every
+# one it offered checks out in the source), but it will occasionally tell
+# somebody a thing cannot be done when it can, which for a tool meant to reduce
+# support load quietly generates support.
+#
+# Full gemini-3.6-flash / gemini-3.5-flash get this right. So does Claude Haiku
+# 4.5, which at ~$6/month is CHEAPER than 3.5-flash at ~$9.45. Move to one of
+# those before this is the official answer to "how do I do X".
+MODEL = "gemini-3.5-flash-lite"
 
 # Documentation sections sent per question. 0 = the whole corpus (~28k tokens),
 # which Gemini has room for and which removes retrieval — and therefore every
