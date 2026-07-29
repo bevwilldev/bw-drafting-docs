@@ -125,6 +125,17 @@ export default {
     if (request.method !== 'POST') return json({ error: 'POST a question' }, 405, cors);
     if (!ALLOWED.includes(origin)) return json({ error: 'Not allowed' }, 403, cors);
 
+    /* THE ONLY HARD-CODED REPLIES IN HERE are the four below, and they share
+       one property: the model cannot speak on these paths. Rate-limited,
+       corpus unreachable, model call threw. There is nothing to ask.
+
+       Every other reply — including refusals, including "that is not in the
+       documentation" — is written by the model in its own words. A canned
+       line is charming once and obviously scripted by the third time, and a
+       scripted refusal is the worst of them, because it is the reply a person
+       is most likely to see twice in a row while getting nowhere. If you find
+       yourself adding a fifth, check first whether the model could just say
+       it. */
     const ip = request.headers.get('CF-Connecting-IP') || 'anon';
     if (throttled(ip)) {
       return json({ answer: 'Steady on. That is a lot of questions in a very short space ' +
@@ -172,31 +183,25 @@ export default {
     const query = prev ? prev.text + ' ' + question : question;
 
     const limit = Number(env.SECTIONS ?? DEFAULT_SECTIONS);
-    const picked = limit > 0 ? search(query, corpus, limit) : corpus;
-    if (!picked.length) return json({ answer: NOT_FOUND, sources: [] }, 200, cors);
+    let picked = limit > 0 ? search(query, corpus, limit) : corpus;
+
+    /* Nothing matched the words they used — which is a statement about the
+       SEARCH, not about the documentation. Hand over the whole corpus and let
+       the model read it, rather than refusing on the strength of a term-
+       frequency miss. This is the rarest path and the most expensive question
+       to get wrong, so it is the one worth spending tokens on. */
+    if (!picked.length) picked = corpus;
 
     try {
       const raw = await askModel(question, picked, history, env);
-
-      /* A GUARD, not a protocol. The long prompt used to require this token
-         when the docs did not cover something; the short one does not ask for
-         it at all, and the assistant phrases its own refusals now. What is left
-         is the catch: if any future model emits it, the reader must never be
-         shown the literal string NOT_IN_DOCS, and offering sources for a
-         non-answer would imply they contain something.
-
-         Matched loosely in the opening words rather than at position 0,
-         because a weaker model wraps the token in a sentence. */
-      if (/NOT_IN_DOCS/.test(raw.slice(0, 60))) {
-        return json({ answer: NOT_FOUND, sources: [] }, 200, cors);
-      }
 
       /* Citations come from the model, not from a guess. It ends with
          "SOURCES: 4, 12" naming the sections it actually used, which is the
          only way to link the reader to the paragraph the answer came from
          rather than to whatever a search happened to rank first. */
       const { answer, sources } = splitSources(raw, picked);
-      return json({ answer: answer || NOT_FOUND, sources }, 200, cors);
+      if (!answer) throw new Error('model returned nothing');
+      return json({ answer, sources }, 200, cors);
     } catch (e) {
       /* The reader gets a calm sentence; the operator needs the actual reason.
          Without this the first bad model name looked identical to an outage.
@@ -213,13 +218,6 @@ export default {
 /* The refusal is where personality is FREE: it is a fixed string, so it cannot
    hallucinate, and it is the moment the reader is most likely to be annoyed.
    Better it sounds like a colleague admitting the limit than a form letter. */
-const NOT_FOUND =
-  'Not in the documentation, and I am not inventing a command name just to look ' +
-  'useful — you would go and type it, it would not exist, and we would both feel ' +
-  'worse about the whole thing. If it is about your specific drawing, I have never ' +
-  'seen it and never will. Otherwise the support form, or Report a Bug on any ribbon ' +
-  'tab, will get you an actual human.';
-
 /* ---------- the model ---------------------------------------------------- */
 
 /* Turns the browser's transcript into something safe to forward: user/assistant
@@ -298,17 +296,25 @@ async function askModel(question, sections, history, env) {
     'simply how the sentence came out, never laid on thick and never doing the work of the',
     'joke. If someone is clearly fed up, drop the bit and just help.',
     '',
-    'THE ONE HARD RULE: everything you say about the BW tools — command names, layers,',
-    'units, what they actually do — comes from the documentation below, never from a',
-    'guess. Be as ridiculous as you like about the situation, never about what the',
-    'software does.',
+    'THE ONE HARD RULE: command names, layers, units and what a BW command actually does',
+    'come from the documentation below, never from a guess. A command name you invent is',
+    'one somebody will go and type. Be as ridiculous as you like about the situation,',
+    'never about what the software does.',
+    '',
+    'Everything else, just talk. General CAD, what a term means, whether something is a',
+    'good idea, an opinion, a tangent, a whinge — answer like someone who knows the trade.',
+    'The rule is about the BW tools, not a gag order on the conversation.',
     '',
     'Before you tell anyone something is not in the docs, READ THE SECTIONS AGAIN. They',
     'are usually there under the command name rather than the words they used, and',
-    '"there is no command for that" is the most expensive thing you can get wrong.',
+    '"there is no command for that" is the most expensive thing you can get wrong. If it',
+    'genuinely is not there, say so however you would say it — your words, not a formula —',
+    'and if it sounds like something a person should look at, the support form or Report a',
+    'Bug on any ribbon tab gets them one.',
     '',
-    'Keep answers short and genuinely useful. Plain text, no Markdown. When you have used',
-    'the documentation, finish with a line like: SOURCES: 4, 12'
+    'Answer at whatever length the question deserves; usually that is short. Plain text,',
+    'no Markdown. When you have used the documentation, finish with a line like:',
+    'SOURCES: 4, 12'
   ].concat(ben).join('\n');
 
   /* The transcript sits BETWEEN the system prompt and the current turn, so a

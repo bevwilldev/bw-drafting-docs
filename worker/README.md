@@ -269,7 +269,19 @@ Anything about the BW tools comes from the supplied documentation — a
 confidently invented command name is worse than no answer, because a drafter
 will go and type it. Everything else is fair game; see the voice section above.
 
-The Worker still catches a literal `NOT_IN_DOCS` in the opening words and
-replaces it with a plain sentence and no source links. The short prompt no
-longer *asks* for that token, so this is now a guard rather than a protocol:
-if some future model emits it, the reader must not be shown the raw string.
+**Refusals are not scripted.** There used to be a `NOT_FOUND` constant — one
+paragraph, returned verbatim whenever the docs did not cover something, plus a
+`NOT_IN_DOCS` token the model was asked to emit so the Worker could swap it in.
+It was well written and it was the most annoying thing here, for the reason any
+canned line eventually is: it is charming once and obviously a machine by the
+third time. A scripted *refusal* is the worst kind, because it is the line
+somebody is most likely to see twice in a row while getting nowhere.
+
+All of it is gone. The model phrases its own refusals now, in its own words,
+and the prompt tells it where to send someone who needs a human rather than
+handing it a sentence to recite.
+
+**There are exactly four hard-coded replies left**, and they share one property:
+the model cannot speak on those paths — rate-limited, corpus unreachable, model
+call threw. There is nothing to ask. Before adding a fifth, check whether the
+model could just say it.
