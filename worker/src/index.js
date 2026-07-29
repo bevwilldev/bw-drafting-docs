@@ -62,38 +62,26 @@ const MAX_QUESTION = 400;      // characters; a question, not a pasted document
    thought, short enough that an old topic does not haunt the retrieval. */
 const MAX_HISTORY = 6;
 
-/* Per-isolate throttle. Meant as the fallback, currently doing the real work,
-   which is worth knowing before trusting this setup.
+/* THERE IS NO RATE LIMIT HERE, on purpose. Two were tried and BOTH were
+   measured as not enforcing: Cloudflare's rate limiting binding returned
+   success=true on 26 requests inside a 60-second window configured for 20, and
+   a per-isolate counter let 20 requests past a limit of 12 because Cloudflare
+   spread them across isolates that each keep their own tally. A WAF rule is not
+   an option either — those are configured per ZONE and a *.workers.dev
+   subdomain is not a zone on this account.
 
-   MEASURED, not assumed: the RATE_LIMITER binding IS bound, IS called with the
-   client IP, and returned success=true on every one of 26 requests inside a
-   60-second window configured for 20. It never threw, so it is wired correctly
-   and simply is not enforcing here — most likely because counters are per
-   Cloudflare location and eventually consistent. Left in place because it costs
-   nothing and may well bite under real distributed load; just not relied on.
+   Both were removed rather than left in place, because config that looks like
+   protection and is not is worse than none: the next person reads it and stops
+   worrying.
 
-   And NOT the WAF: rate limiting rules in the dashboard are configured per
-   ZONE, and a *.workers.dev subdomain is not a zone on this account, so there
-   is nothing there to attach a rule to. That option only appears if this ever
-   moves behind a custom domain.
+   And nothing is needed today, because GOOGLE ALREADY RATE LIMITS THIS. The
+   free tier caps requests per minute and per day, per model, and the key cannot
+   be billed — so the worst a script achieves is draining the day's allowance
+   and making the assistant go quiet. Annoying; free.
 
-   AND THIS ONE DOES NOT ENFORCE EITHER, also measured: 20 sequential requests
-   from one IP against PER_WINDOW=12 produced zero throttles, because Cloudflare
-   spread them across isolates and each keeps its own Map. It only bites when
-   requests happen to land on a warm isolate, which a burst mostly does not.
-
-   SO THERE IS CURRENTLY NO EFFECTIVE RATE LIMIT. Be honest about that rather
-   than reassured by two mechanisms that both look present. What actually bounds
-   the damage today is the MODEL: the Gemini key is on the free tier, so the
-   worst a script achieves is exhausting the daily quota and making the
-   assistant go quiet — irritating, and costing nothing.
-
-   That stops being true the moment billing is enabled on the model key. Before
-   that: a Durable Object gives a single authoritative counter (needs Workers
-   Paid), or KV gives a crude shared one within its consistency limits. */
-const WINDOW_MS = 60_000;
-const PER_WINDOW = 12;
-const seen = new Map();
+   Add a real limit (Durable Object counter, needs Workers Paid) on the day
+   billing is enabled on the model key. That is when a loop stops costing
+   nothing and starts costing money. */
 
 let corpusCache = null;
 let corpusFetchedAt = 0;
@@ -231,26 +219,6 @@ export default {
        is most likely to see twice in a row while getting nowhere. If you find
        yourself adding a fifth, check first whether the model could just say
        it. */
-    /* The real limit: Cloudflare's rate limiting binding, which works on a
-       workers.dev URL where a WAF rule cannot. Counters are per Cloudflare
-       location and eventually consistent, so the effective ceiling is a bit
-       looser than the number suggests — fine here, where the job is stopping a
-       script from draining the day's model quota, not exact accounting. */
-    const ip = request.headers.get('CF-Connecting-IP') || 'anon';
-    let overLimit = false;
-    if (env.RATE_LIMITER) {
-      try {
-        overLimit = !(await env.RATE_LIMITER.limit({ key: ip })).success;
-      } catch (e) {
-        console.error('rate limiter failed:', e && (e.message || e));
-      }
-    }
-    if (overLimit || throttled(ip)) {
-      return json({ answer: 'Steady on. That is a lot of questions in a very short space ' +
-                            'of time, even for me. Give it a minute — I am not going anywhere.' },
-                  200, cors);
-    }
-
     let question = '';
     let history = [];
     let page = '';
@@ -648,12 +616,78 @@ async function askSocial(question, history, env) {
    rather than a code change. Both branches take the same messages and
    return the same plain string; everything downstream is provider-blind. */
 function runModel(messages, env, temperature) {
-  const provider = env.PROVIDER || 'workers-ai';
-  const out =
-    provider === 'gemini' ? runGemini(messages, env, temperature) :
-    provider === 'workers-ai' ? runWorkersAi(messages, env, temperature) :
-    runOpenAiCompatible(messages, env, temperature);
+  const out = (env.PROVIDER || 'gemini') === 'gemini'
+    ? runGemini(messages, env, temperature)
+    : runOpenAiCompatible(messages, env, temperature);
   return out.then(tidy);
+}
+
+/* THE FALLBACK CHAIN, best model first.
+
+   The free tier meters PER MODEL PER DAY, so the way to get a usable daily
+   allowance is to use several. Measured from the AI Studio quota page: the full
+   Flash models give 20 requests a day each and the Lite ones 500, so this chain
+   is worth about 1,060 a day against 500 from any single model.
+
+   Ordered by quality, not by quota, deliberately: every question takes the best
+   model that still has requests left, and the big Lite allowances sit
+   underneath as the reserve. The first sixty questions of the day get full
+   Flash; the rest get Lite, which is the right way round.
+
+   NOT the 2.5 pair. They appear on the quota page with allowances, and they 404
+   with "no longer available to new users" on a key created today. The quota
+   page lists what the account is entitled to, not what the key may call. */
+const GEMINI_CHAIN = [
+  'gemini-3.6-flash',          //  20/day
+  'gemini-3.5-flash',          //  20/day
+  'gemini-3-flash-preview',    //  20/day
+  'gemini-3.5-flash-lite',     // 500/day
+  'gemini-3.1-flash-lite'      // 500/day
+];
+
+/* Which models are known to be out, and until when. Without this, every
+   question spends a doomed round trip on each exhausted model before reaching a
+   live one — by mid-afternoon that is three wasted calls per answer and several
+   seconds of latency. Best-effort: the isolate can vanish and take this with
+   it, but it costs nothing and usually holds. */
+const spent = new Map();
+
+function geminiChain(env) {
+  return (env.MODELS || GEMINI_CHAIN.join(','))
+    .split(',').map(s => s.trim()).filter(Boolean);
+}
+
+/* Walks the chain: best model with quota left, dropping to the next when one is
+   out (429) or gone (404). Anything else is NOT retried on another model — a
+   malformed request fails identically five times and just burns the allowance
+   proving it.
+
+   404 matters as much as 429 here. Google retired the entire 2.5 generation for
+   new keys mid-project, and without this a single retired name left in the
+   chain would take the whole assistant down rather than costing one model. */
+async function runGemini(messages, env, temperature) {
+  const chain = geminiChain(env);
+  let lastErr = null;
+
+  for (const model of chain) {
+    if ((spent.get(model) || 0) > Date.now()) continue;
+    try {
+      const out = await callGemini(model, messages, env, temperature);
+      /* Which model actually answered. The chain is invisible from outside —
+         a good answer and a fourth-choice answer look identical — so this is
+         the only way to see the step-down happening, or to notice that it
+         never does because the top model is quietly failing for some other
+         reason. Visible with `wrangler tail`. */
+      if (model !== chain[0]) console.log('answered by ' + model + ' (fell back)');
+      return out;
+    } catch (e) {
+      lastErr = e;
+      if (!e.quotaFor) throw e;
+      spent.set(model, Date.now() + e.quotaFor);
+      console.log('quota: ' + model + ' out for ' + Math.round(e.quotaFor / 60000) + 'm');
+    }
+  }
+  throw lastErr || new Error('every gemini model in the chain is out of quota');
 }
 
 /* Google Gemini. The only provider here that does NOT speak the OpenAI wire
@@ -663,9 +697,7 @@ function runModel(messages, env, temperature) {
      - text is wrapped in parts[], and settings live in generationConfig
    The key travels as a header rather than the documented ?key= query
    parameter, so it cannot end up in a URL that something decides to log. */
-async function runGemini(messages, env, temperature) {
-  const model = env.MODEL || 'gemini-2.5-flash';
-
+async function callGemini(model, messages, env, temperature) {
   const system = messages.filter(m => m.role === 'system').map(m => m.content).join('\n');
   const turns = messages.filter(m => m.role !== 'system');
 
@@ -701,7 +733,30 @@ async function runGemini(messages, env, temperature) {
       })
     });
 
-  if (!res.ok) throw new Error('model ' + res.status + ' ' + (await res.text()).slice(0, 300));
+  /* A 429 is the signal to move down the chain, and it comes in two flavours
+     the caller must tell apart. The per-DAY quota is gone until Google resets
+     it; the per-MINUTE one clears in seconds. Marking a minute-limited model as
+     dead for an hour would throw away most of the day's allowance, so the
+     quotaId in the body decides. The hour on a daily exhaustion is a re-probe
+     interval, not a belief about when the reset lands. */
+  if (res.status === 429) {
+    const body = await res.text();
+    const err = new Error('model 429 ' + model + ' ' + body.slice(0, 200));
+    err.quotaFor = /PerDay/i.test(body) ? 60 * 60 * 1000 : 60 * 1000;
+    throw err;
+  }
+
+  /* Retired, renamed or misspelled. Never coming back within this isolate, so
+     park it for the day and let the chain carry on. */
+  if (res.status === 404) {
+    const err = new Error('model 404 ' + model + ' ' + (await res.text()).slice(0, 160));
+    err.quotaFor = 24 * 60 * 60 * 1000;
+    throw err;
+  }
+
+  if (!res.ok) {
+    throw new Error('model ' + res.status + ' ' + model + ' ' + (await res.text()).slice(0, 300));
+  }
 
   const data = await res.json();
 
@@ -735,24 +790,17 @@ function tidy(text) {
   return t ? t[0].toUpperCase() + t.slice(1) : t;
 }
 
-/* Cloudflare's own models, via the `AI` binding declared in wrangler.toml.
-   No key, no fetch, no external host — the call never leaves the platform. */
-async function runWorkersAi(messages, env, temperature) {
-  /* The fallback must be a model that EXISTS — this default was the dead
-     llama-3.1-8b-instruct for a while, which would have resurfaced the
-     original deploy failure the moment MODEL went missing from the config. */
-  const out = await env.AI.run(env.MODEL || '@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
-    messages,
-    max_tokens: 400,
-    temperature
-  });
-  return String(out?.response || '').trim();
-}
+/* OpenAI, Groq and Anthropic all speak the SAME wire format, so one function
+   covers all three — only BASE_URL and the key differ. This is the documented
+   exit to Claude Haiku, kept for the day the free tier stops being enough:
+     BASE_URL = "https://api.anthropic.com/v1"
+     MODEL    = "claude-haiku-4-5-20251001"
+   Twenty lines to avoid writing an integration under pressure. Gemini is the
+   odd one out and has its own translation above.
 
-/* OpenAI and Groq speak the SAME wire format, so one function covers both —
-   only BASE_URL and the key differ (api.openai.com/v1 vs api.groq.com/openai/v1).
-   Google Gemini does NOT: it has its own request and response shape, so it
-   would need a third branch here rather than a different URL. */
+   (Cloudflare Workers AI used to be a third branch here. Removed with its
+   binding once Gemini took over — a provider nobody will go back to is just a
+   thing to keep working.) */
 async function runOpenAiCompatible(messages, env, temperature) {
   const base = env.BASE_URL || 'https://api.openai.com/v1';
   const res = await fetch(`${base}/chat/completions`, {
@@ -876,15 +924,6 @@ function search(q, corpus, limit) {
 }
 
 /* ---------- plumbing ------------------------------------------------------ */
-
-function throttled(ip) {
-  const now = Date.now();
-  const hits = (seen.get(ip) || []).filter(t => now - t < WINDOW_MS);
-  hits.push(now);
-  seen.set(ip, hits);
-  if (seen.size > 2000) seen.clear();       // this is a cache, not a ledger
-  return hits.length > PER_WINDOW;
-}
 
 function corsHeaders(origin) {
   return {
