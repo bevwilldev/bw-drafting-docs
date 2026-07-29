@@ -998,21 +998,38 @@
       }));
     }
 
+    /* The running transcript, so a follow-up can refer to what was just said.
+       It lives HERE and not on the server: the endpoint stays stateless, and
+       there are no sessions to store, expire or explain to anyone. The
+       conversation lasts as long as the page does — it survives closing and
+       reopening the panel, and goes when you navigate away. Trimmed to the
+       last few turns; the Worker caps it again on arrival, since anything the
+       browser sends is a suggestion rather than a fact. */
+    var turns = [];
+
+    function remember(role, text) {
+      turns.push({ role: role, text: text });
+      if (turns.length > 6) turns = turns.slice(-6);
+    }
+
     function ask(q) {
       say('you', el('p', { text: q }));
-      var thinking = say('bot', el('p', { class: 'ai-wait', text: 'Looking...' }));
+      var thinking = say('bot', el('p', { class: 'ai-wait', text: 'Thinking...' }));
+      var sent = turns.slice();          // this question's context, before it joins it
+      remember('user', q);
 
       assistantCorpus().then(function (corpus) {
         if (ASSISTANT.endpoint) {
           return fetch(ASSISTANT.endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: q })
+            body: JSON.stringify({ question: q, history: sent })
           })
             .then(function (r) { return r.ok ? r.json() : null; })
             .then(function (data) {
               thinking.remove();
               if (!data || !data.answer) { noAnswer(); return; }
+              remember('assistant', data.answer);
               say('bot', el('p', { text: data.answer }));
               if (data.sources && data.sources.length) say('bot', sourceList(data.sources));
             })
@@ -1043,9 +1060,14 @@
       launcher.classList.add('is-open');
       if (!log.childNodes.length) {
         say('bot', el('p', {
-          html: 'Ask me anything about the BW BricsCAD tools &mdash; what a command ' +
-                'does, what it prompts for, or how to get set up. I answer from this ' +
-                'site, so I know the tools and nothing about your drawings.'
+          html: 'Gday. Ask me anything about the BW BricsCAD tools &mdash; what a ' +
+                'command does, what it prompts for, or why something has stopped ' +
+                'working. Follow-ups are fine, I keep up.'
+        }));
+        say('bot', el('p', {
+          class: 'ai-fineprint',
+          html: 'I only know what is on this site, so your drawings, jobs and files ' +
+                'are a mystery to me.'
         }));
       }
       setTimeout(function () { input.focus(); }, 40);

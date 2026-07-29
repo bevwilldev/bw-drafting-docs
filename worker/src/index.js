@@ -55,6 +55,13 @@ const DEFAULT_SECTIONS = 40;
 
 const MAX_QUESTION = 400;      // characters; a question, not a pasted document
 
+/* How many earlier turns travel with a question. This is what makes it a
+   CONVERSATION rather than a search box that talks: without it, "what about
+   arcs?" is unanswerable and the thing feels like a bot no matter how warmly
+   it is worded. Six is roughly three exchanges — enough to follow a train of
+   thought, short enough that an old topic does not haunt the retrieval. */
+const MAX_HISTORY = 6;
+
 /* Best-effort per-isolate throttle. This is NOT the real rate limit — isolates
    come and go, so it only blunts a hot loop. Set a proper per-IP rule in the
    Cloudflare dashboard (Security → WAF → Rate limiting); it is free and it is
@@ -65,6 +72,40 @@ const seen = new Map();
 
 let corpusCache = null;
 let dfCache = null;
+
+/* CONVERSATION, not documentation.
+
+   "hi" is not a question about ALAB, and answering it with the not-in-docs
+   refusal reads like a vending machine — which is exactly the first thing
+   anyone does when they meet a chat box. Same for "thanks", and same for
+   "what can you do", which the bot could not answer at all because nothing
+   ever told it what it was.
+
+   These turns skip retrieval entirely: no corpus, no sources, no neurons
+   spent shipping 40 documentation sections so it can say good morning. They
+   still go to the MODEL rather than a canned string, because a fixed reply
+   is charming once and obviously scripted by the third time. */
+const GREETING = new RegExp(
+  '^\\s*(?:(?:hi|hey+|hello|yo|hiya|howdy|sup|g\'?day|greetings|' +
+  'good\\s+(?:morning|afternoon|evening|day)|mornin[g\']?|' +
+  'thanks?|thank\\s+you|ta|cheers|nice\\s+one|' +
+  'bye|goodbye|see\\s+ya|later|cya)[\\s,!.]*)+' +
+  '(?:there|mate|mates|team|guys|folks|all|everyone)?[\\s!?.]*$', 'i');
+
+const META = new RegExp(
+  '^\\s*(?:' +
+  'who\\s+(?:are|r)\\s+(?:you|u)|' +
+  'what\\s+(?:are|r)\\s+(?:you|u)|' +
+  'what\\s+(?:can|do)\\s+(?:you|u)\\s+do|' +
+  'what\\s+do\\s+(?:you|u)\\s+know|' +
+  'how\\s+(?:are|r)\\s+(?:you|u)|' +
+  'are\\s+(?:you|u)\\s+(?:a\\s+)?(?:bot|ai|robot|human|real|chatgpt)|' +
+  'help|what\\s+is\\s+this' +
+  ')\\b[\\s\\S]{0,25}$', 'i');
+
+function looksSocial(q) {
+  return GREETING.test(q) || META.test(q);
+}
 
 const STOP = new Set(('a an the and or of to in on for from with by is are was do does did how ' +
   'what when where which that this it its you your i my we our can could should would if then ' +
@@ -88,13 +129,28 @@ export default {
     }
 
     let question = '';
+    let history = [];
     try {
       const body = await request.json();
       question = String(body.question || '').trim();
+      history = cleanHistory(body.history);
     } catch { /* falls through to the empty check */ }
 
     if (!question) return json({ error: 'No question' }, 400, cors);
     if (question.length > MAX_QUESTION) question = question.slice(0, MAX_QUESTION);
+
+    /* Small talk never touches the documentation: no corpus fetch, no
+       retrieval, no sources. Answering "hi" by shipping 40 sections of
+       reference material was both wasteful and, judging by the reply it
+       produced, not much of a hello. */
+    if (looksSocial(question)) {
+      try {
+        return json({ answer: await askSocial(question, history, env), sources: [] }, 200, cors);
+      } catch (e) {
+        console.error('askSocial failed:', e && (e.stack || e.message || e));
+        return json({ answer: 'Hello. Ask me anything about the BW BricsCAD Tools.' }, 200, cors);
+      }
+    }
 
     let corpus;
     try {
@@ -104,12 +160,19 @@ export default {
                   200, cors);
     }
 
+    /* Retrieval reads the PREVIOUS question too, because a follow-up is
+       usually unsearchable on its own — "what about arcs?" has nothing in it
+       to match. Only the previous user turn: any more and old topics start
+       dragging the results away from what is being asked now. */
+    const prev = [...history].reverse().find(m => m.role === 'user');
+    const query = prev ? prev.text + ' ' + question : question;
+
     const limit = Number(env.SECTIONS ?? DEFAULT_SECTIONS);
-    const picked = limit > 0 ? search(question, corpus, limit) : corpus;
+    const picked = limit > 0 ? search(query, corpus, limit) : corpus;
     if (!picked.length) return json({ answer: NOT_FOUND, sources: [] }, 200, cors);
 
     try {
-      const raw = await askModel(question, picked, env);
+      const raw = await askModel(question, picked, history, env);
 
       /* The model is told to say exactly this when the docs do not cover it.
          Offering sources for a non-answer would imply they contain something.
@@ -150,7 +213,20 @@ const NOT_FOUND =
 
 /* ---------- the model ---------------------------------------------------- */
 
-async function askModel(question, sections, env) {
+/* Turns the browser's transcript into something safe to forward: user/assistant
+   only, trimmed, capped both in number and in size. It arrives from the client
+   and is therefore untrusted — a long enough "history" would otherwise be a
+   free way to push whatever you liked into the prompt. */
+function cleanHistory(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter(m => m && (m.role === 'user' || m.role === 'assistant') && m.text)
+    .map(m => ({ role: m.role, text: String(m.text).slice(0, 600).trim() }))
+    .filter(m => m.text)
+    .slice(-MAX_HISTORY);
+}
+
+async function askModel(question, sections, history, env) {
   const context = sections
     .map((d, i) => `[${i + 1}] ${d.h || d.t} (${d.u})\n${d.x}`)
     .join('\n\n');
@@ -247,6 +323,26 @@ async function askModel(question, sections, env) {
     'SOURCES: 4, 12',
     'Only list sections you actually drew on.',
     '',
+    '=== IT IS A CONVERSATION ===',
+    '',
+    'Earlier turns come with the question. Use them. "What about arcs?" or "that did not',
+    'work" refers to what was just said — pick it up the way a person would, without',
+    'making them repeat themselves and without recapping what they already know.',
+    '',
+    'NOT_IN_DOCS is only for a genuine question about the tools that the documentation',
+    'does not answer. It is NOT for chat. If someone says thanks, says it worked, tells',
+    'you it did not, or asks you to put it more simply, just respond like a person —',
+    'briefly, and without the refusal.',
+    '',
+    'But a follow-up that the documentation does NOT cover still gets NOT_IN_DOCS. If they',
+    'ask whether it can do something and the sections say nothing about it, do not repeat',
+    'your previous answer as though it addressed the question — that reads as agreement',
+    'and sends them off believing the tool does something it may not. Saying "the docs do',
+    'not say" is always better than an answer that quietly misses the point.',
+    '',
+    'If a question is ambiguous, ask the one short question that would clear it up',
+    'instead of guessing at length.',
+    '',
     '=== CHECK BEFORE YOU SEND ===',
     '',
     'Last, because these are the ones that keep slipping through:',
@@ -257,31 +353,117 @@ async function askModel(question, sections, env) {
     '   you are patching a gap from memory, the answer is NOT_IN_DOCS instead.'
   ].join('\n');
 
-  const messages = [
-    { role: 'system', content: system },
-    { role: 'user', content: `Documentation:\n\n${context}\n\nQuestion: ${question}` }
-  ];
+  /* The transcript sits BETWEEN the system prompt and the current turn, so a
+     follow-up like "what about arcs?" has something to refer back to. The
+     documentation rides with the latest question rather than the history,
+     because the sections retrieved are the ones for THIS question — pinning
+     an old answer's sections into the conversation would have it answering
+     from whatever was relevant two questions ago. */
+  const messages = [{ role: 'system', content: system }];
+  for (const m of history) messages.push({ role: m.role, content: m.text });
+  messages.push({
+    role: 'user',
+    content: `Documentation:\n\n${context}\n\nQuestion: ${question}`
+  });
 
-  /* One switch, so changing provider is a wrangler.toml edit and a redeploy
-     rather than a code change. Both branches take the same messages and
-     return the same plain string; everything downstream is provider-blind. */
+  /* 0.2 was right when the brief was "documentation, not creative writing".
+     A voice needs a little room to vary its phrasing, and the facts are
+     pinned by the supplied sections rather than by the sampling temperature.
+     0.5 is the ceiling that felt safe — push it higher and the flourishes
+     start reaching for detail the documentation never gave it. */
+  return runModel(messages, env, 0.5);
+}
+
+/* Greetings, thanks, and "what are you". No documentation goes in, so nothing
+   can be got wrong — which means the temperature can go up and the thing can
+   actually be a bit of a character for once. */
+async function askSocial(question, history, env) {
+  const system = [
+    'You are the BW CAD Hub assistant — the help desk for the BW BricsCAD Tools,',
+    'a suite of drafting plugins used at Beveridge Williams.',
+    '',
+    'Someone has said hello, thanked you, or asked what you are. This is small talk,',
+    'NOT a documentation question. Answer it like a person. Do not refuse it, do not',
+    'mention NOT_IN_DOCS, and do not add a SOURCES line.',
+    '',
+    'You are the senior drafter everyone actually likes asking: dry, warm, quietly',
+    'amused by how many ways there are to stuff up a drawing. Australian office',
+    'register — plain, no corporate padding, no exclamation marks, no "Great question!".',
+    '',
+    'ONE or TWO sentences. Greet them back with a bit of character, then point them at',
+    'what you are for: questions about the tools, the commands, the ribbons, installing',
+    'and troubleshooting. Vary how you say it — you say hello all day and nobody wants',
+    'the same sentence twice.',
+    '',
+    'If they ask what you are, be straight about the limits and unbothered by them: you',
+    'know the published documentation for these tools, you cannot see their drawing,',
+    'their job or their files, and you would rather say "not in the docs" than invent a',
+    'command that wastes their afternoon.',
+    '',
+    'Never say "I can try to" or "I might be able to" — you either know it or you do not,',
+    'and hedging in a greeting is how software sounds when nobody has thought about it.',
+    'Never announce yourself like a switchboard. Show, do not introduce.',
+    '',
+    'The difference:',
+    '',
+    'FLAT — "You have reached the BW CAD Hub. If you are looking for help with a specific',
+    'command or tool, I can try to assist you."',
+    'RIGHT — "Gday. What are you stuck on — a command, the ribbons, or getting the thing',
+    'installed?"',
+    '',
+    'FLAT — "I am here to help with the BW BricsCAD Tools, so if you have a question about',
+    'how to use a particular tool, I can try to point you in the right direction."',
+    'RIGHT — "I know the documentation for these tools front to back: what each command',
+    'does, what it will ask you for, how to get installed, and what to try when a ribbon',
+    'goes missing. I cannot see your drawing though, so anything job-specific is beyond me."',
+    '',
+    'FLAT — "No worries, happy to help. If you have any more questions about the tools,',
+    'feel free to ask."',
+    'RIGHT — "No worries."',
+    '',
+    'That last one matters: when someone says thanks, say it back and stop. Do not offer',
+    'further assistance they did not ask for.',
+    '',
+    'Casual in REGISTER, not sloppy in grammar. Complete sentences, full stops, and a',
+    'question mark on a question. "gday, what are you after, a command or something else"',
+    'is three clauses bolted together; "Gday. What are you after — a command, or something',
+    'else?" is the same warmth and actually reads.',
+    '',
+    'The RIGHT lines above are examples of TONE, not a script. Do not repeat them word for',
+    'word — you greet people all day and saying the identical sentence every time is the',
+    'most robotic thing you could possibly do. Same warmth, different words, every time.',
+    '',
+    'Never invent a command name, even in passing, even as a joke.'
+  ].join('\n');
+
+  const messages = [{ role: 'system', content: system }];
+  for (const m of history) messages.push({ role: m.role, content: m.text });
+  messages.push({ role: 'user', content: question });
+
+  /* 0.85 was loose enough to produce comma-spliced run-ons. 0.7 keeps the
+     variety between greetings without losing the full stops. */
+  return runModel(messages, env, 0.7);
+}
+
+/* One switch, so changing provider is a wrangler.toml edit and a redeploy
+   rather than a code change. Both branches take the same messages and
+   return the same plain string; everything downstream is provider-blind. */
+function runModel(messages, env, temperature) {
   return (env.PROVIDER || 'workers-ai') === 'workers-ai'
-    ? runWorkersAi(messages, env)
-    : runOpenAiCompatible(messages, env);
+    ? runWorkersAi(messages, env, temperature)
+    : runOpenAiCompatible(messages, env, temperature);
 }
 
 /* Cloudflare's own models, via the `AI` binding declared in wrangler.toml.
    No key, no fetch, no external host — the call never leaves the platform. */
-async function runWorkersAi(messages, env) {
-  const out = await env.AI.run(env.MODEL || '@cf/meta/llama-3.1-8b-instruct', {
+async function runWorkersAi(messages, env, temperature) {
+  /* The fallback must be a model that EXISTS — this default was the dead
+     llama-3.1-8b-instruct for a while, which would have resurfaced the
+     original deploy failure the moment MODEL went missing from the config. */
+  const out = await env.AI.run(env.MODEL || '@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
     messages,
     max_tokens: 400,
-    /* 0.2 was right when the brief was "documentation, not creative writing".
-       A voice needs a little room to vary its phrasing, and the facts are
-       pinned by the supplied sections rather than by the sampling temperature.
-       0.5 is the ceiling that felt safe — push it higher and the flourishes
-       start reaching for detail the documentation never gave it. */
-    temperature: 0.5
+    temperature
   });
   return String(out?.response || '').trim();
 }
@@ -290,7 +472,7 @@ async function runWorkersAi(messages, env) {
    only BASE_URL and the key differ (api.openai.com/v1 vs api.groq.com/openai/v1).
    Google Gemini does NOT: it has its own request and response shape, so it
    would need a third branch here rather than a different URL. */
-async function runOpenAiCompatible(messages, env) {
+async function runOpenAiCompatible(messages, env, temperature) {
   const base = env.BASE_URL || 'https://api.openai.com/v1';
   const res = await fetch(`${base}/chat/completions`, {
     method: 'POST',
@@ -301,7 +483,7 @@ async function runOpenAiCompatible(messages, env) {
     body: JSON.stringify({
       model: env.MODEL || 'gpt-4o-mini',
       max_tokens: 400,
-      temperature: 0.2,
+      temperature,
       messages
     })
   });

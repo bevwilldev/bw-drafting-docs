@@ -1611,6 +1611,11 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 .ai-bot { max-width: 100%; }
 .ai-wait { color: var(--ink-faint); }
 
+/* The "I cannot see your drawings" line. Present on the way in, so nobody
+   discovers the limit by being disappointed by it — but quiet, because it is
+   a caveat and not the greeting. */
+.ai-fineprint { font-size: .8rem; color: var(--ink-faint); }
+
 .ai-quote {
   border-left: 3px solid var(--brand);
   padding: 6px 0 6px 12px; color: var(--ink-muted);
