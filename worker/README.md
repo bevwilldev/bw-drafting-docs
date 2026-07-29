@@ -158,8 +158,16 @@ third branch in `askModel()` rather than just a different `BASE_URL`.
 
 ## The voice, and how little of it is rules
 
-The register is **sarcastic, dry, faintly amused** — aimed at the software and
-never at the person asking, and dialled down when someone is clearly stuck.
+The register is **the office clown who happens to know the software** — playful
+and daft, aimed at BricsCAD and at itself, never at the person for not knowing.
+Two guardrails make that safe rather than annoying:
+
+- **It reads the room.** Told "nothing works and im over it" it drops the bit
+  entirely and just helps. A clown who cannot tell when to stop is only tiring.
+- **The comedy stops at the facts.** Be ridiculous about the situation; never
+  exaggerate what a command does. If a joke would have to be TRUE to work, it is
+  not a joke, it is a claim. That line is in the prompt verbatim, because an
+  earlier version invented a limitation to round one off.
 
 The system prompt is deliberately **short** (~650 tokens). An earlier version ran
 to ~1,800: worked examples, an anti-recitation rule, a punctuation lecture and a
