@@ -859,7 +859,7 @@
      so it never round-trips. */
 
   var ASSISTANT = {
-    endpoint: null,          // e.g. 'https://…/api/ask'
+    endpoint: 'https://bw-cad-hub-assistant.aidenantonino2001.workers.dev',
     corpus: null
   };
 

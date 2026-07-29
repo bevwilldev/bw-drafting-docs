@@ -126,6 +126,10 @@ export default {
       const { answer, sources } = splitSources(raw, picked);
       return json({ answer: answer || NOT_FOUND, sources }, 200, cors);
     } catch (e) {
+      /* The reader gets a calm sentence; the operator needs the actual reason.
+         Without this the first bad model name looked identical to an outage.
+         Visible with `wrangler tail`. */
+      console.error('askModel failed:', e && (e.stack || e.message || e));
       return json({ answer: 'The assistant is unavailable at the moment. ' +
                             'The documentation is all still here, and the support form works.' },
                   200, cors);

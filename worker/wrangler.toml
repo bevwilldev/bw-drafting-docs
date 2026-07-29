@@ -20,9 +20,15 @@ binding = "AI"
 # OpenAI and Groq, which share a wire format, via BASE_URL + an API_KEY secret.
 PROVIDER = "workers-ai"
 
-# Which model. Check the current Workers AI catalogue rather than trusting
-# this default — the list changes and names carry version numbers.
-MODEL = "@cf/meta/llama-3.1-8b-instruct"
+# Which model. Verify against `wrangler ai models` rather than trusting a
+# name from memory — the catalogue changes and near-misses exist (there is an
+# @cf/meta/llama-3.1-8b-instruct-fp8 but no plain -instruct, which is exactly
+# the mistake that made the first deploy fail).
+#
+# 70B rather than the 8B first tried: this answers from supplied documentation,
+# where following "only use these sections, never invent a command" matters
+# more than raw speed, and -fast keeps it responsive.
+MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
 
 # Documentation sections sent per question. 0 = the whole corpus, which is
 # better but needs a big context window; see the long note in src/index.js
