@@ -1551,6 +1551,106 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   .footer .copyright { margin-left: 0; }
 }
 
+/* ---------- Assistant ----------------------------------------------------
+   A launcher in the corner and a panel above it. Deliberately quiet: it sits
+   below the drawer and the lightbox in z-order, and it never covers the page
+   content on a phone until it is opened. */
+
+.ai-launch {
+  position: fixed; right: 20px; bottom: 20px; z-index: 90;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 16px; border: 0; border-radius: 999px;
+  background: var(--brand-fill); color: #fff; cursor: pointer;
+  font: inherit; font-size: .9rem; font-weight: 600;
+  box-shadow: 0 10px 28px -10px rgba(0, 0, 0, .55);
+  transition: background .2s var(--ease), transform .15s var(--ease-out);
+}
+.ai-launch:hover { background: var(--brand-fill-hover); }
+.ai-launch:active { transform: scale(.97); }
+.ai-launch svg { width: 17px; height: 17px; }
+.ai-launch.is-open svg { opacity: .75; }
+
+.ai-panel {
+  position: fixed; right: 20px; bottom: 78px; z-index: 90;
+  width: min(390px, calc(100vw - 40px));
+  max-height: min(560px, calc(100vh - 120px));
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--bg-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: calc(var(--radius) * 2.2);
+  box-shadow: 0 26px 70px -22px rgba(0, 0, 0, .6);
+  animation: ai-in .18s var(--ease-out);
+}
+.ai-panel[hidden] { display: none; }
+@keyframes ai-in { from { opacity: 0; transform: translateY(8px); } }
+
+.ai-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+}
+.ai-title { font-weight: 650; font-size: .95rem; }
+.ai-sub { font-size: .76rem; color: var(--ink-faint); margin-top: 2px; }
+.ai-close {
+  flex: none; width: 26px; height: 26px; padding: 0; line-height: 1;
+  background: none; border: 0; border-radius: var(--radius);
+  color: var(--ink-faint); font-size: 1.3rem; cursor: pointer;
+}
+.ai-close:hover { color: var(--ink); background: var(--bg-subtle); }
+
+.ai-log {
+  flex: 1 1 auto; overflow-y: auto; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  font-size: .88rem; line-height: 1.55;
+}
+.ai-msg p { margin: 0; }
+.ai-you {
+  align-self: flex-end; max-width: 85%;
+  background: var(--brand-wash); border: 1px solid var(--line);
+  border-radius: calc(var(--radius) * 1.6); padding: 8px 12px;
+}
+.ai-bot { max-width: 100%; }
+.ai-wait { color: var(--ink-faint); }
+
+.ai-quote {
+  border-left: 3px solid var(--brand);
+  padding: 6px 0 6px 12px; color: var(--ink-muted);
+}
+
+.ai-sources { display: flex; flex-direction: column; gap: 3px; margin-top: 2px; }
+.ai-sources-t {
+  font-size: .68rem; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--ink-faint); margin-bottom: 2px;
+}
+.ai-sources a { font-size: .84rem; }
+
+.ai-ask {
+  display: flex; gap: 8px; padding: 12px 14px;
+  border-top: 1px solid var(--line); background: var(--bg);
+}
+.ai-input {
+  flex: 1 1 auto; min-width: 0; padding: 9px 12px;
+  background: var(--bg-raised); color: var(--ink);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+  font: inherit; font-size: .88rem;
+}
+.ai-input:focus { outline: 2px solid var(--brand); outline-offset: -1px; }
+.ai-send {
+  flex: none; padding: 9px 15px; border: 0; border-radius: var(--radius);
+  background: var(--brand-fill); color: #fff; cursor: pointer;
+  font: inherit; font-size: .86rem; font-weight: 600;
+}
+.ai-send:hover { background: var(--brand-fill-hover); }
+
+/* On a phone the panel takes the width and the launcher shrinks to its icon,
+   so neither fights the page for room. */
+@media (max-width: 560px) {
+  .ai-launch { right: 14px; bottom: 14px; padding: 11px; }
+  .ai-launch span { display: none; }
+  .ai-panel { right: 14px; left: 14px; bottom: 68px; width: auto; }
+}
+
+@media print { .ai-launch, .ai-panel { display: none !important; } }
+
 /* ---------- Print -------------------------------------------------------- */
 @media print {
   .header, .sidenav, .toc, .footer, .page-nav, .skip-link { display: none !important; }

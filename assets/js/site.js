@@ -842,6 +842,235 @@
     update();
   }
 
+
+  /* ---------- Assistant -------------------------------------------------
+     Answers questions about the tools from THIS documentation and nothing
+     else. The corpus (assets/data/corpus.json, built by scripts/gen_corpus.py)
+     is every page split by heading, so an answer links to the exact section it
+     came from rather than dumping you at the top of a long page.
+
+     ENDPOINT is where a question is sent. Leave it null and the widget runs in
+     STUB mode: it searches the corpus in the browser and shows the passages it
+     would have handed a model. That is deliberately useful on its own — it
+     proves the corpus and the interface before any account, key or vendor
+     exists, and going live is this one line.
+
+     The QUESTION is all that is ever sent. The corpus lives with the endpoint,
+     so it never round-trips. */
+
+  var ASSISTANT = {
+    endpoint: null,          // e.g. 'https://…/api/ask'
+    corpus: null
+  };
+
+  function assistantCorpus() {
+    if (ASSISTANT.corpus) return Promise.resolve(ASSISTANT.corpus);
+    return fetch(url('/assets/data/corpus.json'))
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (d) { ASSISTANT.corpus = d; return d; })
+      .catch(function () { ASSISTANT.corpus = []; return []; });
+  }
+
+  /* Which sections best match a question.
+     Not a plain word count: "how do I label lot areas" is mostly words that
+     appear on every page, and counting them makes short sections win on noise.
+     So common words are dropped, the rest are weighted by how RARE they are
+     across the corpus (a section naming ALAB beats one that says "command"
+     forty times), and long sections are damped so a big page cannot win on
+     volume alone. */
+
+  var AI_STOP = ('a an the and or of to in on for from with by is are was do does did ' +
+    'how what when where which that this it its you your i my we our can could should ' +
+    'would if then than there here as at be been being have has had not no yes use ' +
+    'used using get got make made').split(' ');
+
+  function assistantIndex(corpus) {
+    if (corpus._df) return corpus._df;
+    var df = Object.create(null);
+    for (var i = 0; i < corpus.length; i++) {
+      var seen = Object.create(null);
+      var words = (corpus[i].x + ' ' + (corpus[i].h || '')).toLowerCase().match(/[a-z0-9]+/g) || [];
+      for (var w = 0; w < words.length; w++) {
+        if (seen[words[w]]) continue;
+        seen[words[w]] = 1;
+        df[words[w]] = (df[words[w]] || 0) + 1;
+      }
+    }
+    try { Object.defineProperty(corpus, '_df', { value: df }); } catch (e) { corpus._df = df; }
+    return df;
+  }
+
+  function assistantSearch(q, corpus, limit) {
+    if (!corpus || !corpus.length) return [];
+    var df = assistantIndex(corpus);
+    var n = corpus.length;
+
+    var raw = q.toLowerCase().match(/[a-z0-9]+/g) || [];
+    var words = [];
+    for (var i = 0; i < raw.length; i++) {
+      if (raw[i].length > 1 && AI_STOP.indexOf(raw[i]) < 0) words.push(raw[i]);
+    }
+    if (!words.length) return [];
+
+    var scored = [];
+    for (var d = 0; d < corpus.length; d++) {
+      var doc = corpus[d];
+      var hay = doc.x.toLowerCase(), head = (doc.h || '').toLowerCase();
+      var score = 0;
+      for (var k = 0; k < words.length; k++) {
+        var word = words[k];
+        var idf = Math.log((n + 1) / (1 + (df[word] || 0)));
+        if (idf <= 0.5) continue;          // in most sections: no signal
+        if (head.indexOf(word) >= 0) score += 8 * idf;
+        var at = 0, hits = 0;
+        while ((at = hay.indexOf(word, at)) >= 0 && hits < 4) { hits++; at += word.length; }
+        score += hits * idf;
+      }
+      if (score > 0) {
+        scored.push({ d: doc, s: score / Math.sqrt(Math.max(doc.x.length, 600) / 600) });
+      }
+    }
+    scored.sort(function (a, b) { return b.s - a.s; });
+    return scored.slice(0, limit || 4).map(function (x) { return x.d; });
+  }
+
+  function initAssistant() {
+    if (document.querySelector('[data-assistant]')) return;
+
+    var launcher = el('button', {
+      class: 'ai-launch', type: 'button', 'aria-expanded': 'false',
+      'aria-label': 'Ask about the tools',
+      html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.3-.6L3 21l1.9-4.7A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>' +
+            '</svg><span>Ask</span>'
+    });
+
+    var log = el('div', { class: 'ai-log' });
+    var input = el('input', {
+      class: 'ai-input', type: 'text', autocomplete: 'off',
+      placeholder: 'How do I label lot areas?', 'aria-label': 'Your question'
+    });
+    var send = el('button', { class: 'ai-send', type: 'button', text: 'Ask' });
+    var close = el('button', {
+      class: 'ai-close', type: 'button', 'aria-label': 'Close', html: '&times;'
+    });
+    var form = el('form', { class: 'ai-ask' }, [input, send]);
+
+    var panel = el('div', { class: 'ai-panel', 'data-assistant': '', hidden: 'hidden' }, [
+      el('div', { class: 'ai-head' }, [
+        el('div', {}, [
+          el('div', { class: 'ai-title', text: 'Ask about the tools' }),
+          el('div', { class: 'ai-sub', text: 'Answers from this documentation only' })
+        ]),
+        close
+      ]),
+      log,
+      form
+    ]);
+
+    document.body.appendChild(launcher);
+    document.body.appendChild(panel);
+
+    function say(who, node) {
+      var row = el('div', { class: 'ai-msg ai-' + who });
+      row.appendChild(node);
+      log.appendChild(row);
+      log.scrollTop = log.scrollHeight;
+      return row;
+    }
+
+    function sourceList(hits) {
+      var wrap = el('div', { class: 'ai-sources' });
+      wrap.appendChild(el('div', { class: 'ai-sources-t', text: 'From the documentation' }));
+      hits.forEach(function (h) {
+        wrap.appendChild(el('a', { href: url(h.u), text: h.h || h.t }));
+      });
+      return wrap;
+    }
+
+    function noAnswer() {
+      say('bot', el('p', {
+        html: 'I can only answer from the tool documentation, and I cannot find that ' +
+              'in it. If it is about a specific job or drawing I will not be able to ' +
+              'help &mdash; for anything else, <a href="' + url('/support/') + '">send ' +
+              'it through the support form</a>, or hit Report a Bug on any ribbon tab.'
+      }));
+    }
+
+    function ask(q) {
+      say('you', el('p', { text: q }));
+      var thinking = say('bot', el('p', { class: 'ai-wait', text: 'Looking...' }));
+
+      assistantCorpus().then(function (corpus) {
+        if (ASSISTANT.endpoint) {
+          return fetch(ASSISTANT.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: q })
+          })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (data) {
+              thinking.remove();
+              if (!data || !data.answer) { noAnswer(); return; }
+              say('bot', el('p', { text: data.answer }));
+              if (data.sources && data.sources.length) say('bot', sourceList(data.sources));
+            })
+            .catch(function () { thinking.remove(); noAnswer(); });
+        }
+
+        /* Stub: show what a model would have been handed. */
+        thinking.remove();
+        var hits = assistantSearch(q, corpus, 4);
+        if (!hits.length) { noAnswer(); return; }
+
+        say('bot', el('p', {
+          html: 'Not connected to a model yet, so here is what it would answer from ' +
+                '&mdash; the first one usually has it:'
+        }));
+        say('bot', el('div', { class: 'ai-quote' }, [
+          el('p', {
+            text: hits[0].x.slice(0, 320) + (hits[0].x.length > 320 ? '...' : '')
+          })
+        ]));
+        say('bot', sourceList(hits));
+      });
+    }
+
+    function open() {
+      panel.hidden = false;
+      launcher.setAttribute('aria-expanded', 'true');
+      launcher.classList.add('is-open');
+      if (!log.childNodes.length) {
+        say('bot', el('p', {
+          html: 'Ask me anything about the BW BricsCAD tools &mdash; what a command ' +
+                'does, what it prompts for, or how to get set up. I answer from this ' +
+                'site, so I know the tools and nothing about your drawings.'
+        }));
+      }
+      setTimeout(function () { input.focus(); }, 40);
+    }
+
+    function shut() {
+      panel.hidden = true;
+      launcher.setAttribute('aria-expanded', 'false');
+      launcher.classList.remove('is-open');
+    }
+
+    launcher.addEventListener('click', function () { if (panel.hidden) open(); else shut(); });
+    close.addEventListener('click', shut);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hidden) shut();
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = input.value.trim();
+      if (!q) return;
+      input.value = '';
+      ask(q);
+    });
+  }
+
   /* ---------- Boot ------------------------------------------------------- */
 
   function boot() {
@@ -857,6 +1086,7 @@
     initFilter();
     initCommandSearch();
     initScrollCue();
+    initAssistant();
   }
 
   if (document.readyState === 'loading') {
