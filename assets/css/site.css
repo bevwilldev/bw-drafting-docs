@@ -1616,6 +1616,11 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
    a caveat and not the greeting. */
 .ai-fineprint { font-size: .8rem; color: var(--ink-faint); }
 
+/* Multi-paragraph answers. .ai-msg p has margin:0 so bubbles stay tight, which
+   is right for one paragraph and wrong for three — this puts the gap back
+   between them without loosening single-line replies. */
+.ai-answer { display: flex; flex-direction: column; gap: .55em; }
+
 .ai-quote {
   border-left: 3px solid var(--brand);
   padding: 6px 0 6px 12px; color: var(--ink-muted);

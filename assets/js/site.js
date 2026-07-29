@@ -980,6 +980,26 @@
       return row;
     }
 
+    /* An answer is no longer one sentence. Since the assistant was given room
+       to write properly it replies in paragraphs, and numbers its steps —
+       and textContent in a single <p> collapses every newline to a space, so
+       a tidy three-step answer arrived as one unreadable run of words.
+
+       Blank lines separate paragraphs; single newlines (the steps) become
+       real breaks inside one. Built with textContent + <br> rather than
+       innerHTML, because this text comes from a model and must never be able
+       to inject markup into the page. */
+    function answerNodes(text) {
+      return String(text).split(/\n\s*\n/).map(function (para) {
+        var p = el('p');
+        para.split('\n').forEach(function (line, i) {
+          if (i) p.appendChild(el('br'));
+          p.appendChild(document.createTextNode(line.trim()));
+        });
+        return p;
+      }).filter(function (p) { return p.textContent.trim(); });
+    }
+
     function sourceList(hits) {
       var wrap = el('div', { class: 'ai-sources' });
       wrap.appendChild(el('div', { class: 'ai-sources-t', text: 'From the documentation' }));
@@ -989,12 +1009,16 @@
       return wrap;
     }
 
+    /* This is the BROWSER giving up — the request failed or came back empty.
+       It used to say "I can only answer from the documentation", which was the
+       assistant's own refusal wording and is now doubly wrong: the assistant
+       phrases its own refusals, and it happily answers general questions. A
+       network failure should sound like a network failure. */
     function noAnswer() {
       say('bot', el('p', {
-        html: 'I can only answer from the tool documentation, and I cannot find that ' +
-              'in it. If it is about a specific job or drawing I will not be able to ' +
-              'help &mdash; for anything else, <a href="' + url('/support/') + '">send ' +
-              'it through the support form</a>, or hit Report a Bug on any ribbon tab.'
+        html: 'I could not reach the assistant just then. Try again in a moment &mdash; ' +
+              'and if it keeps sulking, the documentation is all still here, or ' +
+              '<a href="' + url('/support/') + '">send it through the support form</a>.'
       }));
     }
 
@@ -1030,7 +1054,8 @@
               thinking.remove();
               if (!data || !data.answer) { noAnswer(); return; }
               remember('assistant', data.answer);
-              say('bot', el('p', { text: data.answer }));
+              var parts = answerNodes(data.answer);
+              say('bot', el('div', { class: 'ai-answer' }, parts));
               if (data.sources && data.sources.length) say('bot', sourceList(data.sources));
             })
             .catch(function () { thinking.remove(); noAnswer(); });
