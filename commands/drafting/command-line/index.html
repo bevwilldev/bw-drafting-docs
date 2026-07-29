@@ -88,19 +88,37 @@
 <h2 id="dimrenum"><code class="cmd">DIMRENUM</code></h2>
     <p>Renumbers dimension labels in sequence, closing gaps left by deleted ones.</p>
     <h4>How to use it</h4>
-    <p>Pre-select, or <code>Select dimension labels to renumber:</code> → <code>Starting number &lt;1&gt;:</code>.</p>
-    <div class="note"><strong>Note</strong> — It keeps the labels in their existing order and just closes the gaps.</div>
+    <p>Pre-select, or <code>Select dimension labels to renumber:</code> → <code>Starting number &lt;1&gt;:</code>.
+        The select prompt also offers <code>Sequence</code>, which decides what order the numbers go in.</p>
+    <h4>Sequence</h4>
+    <ul>
+        <li><strong>Existing</strong> — keeps the order already on the labels and just closes the gaps left by
+            deleted ones. This is what the command has always done.</li>
+        <li><strong>Reading</strong> — renumbers top-down and then left-to-right, the way you read the sheet.
+            Use it when the numbering has drifted out of step with the drawing.</li>
+    </ul>
+    <div class="note"><strong>Note</strong> — Your choice is remembered between sessions, and the command says
+        which order it used. Reading order groups labels into rows by height band rather than comparing exactly,
+        so two labels a whisker apart still count as the same row instead of one jumping the queue.</div>
 
 <h2 id="curvetable"><code class="cmd">CURVETABLE</code></h2>
     <p>Builds a schedule of curved dimensions from the numbered curve labels, or exports them to CSV.</p>
     <h4>How to use it</h4>
     <p><strong>In model space:</strong> pre-select, or <code>Select dimension label blocks
         or Enter for all:</code>. <strong>In a layout:</strong> it asks you to
-        <code>Select viewport:</code> and includes only the labels visible in it.</p>
+        <code>Select viewport(s):</code> and includes only the labels visible in them. You can pick several —
+        one at a time, by dragging a window across the sheet, or by selecting them before you run the command —
+        so a layout with an overall and a couple of detail blow-ups gets one combined schedule instead of a
+        table each. Either the viewport or its clip boundary works.</p>
         <p>Then <code>N curves — specify table insertion point or [Export]:</code>. Export writes a CSV.</p>
     <h4>What it produces</h4>
     <p>A table titled <em>Schedule of Short &amp; Curved Dimensions</em> on the <strong>TEXT</strong> layer, with columns for number, bearing, chord, arc and radius, sorted numerically.</p>
-    <div class="note"><strong>Note</strong> — In a layout it lists only the curves actually visible in the viewport you pick. If none qualify, it tells you why on the command line.</div>
+    <div class="note"><strong>Note</strong> — In a layout it lists only the curves actually visible in the
+        viewports you pick, and a curve showing in two of them is listed once rather than twice. If none qualify,
+        it tells you why on the command line.</div>
+    <div class="note"><strong>Keeping it current</strong> — <code class="cmd">CURVETABLEUPDATE</code> resyncs a
+        placed table from every viewport it was built from. Delete one of them later and the table simply shrinks
+        on the next update; it only loses its link when every source viewport is gone.</div>
 
 <h2 id="curvetableupdate"><code class="cmd">CURVETABLEUPDATE</code></h2>
     <p>Resyncs a placed curve table with the drawing — adds new curves, drops deleted ones, refreshes changed values.</p>
@@ -118,7 +136,29 @@
     <p>The inverse of CURVETABLE — reads a hand-drawn or imported curve schedule and writes its values back into the matching numbered labels.</p>
     <h4>How to use it</h4>
     <p>Pre-select, or <code>Select the curve schedule text (window the whole table):</code>.</p>
-    <div class="note"><strong>Note</strong> — Built for reading surveyor curve schedules. It expects the standard columns: number, bearing, chord, arc, radius.</div>
+    <h4>What it reads</h4>
+    <p>Three shapes of source data, including a table that mixes them:</p>
+    <ul>
+        <li><strong>A cell per text object</strong> — the older export, one piece of text per value.</li>
+        <li><strong>A whole row in one line</strong> — the newer export, columns separated by spaces. Bearings
+            written with spaces (<code>128° 05' 12"</code>) stay in one piece, and the AutoCAD <code>%%d</code>
+            degree code is understood.</li>
+        <li><strong>Values annotated beside the curve</strong> — not a table at all, but separate text on the plan:
+            <code>81°48'10"</code>, <code>C6.685</code>, <code>A6.775</code>, <code>R12.070</code>. Select them and
+            <code class="cmd">DIMDATA</code> replaces them with a proper numbered dimension label where the text
+            was. <code>C</code> is the chord, <code>A</code> (or <code>L</code>) the arc, <code>R</code> the radius,
+            and anything with degree marks is the bearing; lower case and an optional space or <code>=</code> are
+            accepted. Where the arc and chord are equal and the plan writes them once as <code>A&amp;C6.685</code>,
+            both are filled from it. Bearings with the seconds left off (<code>81°48'</code>) are read too, and
+            the missing seconds written in as <code>00"</code> so one sheet does not end up with two formats.</li>
+    </ul>
+    <div class="note"><strong>Note</strong> — <strong>The column order is read from the header, not assumed.</strong>
+        A schedule headed <em>No / Bearing / Distance / Radius / Arc</em> holds the same data in a different order,
+        and taking it at face value would write every radius into the arc and every arc into the radius — which
+        looks entirely plausible on a plan. <code>DISTANCE</code> is understood as the chord,
+        <code>ARC LENGTH</code> as the arc and <code>CHORD BEARING</code> as the bearing.</div>
+    <div class="note"><strong>Note</strong> — Anything it cannot read stops it rather than letting it guess, so an
+        ordinary selection of text is never mistaken for curve data.</div>
 
 <h2 id="easeleg"><code class="cmd">EASELEG</code></h2>
     <p>Places a schedule of the easements a chosen viewport can actually show — e.g.
@@ -225,9 +265,24 @@
 <h2 id="alab"><code class="cmd">ALAB</code></h2>
     <p>Labels each selected lot with its area.</p>
     <h4>How to use it</h4>
-    <p>Pre-select, or <code>Select polylines to label:</code>.</p>
+    <p>Pre-select, or <code>Select polylines to label:</code>. The select prompt also offers
+        <code>Placement</code>, which decides where in the lot the label lands.</p>
     <h4>What it produces</h4>
     <p>Area labels on <strong>SUB AREA</strong>, placed inside each lot. Areas read in m² below a hectare and ha above.</p>
+    <h4>Placement</h4>
+    <p>The same four options are on <a href="/commands/drafting/text/#mtc"><code class="cmd">MTC</code></a>, and your
+        choice is remembered between sessions.</p>
+    <ul>
+        <li><strong>Fit</strong> (the default) — the best spot for the size of <em>this</em> label. A label is a
+            wide rectangle, so on a lot wider than it is deep the roomiest point can still let it overhang the
+            frontage; this finds where it actually fits.</li>
+        <li><strong>Roomiest</strong> — the point furthest from every boundary.</li>
+        <li><strong>Centre</strong> — the true centroid of the lot.</li>
+        <li><strong>Box</strong> — the centre of the extents. Predictable, and it lines labels up neatly across a
+            row of similar lots.</li>
+    </ul>
+    <div class="note"><strong>Note</strong> — Every mode falls back to Roomiest rather than putting a label outside
+        the lot: a centroid lands outside an L-shaped lot, and a long label may fit nowhere.</div>
 
 <h2 id="setlayout"><code class="cmd">SETLAYOUT</code></h2>
     <p>Builds a complete set of per-lot sales layouts — one sheet per lot, each centred and scaled to its own lot.</p>

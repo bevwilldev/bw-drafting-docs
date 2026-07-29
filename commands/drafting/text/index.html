@@ -76,10 +76,24 @@
     <p>Drops each selected label into the middle of its lot.</p>
     <p class="meta"><strong>Ribbon</strong> &middot; Text → Move to Center</p>
     <h4>How to use it</h4>
-    <p>Pre-select, or <code>Select closed polylines and text:</code>. Each label moves to the middle of the nearest lot that hasn't already taken a label.</p>
+    <p>Pre-select, or <code>Select closed polylines and text:</code>. Each label moves to the middle of the nearest
+        lot that hasn't already taken a label. The select prompt also offers <code>Placement</code>, which decides
+        what “the middle” means.</p>
     <h4>What it produces</h4>
     <p>Moves existing mtext; creates nothing.</p>
-    <div class="note"><strong>Note</strong> — The label lands inside the lot, even on concave or L-shaped lots.</div>
+    <h4>Placement</h4>
+    <p>The same four options are on <a href="/commands/drafting/command-line/#alab"><code class="cmd">ALAB</code></a>,
+        and your choice is remembered between sessions.</p>
+    <ul>
+        <li><strong>Fit</strong> (the default) — the best spot for the size of <em>this</em> label, so a wide label
+            on a shallow lot does not overhang the frontage.</li>
+        <li><strong>Roomiest</strong> — the point furthest from every boundary.</li>
+        <li><strong>Centre</strong> — the true centroid.</li>
+        <li><strong>Box</strong> — the centre of the extents; predictable, and it lines labels up across a row of
+            similar lots.</li>
+    </ul>
+    <div class="note"><strong>Note</strong> — The label lands inside the lot, even on concave or L-shaped ones:
+        every mode falls back to Roomiest rather than placing a label outside the boundary.</div>
 
 <h2 id="tbrk"><code class="cmd">TBRK</code></h2>
     <p>Adds or removes brackets around selected text.</p>
