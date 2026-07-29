@@ -146,13 +146,28 @@ The system prompt in `askModel()` is in three parts, and the split is the point:
 come straight from the documentation; the personality lives only in the sentence
 around them. Being funny is never a licence to be vague.
 
-Tuning it is a prompt edit and `wrangler deploy`. Two things learned doing it:
+The register is **sarcastic, facetious, dry** — aimed at the software and never
+at the person asking, and dialled down when someone is clearly stuck.
+
+Tuning it is a prompt edit and `wrangler deploy`. What was learned doing it:
 
 - **Examples beat adjectives.** "Be charming" produced nothing; a FLAT/RIGHT pair
   for the same answer produced the voice immediately.
 - **Put the rules that keep slipping at the END.** The middle of a long prompt
   gets skimmed. The closing "check before you send" list is there because
   banning `"To label lot areas, ..."` in the middle simply did not take.
+- **This model recites its examples verbatim.** Not a bug to fix — a property to
+  design around, proven both ways: remove the CAD examples and the copying stops
+  and so does the personality; put them back and the voice returns with them.
+
+So the prompt carries **two** example sets on purpose. The printer/kettle/door
+ones teach the attitude with nothing CAD-shaped to copy. The four command ones
+(missing ribbon, ALAB, SMT, WSYUPDATE) are the most-asked questions, and are
+effectively **hand-written answers** — a reader meets each once, so a polished
+canned reply beats an improvised one. Everything else is generated in voice.
+
+**Rewriting one of those four rewrites that answer**, near enough. Worth knowing
+before wondering why an edit had more effect than expected.
 
 **A limit worth knowing:** each question is a fresh request with no memory of the
 last one, so the model always reaches for its highest-probability opening. Expect
