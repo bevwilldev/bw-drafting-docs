@@ -1,0 +1,18 @@
+# Cloudflare Worker — the assistant endpoint.
+#
+# The API key is NOT in this file and must never be. It is set once with
+#   wrangler secret put OPENAI_API_KEY
+# which stores it with Cloudflare, not in the repo.
+
+name = "bw-cad-hub-assistant"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+# Which model to call. Set it here rather than in code so it can be changed
+# without touching the Worker — check the current model names and pricing when
+# you set this up rather than trusting a default.
+OPENAI_MODEL = "gpt-4o-mini"
+
+# Keep the free tier honest: no analytics engine, no KV, no durable objects.
+# This Worker holds no state that matters between requests.
