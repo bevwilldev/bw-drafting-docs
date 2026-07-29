@@ -4,7 +4,19 @@ The Worker takes a question, finds the documentation sections that best match
 it, asks a model to answer **from those sections only**, and returns the answer
 with links. It holds no state and stores nothing.
 
-It runs on **Google Gemini 2.5 Flash** — about **$2/month** at this volume.
+It runs on **Google Gemini 3.5 Flash-Lite**, on the free tier, for the pilot.
+Not 2.5: the whole 2.5 generation returns 404 *"no longer available to new
+users"* on a key created today, whatever the model list claims. And Lite rather
+than full Flash because free-tier quota is per model per day — full Flash allows
+**twenty requests a day**, which is unusable for a team without billing.
+
+**Know the trade before anyone relies on this.** Lite invents no command *names*,
+but it will occasionally tell somebody a thing cannot be done when it can — for
+a tool meant to reduce support load, that quietly generates support. Full
+`gemini-3.6-flash` gets it right, and so does Claude Haiku 4.5 at ~$6/month,
+which is cheaper than `gemini-3.5-flash` at ~$9.45. Move to one of those before
+this is the official answer to "how do I do X". The reasoning is kept at length
+in `wrangler.toml`, beside the setting it justifies.
 
 It started on Workers AI, which is free and needs no key. That was the right
 place to start and the wrong place to stay: the open model had to be argued out
@@ -121,26 +133,32 @@ immediately on a cold start.
 
 ## If the answers are not good enough
 
-A small open model is the one real compromise in this setup. It is very good at
-*"find the relevant passage and rewrite it as a sentence"*, which is most of
-this job, and weaker at questions phrased far from the documentation's own
-wording. Two dials, in the order worth trying:
+**Reach for `MODEL` first, not `SECTIONS`.** That is the opposite of the usual
+advice, and it is what the measurements say here: replaying the real corpus
+against twelve realistic questions, the answering section made the top 40 every
+single time (`ALAB`, the worst, ranks 19th). Retrieval is not what is losing
+answers — the model is. The known failure is the Flash-Lite one above, and no
+amount of extra context fixes a model that has been *shown* the paragraph and
+still says the command does not exist.
 
-1. **`SECTIONS` in `wrangler.toml`** (currently 40). If the model has the room,
-   more sections means the right one is less likely to be missed. This is the
-   most common cause of a bad answer — not the model, but the model never being
-   shown the paragraph.
-2. **`MODEL`** — try a larger one from the Workers AI catalogue. Same binding,
-   no other change.
+So, in order:
 
-If neither is enough, switching to a paid provider is a `wrangler.toml` edit and
-one secret:
+1. **`MODEL`** — `gemini-3.6-flash`, or `claude-haiku-4-5-20251001` via the
+   `openai-compatible` branch. Both fix the known failure. Billing, but single
+   dollars a month.
+2. **`SECTIONS`** — 0 sends the whole corpus (~28k tokens), removing retrieval,
+   and therefore every *"the right section did not rank high enough"* failure,
+   as a concept. It costs about 5x per question as insurance against a failure
+   not yet observed at 40. Worth it once a real one turns up.
+
+All three providers are already wired in `askModel()` — switching is a
+`wrangler.toml` edit and, for the paid ones, one secret:
 
 ```
 # in [vars]
 PROVIDER = "openai-compatible"
-MODEL    = "gpt-4o-mini"                     # or a Groq model
-BASE_URL = "https://api.openai.com/v1"       # Groq: https://api.groq.com/openai/v1
+MODEL    = "claude-haiku-4-5-20251001"       # or gpt-4o-mini, or a Groq model
+BASE_URL = "https://api.anthropic.com/v1"    # Groq: https://api.groq.com/openai/v1
 SECTIONS = 0                                 # big context: send the whole corpus
 ```
 
@@ -148,11 +166,6 @@ SECTIONS = 0                                 # big context: send the whole corpu
 wrangler secret put API_KEY
 wrangler deploy
 ```
-
-`SECTIONS = 0` sends the entire corpus, which is what a large-context model
-should get — retrieval only exists here to fit a small window. Google Gemini is
-also an option but does **not** speak the OpenAI wire format, so it needs a
-third branch in `askModel()` rather than just a different `BASE_URL`.
 
 ---
 
@@ -170,11 +183,22 @@ Two guardrails make that safe rather than annoying:
   earlier version invented a limitation to round one off.
 
 **The Ben gag.** There is a running in-joke about the boss handing work out late
-and wanting it back instantly. It is injected at random into ~1 in 5 requests
-(observed landing about 1 in 8, since the model also declines when the question
-has nothing to do with time). Frequency is mechanical for the same reason the
-greetings are: the model is stateless, so "occasionally" becomes always or
-never. It is aimed at the deadline and never at the man, and this is a **public
+and wanting it back instantly. It is injected at random into ~1 in 8 requests,
+and lands less often than that, since the model also declines when the question
+has nothing to do with time. Frequency is mechanical for the same reason the
+greetings are: the model is stateless, so "occasionally" becomes always or never.
+
+Two rules keep a *running* gag from becoming a tic, and both are worth
+preserving if you touch this:
+
+- **Only what the USER wrote arms it.** Testing the whole history included the
+  assistant's own replies, which made it self-sustaining — the joke lands, that
+  answer enters the history, the next turn sees "Ben" in it and fires again. From
+  the first mention onward, every single reply had the boss in it.
+- **Once per conversation.** Having made it, the assistant does not volunteer it
+  again unless they bring him up themselves — in which case it always takes the
+  opening. The greeting `ANGLES` respect the same cooldown, since a mid-chat
+  "thanks" lands there and is otherwise a second route to the same joke. It is aimed at the deadline and never at the man, and this is a **public
 site he can read** — keep it that way, or delete the `ben` block in
 `askModel()` and the matching entry in `ANGLES` to remove it entirely.
 
@@ -223,8 +247,11 @@ Both are in `wrangler.toml`, explained at length in `src/index.js`:
 - **`MAX_QUESTION`** (in code) — questions are truncated to 400 characters.
   This is a question box, not somewhere to paste a document.
 
-The model is instructed to answer only from the supplied documentation and to
-reply `NOT_IN_DOCS` when it cannot — which the Worker turns into a plain "I can
-only answer from the tool documentation" and, deliberately, no source links.
-A confidently invented command name is worse than no answer, because a drafter
-will go and type it.
+Anything about the BW tools comes from the supplied documentation — a
+confidently invented command name is worse than no answer, because a drafter
+will go and type it. Everything else is fair game; see the voice section above.
+
+The Worker still catches a literal `NOT_IN_DOCS` in the opening words and
+replaces it with a plain sentence and no source links. The short prompt no
+longer *asks* for that token, so this is now a guard rather than a protocol:
+if some future model emits it, the reader must not be shown the raw string.

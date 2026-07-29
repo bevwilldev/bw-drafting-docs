@@ -951,7 +951,11 @@
       class: 'ai-input', type: 'text', autocomplete: 'off',
       placeholder: 'How do I label lot areas?', 'aria-label': 'Your question'
     });
-    var send = el('button', { class: 'ai-send', type: 'button', text: 'Ask' });
+    /* type=submit, NOT type=button: the form's submit handler is what sends a
+       question, and a type=button inside a form does nothing at all when
+       clicked. Enter still worked (implicit submission), so the button looked
+       fine and was dead to anyone who reached for the mouse. */
+    var send = el('button', { class: 'ai-send', type: 'submit', text: 'Ask' });
     var close = el('button', {
       class: 'ai-close', type: 'button', 'aria-label': 'Close', html: '&times;'
     });

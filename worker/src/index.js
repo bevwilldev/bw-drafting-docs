@@ -178,11 +178,15 @@ export default {
     try {
       const raw = await askModel(question, picked, history, env);
 
-      /* The model is told to say exactly this when the docs do not cover it.
-         Offering sources for a non-answer would imply they contain something.
-         Matched loosely in the opening words rather than at position 0: a
-         small model often wraps the token in a sentence, and treating that as
-         a real answer would show the reader the literal string NOT_IN_DOCS. */
+      /* A GUARD, not a protocol. The long prompt used to require this token
+         when the docs did not cover something; the short one does not ask for
+         it at all, and the assistant phrases its own refusals now. What is left
+         is the catch: if any future model emits it, the reader must never be
+         shown the literal string NOT_IN_DOCS, and offering sources for a
+         non-answer would imply they contain something.
+
+         Matched loosely in the opening words rather than at position 0,
+         because a weaker model wraps the token in a sentence. */
       if (/NOT_IN_DOCS/.test(raw.slice(0, 60))) {
         return json({ answer: NOT_FOUND, sources: [] }, 200, cors);
       }
@@ -236,20 +240,29 @@ async function askModel(question, sections, history, env) {
     .map((d, i) => `[${i + 1}] ${d.h || d.t} (${d.u})\n${d.x}`)
     .join('\n\n');
 
-  /* The running gag about Ben, injected at RANDOM into roughly one request in
-     five. Frequency cannot be left to the prompt: the model is stateless, so
+  /* The running gag about Ben, injected at RANDOM into about one request in
+     eight. Frequency cannot be left to the prompt: the model is stateless, so
      "occasionally" means it either does it every single time or never. Same
      fix as the greeting angles — vary the input, not the instruction.
 
      It is affectionate and it is about the DEADLINE, never about the man. He
-     is well liked, and this is a public website he will eventually read. */
-  /* Always in play when THEY bring him up — a direct mention is the one moment
-     the gag must not miss, and at 20% it was missing four times in five with
-     the model not even knowing who Ben was. Otherwise random. */
-  const namedBen = MENTIONS_BEN.test(question) ||
-                   history.some(m => MENTIONS_BEN.test(m.text));
+     is well liked, and this is a public website he will eventually read.
 
-  const ben = (namedBen || Math.random() < 0.2) ? [
+     Always in play when THEY bring him up — a direct mention is the one moment
+     the gag must not miss. Otherwise occasional, and once per conversation.
+
+     This used to test the WHOLE history, assistant turns included, which made
+     it self-sustaining: the gag lands once, that answer goes into the history,
+     the next turn sees "Ben" in it and fires again — so from the first mention
+     onward every single reply had the boss in it. A running gag that runs
+     every time is just a tic. Only what the USER wrote counts now.
+
+     The cooldown handles the other half: having made the joke once, it does
+     not volunteer it again unless they bring him up themselves. */
+  const namedBen = MENTIONS_BEN.test(question);
+  const alreadyMade = history.some(m => m.role === 'assistant' && MENTIONS_BEN.test(m.text));
+
+  const ben = (namedBen || (!alreadyMade && Math.random() < 0.12)) ? [
     '',
     'RUNNING GAG:',
     'Ben is the boss. Good bloke, everybody likes him, hands work out at four o clock and',
@@ -336,7 +349,12 @@ const ANGLES = [
 ];
 
 async function askSocial(question, history, env) {
-  const angle = ANGLES[Math.floor(Math.random() * ANGLES.length)];
+  /* Drop the Ben angle once he has already come up. A "thanks" or a "you
+     there?" mid-conversation lands here too, and the greeting is otherwise a
+     second, separate way for the same joke to arrive twice. */
+  const fresh = !history.some(m => m.role === 'assistant' && MENTIONS_BEN.test(m.text));
+  const pool = fresh ? ANGLES : ANGLES.filter(a => !MENTIONS_BEN.test(a));
+  const angle = pool[Math.floor(Math.random() * pool.length)];
   const system = [
     'You are the BW CAD Hub assistant: the office clown of the drafting room, who knows',
     'the BW BricsCAD Tools inside out. Someone has just said hello or asked what you are.',
