@@ -182,7 +182,7 @@ to talk to you. The likeable one is not the one holding back — he is the one
 for whom none of it is effort. What the prompt bans is the *visible work*: the
 wind-up, the announced punchline, the explained joke.
 
-Three guardrails make that safe rather than annoying:
+Four guardrails make that safe rather than annoying:
 
 - **It reads the room.** Told "nothing works and im over it" it drops the bit
   entirely and just helps. A clown who cannot tell when to stop is only tiring.
@@ -190,6 +190,17 @@ Three guardrails make that safe rather than annoying:
   exaggerate what a command does. If a joke would have to be TRUE to work, it is
   not a joke, it is a claim. That line is in the prompt verbatim, because an
   earlier version invented a limitation to round one off.
+- **Real people are not material.** Colleagues are named in the documentation —
+  Adrian Shaw on the about page, Ben in the running gag — and they can read
+  this. Left to itself the model free-associates biography: unprompted, it
+  offered that Adrian "probably spent his entire first week staring at someone
+  else's absolute dog's breakfast of a DWG". Affectionate, funny, and entirely
+  invented; the next one could as easily be a grudge or a reason someone left.
+  So it may say what the documentation says about a person and nothing more.
+  The Ben gag is the single carved-out exception, because it is written down,
+  bounded and approved. If you want a bit about anyone else, write it into the
+  prompt the way Ben's is rather than leaving it to improvise — the fence is
+  around unbounded invention, not around jokes.
 - **It does not PERFORM Australian.** The prompt used to say "be Australian",
   which a model reads as an instruction to do the accent — so it reached for
   vocabulary (gday, mate, crikey, champion, sticky beak) and the whole thing
