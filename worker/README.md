@@ -93,6 +93,51 @@ Commit and push. The widget stops stubbing and starts answering.
 
 ---
 
+## Three things it does besides answer
+
+**It knows what page you are on.** The widget sends the current path, the
+Worker moves that page's sections to the front of the retrieval list, and the
+prompt names the page as a hint. So "how do I change the wording" asked from
+the cadastre page is about easements without anyone saying so. Deliberately a
+hint and not an instruction — somebody can stand on the install page and ask
+about something else, and the answer has to follow the question, not the
+scenery.
+
+**"Not right?" under every answer.** One click posts the question, the answer
+and the page back, where it lands in the log. There is otherwise no signal at
+all when this thing is wrong: a drafter reads a confident wrong layer name,
+shrugs, and nobody hears about it. It is deliberately not a thumbs up/down
+pair — a thumbs up is a vanity metric, and offering two buttons makes reporting
+a fault feel like voting rather than telling someone.
+
+**It writes down what people ask.** Question, page, how many sources came back,
+and whether anyone marked it wrong. **No IP, no headers, nothing identifying**,
+and every entry expires after 90 days so this cannot quietly become a permanent
+record. The point is the documentation, not the people: a question that comes
+back with no source is either a page that does not exist or one retrieval
+cannot find, and both are worth an afternoon.
+
+```powershell
+cd worker
+.\gaps.ps1            # last 30 days
+.\gaps.ps1 -Days 7    # last week
+.\gaps.ps1 -All       # everything still in the log
+```
+
+It leads with the no-source questions, then anything marked wrong, then
+anything asked more than once — a repeat is a page people expect to exist.
+
+Two things worth knowing if you extend this:
+
+- **`ctx.waitUntil`, not fire-and-forget.** A Worker is torn down the moment it
+  returns a response, so an un-awaited promise is simply cancelled. The first
+  version logged nothing at all while appearing to work perfectly.
+- **KV list is eventually consistent.** A write can take up to a minute to show
+  up in `kv key list`, which looks exactly like a bug that is not there. Check
+  twice before believing it.
+
+---
+
 ## Before you tell anyone about it
 
 The endpoint is public the moment it is deployed. Workers AI has a daily free

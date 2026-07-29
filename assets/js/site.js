@@ -244,6 +244,19 @@
     return BASE + path;
   }
 
+  /* The inverse of url(): the page as the CORPUS names it, so the assistant can
+     be told where the reader is standing. BASE differs between GitHub Pages
+     (/bw-drafting-docs) and a file:// copy, and corpus entries are site-
+     relative ("/about/#where-it-started"), so the prefix has to come off.
+     The hash goes along: which heading someone is parked on is the useful part
+     of "where are they". */
+  function herePath() {
+    var p = location.pathname;
+    if (BASE && p.indexOf(BASE) === 0) p = p.slice(BASE.length);
+    if (p.charAt(0) !== '/') p = '/' + p;
+    return p.replace(/index\.html$/, '') + (location.hash || '');
+  }
+
   /* Normalise a URL for "is this the current page?" comparison. */
   function normalise(href) {
     var a = document.createElement('a');
@@ -1004,6 +1017,34 @@
       }).filter(function (p) { return p.textContent.trim(); });
     }
 
+    /* "Not right?" under every answer.
+       There is otherwise NO signal when this thing is wrong: a drafter reads a
+       confident wrong layer name, shrugs, and nobody ever hears about it. One
+       click posts the question and the answer back to the endpoint, where it
+       lands beside the question log.
+       Deliberately not a thumbs-up/down pair. A thumbs up is a vanity metric —
+       nothing is done differently because of one — and offering two buttons
+       makes reporting a fault feel like voting rather than telling someone. */
+    function flagRow(q, answer, sources) {
+      var btn = el('button', { class: 'ai-flag', type: 'button', text: 'Not right?' });
+      var row = el('div', { class: 'ai-flagrow' }, [btn]);
+
+      btn.addEventListener('click', function () {
+        row.textContent = 'Noted — thanks. Someone will have a look at that one.';
+        row.className = 'ai-flagrow is-done';
+        if (!ASSISTANT.endpoint) return;
+        fetch(ASSISTANT.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            feedback: true, question: q, answer: answer,
+            sources: (sources || []).length, page: herePath()
+          })
+        }).catch(function () { /* a report failing must not become a second error */ });
+      });
+      return row;
+    }
+
     function sourceList(hits) {
       var wrap = el('div', { class: 'ai-sources' });
       wrap.appendChild(el('div', { class: 'ai-sources-t', text: 'From the documentation' }));
@@ -1051,7 +1092,7 @@
           return fetch(ASSISTANT.endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: q, history: sent })
+            body: JSON.stringify({ question: q, history: sent, page: herePath() })
           })
             .then(function (r) { return r.ok ? r.json() : null; })
             .then(function (data) {
@@ -1061,6 +1102,7 @@
               var parts = answerNodes(data.answer);
               say('bot', el('div', { class: 'ai-answer' }, parts));
               if (data.sources && data.sources.length) say('bot', sourceList(data.sources));
+              say('bot', flagRow(q, data.answer, data.sources));
             })
             .catch(function () { thinking.remove(); noAnswer(); });
         }

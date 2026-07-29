@@ -62,5 +62,18 @@ MODEL = "gemini-3.5-flash-lite"
 # up. See the long note in src/index.js.
 SECTIONS = 40
 
-# Keep the free tier honest: no analytics engine, no KV, no durable objects.
-# This Worker holds no state that matters between requests.
+# WHAT PEOPLE ASK, and nothing else. This is the one piece of state the Worker
+# keeps, and it exists to improve the DOCUMENTATION rather than to measure
+# anybody: the questions nobody can answer are the pages that are missing.
+#
+# Stored per entry: the question, the page they were on, how many sources came
+# back, and whether somebody marked the answer wrong. NOT stored: IP, any
+# header that identifies a person, or anything from a drawing. Entries expire
+# by themselves after 90 days, so this cannot quietly become a permanent record.
+#
+# Read it with:  wrangler kv key list --binding ASK_LOG --remote
+[[kv_namespaces]]
+binding = "ASK_LOG"
+id = "01dfb5474fcd4da3b73207e3e621928d"
+
+# Otherwise the free tier stays honest: no analytics engine, no durable objects.

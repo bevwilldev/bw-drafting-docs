@@ -187,7 +187,7 @@ const STOP = new Set(('a an the and or of to in on for from with by is are was d
 ).split(' '));
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
     const cors = corsHeaders(origin);
 
@@ -215,11 +215,29 @@ export default {
 
     let question = '';
     let history = [];
+    let page = '';
+    let body = {};
     try {
-      const body = await request.json();
+      body = await request.json();
       question = String(body.question || '').trim();
       history = cleanHistory(body.history);
+      page = cleanPage(body.page);
     } catch { /* falls through to the empty check */ }
+
+    /* Somebody pressed "not right" on an answer. It is not a question, so it
+       never reaches a model — it is written down and acknowledged. Handled
+       before the empty-question check, since a report carries no question of
+       its own beyond the one it is about. */
+    if (body && body.feedback) {
+      await logEntry(env, {
+        kind: 'wrong',
+        q: String(body.question || '').slice(0, 400),
+        a: String(body.answer || '').slice(0, 600),
+        page,
+        n: Number(body.sources) || 0
+      });
+      return json({ ok: true }, 200, cors);
+    }
 
     if (!question) return json({ error: 'No question' }, 400, cors);
     if (question.length > MAX_QUESTION) question = question.slice(0, MAX_QUESTION);
@@ -255,6 +273,21 @@ export default {
     const limit = Number(env.SECTIONS ?? DEFAULT_SECTIONS);
     let picked = limit > 0 ? search(query, corpus, limit) : corpus;
 
+    /* WHERE THEY ARE STANDING. Someone reading the EASELEG page and asking
+       "how do I change the wording" is asking about easements, and nothing in
+       those words says so. The sections of the current page are moved to the
+       front of the list, and the page is named in the prompt, so a question
+       that only makes sense in context has the context.
+
+       Moved rather than added: retrieval already chose `limit` sections, and
+       promoting the ones they are literally looking at costs nothing. Anything
+       displaced was, by definition, ranked below them. */
+    const here = page ? corpus.filter(d => samePage(d.u, page)) : [];
+    if (here.length) {
+      const seen = new Set(here.map(d => d.u));
+      picked = here.concat(picked.filter(d => !seen.has(d.u))).slice(0, limit || undefined);
+    }
+
     /* Nothing matched the words they used — which is a statement about the
        SEARCH, not about the documentation. Hand over the whole corpus and let
        the model read it, rather than refusing on the strength of a term-
@@ -263,7 +296,7 @@ export default {
     if (!picked.length) picked = corpus;
 
     try {
-      const raw = await askModel(question, picked, history, env);
+      const raw = await askModel(question, picked, history, env, page);
 
       /* Citations come from the model, not from a guess. It ends with
          "SOURCES: 4, 12" naming the sections it actually used, which is the
@@ -271,6 +304,20 @@ export default {
          rather than to whatever a search happened to rank first. */
       const { answer, sources } = splitSources(raw, picked);
       if (!answer) throw new Error('model returned nothing');
+
+      /* Written down AFTER the answer, so the record includes whether it could
+         actually cite anything. A question that comes back with no sources is
+         the interesting one: it is either a documentation gap or a retrieval
+         miss, and both are worth a look.
+
+         ctx.waitUntil, NOT a bare un-awaited promise. A Worker is torn down the
+         moment its response is returned, so fire-and-forget work is simply
+         cancelled — the first version of this logged nothing at all while
+         appearing to work perfectly, because the KV write never got to run.
+         waitUntil keeps the isolate alive for it without making the reader wait,
+         which is the actual thing wanted here. */
+      ctx.waitUntil(logEntry(env, { kind: 'ask', q: question, page, n: sources.length }));
+
       return json({ answer, sources }, 200, cors);
     } catch (e) {
       /* The reader gets a calm sentence; the operator needs the actual reason.
@@ -290,6 +337,44 @@ export default {
    Better it sounds like a colleague admitting the limit than a form letter. */
 /* ---------- the model ---------------------------------------------------- */
 
+/* The page the reader is on, as a site-relative path the corpus can be matched
+   against. Untrusted like everything else from the browser: anything that is
+   not a short same-site path is dropped rather than argued with. */
+function cleanPage(v) {
+  const p = String(v || '').trim();
+  if (!p || p.length > 200 || !p.startsWith('/') || p.startsWith('//')) return '';
+  return p;
+}
+
+/* Same PAGE, ignoring the heading anchor — a reader part-way down a page is
+   still on all of it, and the section they want is often the next one along. */
+function samePage(u, page) {
+  if (!u) return false;
+  const bare = x => String(x).split('#')[0].replace(/\/+$/, '');
+  return bare(u) === bare(page);
+}
+
+/* WHAT PEOPLE ASK. One key per entry, keyed by time so listing comes back in
+   order, with a 90-day expiry so it cannot quietly become a permanent record
+   nobody decided to keep. No IP, no headers, nothing identifying — the point is
+   to find the pages that are missing, not to watch anyone.
+
+   Best-effort throughout: with no binding (a local run, or before the namespace
+   existed) this does nothing at all rather than breaking answers. */
+const LOG_TTL_S = 90 * 24 * 60 * 60;
+
+async function logEntry(env, entry) {
+  if (!env.ASK_LOG) return;
+  try {
+    const now = new Date().toISOString();
+    const key = entry.kind + ':' + now + ':' + Math.random().toString(36).slice(2, 8);
+    await env.ASK_LOG.put(key, JSON.stringify(Object.assign({ t: now }, entry)),
+                          { expirationTtl: LOG_TTL_S });
+  } catch (e) {
+    console.error('log failed:', e && (e.message || e));
+  }
+}
+
 /* Turns the browser's transcript into something safe to forward: user/assistant
    only, trimmed, capped both in number and in size. It arrives from the client
    and is therefore untrusted — a long enough "history" would otherwise be a
@@ -303,7 +388,7 @@ function cleanHistory(raw) {
     .slice(-MAX_HISTORY);
 }
 
-async function askModel(question, sections, history, env) {
+async function askModel(question, sections, history, env, page) {
   const context = sections
     .map((d, i) => `[${i + 1}] ${d.h || d.t} (${d.u})\n${d.x}`)
     .join('\n\n');
@@ -432,11 +517,21 @@ async function askModel(question, sections, history, env) {
      because the sections retrieved are the ones for THIS question — pinning
      an old answer's sections into the conversation would have it answering
      from whatever was relevant two questions ago. */
+
+  /* Where they are reading from, stated plainly. It rides with the question
+     rather than the system prompt because it changes every turn — and it is a
+     HINT, not an instruction: somebody can be on the install page and ask about
+     easements, and the answer must follow the question, not the scenery. */
+  const whereabouts = page
+    ? 'They are currently reading the page ' + page + ' — worth using if the ' +
+      'question leans on it, ignore it if the question is about something else.\n\n'
+    : '';
+
   const messages = [{ role: 'system', content: system }];
   for (const m of history) messages.push({ role: m.role, content: m.text });
   messages.push({
     role: 'user',
-    content: `Documentation:\n\n${context}\n\nQuestion: ${question}`
+    content: `Documentation:\n\n${context}\n\n${whereabouts}Question: ${question}`
   });
 
   /* 0.2 was right when the brief was "documentation, not creative writing".

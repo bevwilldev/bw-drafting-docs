@@ -1651,6 +1651,18 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
 }
 .ai-send:hover { background: var(--brand-fill-hover); }
 
+/* "Not right?" — deliberately the quietest thing in the panel. It has to be
+   findable the moment an answer is wrong and invisible the rest of the time;
+   anything louder reads as the assistant fishing for a review. */
+.ai-flagrow { margin-top: -2px; font-size: .74rem; opacity: .62; }
+.ai-flagrow.is-done { opacity: .78; font-style: italic; }
+.ai-flag {
+  border: 0; background: none; padding: 0; cursor: pointer;
+  font: inherit; color: inherit; text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ai-flag:hover { color: var(--brand); }
+
 /* On a phone the panel takes the width and the launcher shrinks to its icon,
    so neither fights the page for room. */
 @media (max-width: 560px) {
