@@ -156,47 +156,40 @@ third branch in `askModel()` rather than just a different `BASE_URL`.
 
 ---
 
-## The voice
+## The voice, and how little of it is rules
 
-The system prompt in `askModel()` is in three parts, and the split is the point:
-**the rules bind, the voice decorates.** Command names, layer names and numbers
-come straight from the documentation; the personality lives only in the sentence
-around them. Being funny is never a licence to be vague.
+The register is **sarcastic, dry, faintly amused** — aimed at the software and
+never at the person asking, and dialled down when someone is clearly stuck.
 
-The register is **sarcastic, facetious, dry** — aimed at the software and never
-at the person asking, and dialled down when someone is clearly stuck.
+The system prompt is deliberately **short** (~650 tokens). An earlier version ran
+to ~1,800: worked examples, an anti-recitation rule, a punctuation lecture and a
+six-point "check before you send" list. All of it was scaffolding to stop a weak
+open model reciting its own examples verbatim and inventing command limitations
+to round off a joke.
 
-Tuning it is a prompt edit and `wrangler deploy`. What was learned doing it:
+**That scaffolding was the problem, not the fix.** It made the assistant stiff:
+it refused ordinary questions, answered "CURVETABLE" and stopped, and read like
+a form. Deleting two-thirds of it on a model that follows instructions produced
+*better* behaviour, not worse.
 
-- **Examples beat adjectives.** "Be charming" produced nothing; a FLAT/RIGHT pair
-  for the same answer produced the voice immediately.
-- **Put the rules that keep slipping at the END.** The middle of a long prompt
-  gets skimmed. The closing "check before you send" list is there because
-  banning `"To label lot areas, ..."` in the middle simply did not take.
-- **This model recites its examples verbatim.** Not a bug to fix — a property to
-  design around, proven both ways: remove the CAD examples and the copying stops
-  and so does the personality; put them back and the voice returns with them.
+What is left is one hard rule and a voice:
 
-So the prompt carries **two** example sets on purpose. The printer/kettle/door
-ones teach the attitude with nothing CAD-shaped to copy. The four command ones
-(missing ribbon, ALAB, SMT, WSYUPDATE) are the most-asked questions, and are
-effectively **hand-written answers** — a reader meets each once, so a polished
-canned reply beats an improvised one. Everything else is generated in voice.
+- **Anything about the BW tools comes from the documentation.** Commands, layers,
+  units, what it will not do — never from general CAD knowledge, never a guess.
+  An aside COMMENTS on the situation; it never adds behaviour nobody documented.
+- **Everything else is fair game.** General CAD questions, what a term means,
+  small talk, a tangent. The rule is about the software, not a gag order on the
+  conversation. It may know the capital of France; it may not guess what ALAB
+  puts on which layer.
 
-**Rewriting one of those four rewrites that answer**, near enough. Worth knowing
-before wondering why an edit had more effect than expected.
+Two things learned the hard way and worth keeping:
 
-**A limit worth knowing:** each question is a fresh request with no memory of the
-last one, so the model always reaches for its highest-probability opening. Expect
-`"X is the command you want"` to recur across answers no matter how firmly the
-prompt asks for variety — it cannot see what it said to the previous person. It
-reads fine one answer at a time, which is how anyone actually meets it. Only a
-stronger model really moves this.
-
-**Temperature is 0.5**, up from 0.2. A voice needs room to phrase things
-differently, and the facts are pinned by the supplied sections rather than by
-sampling. Higher than 0.5 and the flourishes start reaching for detail the
-documentation never gave it.
+- **Examples get recited verbatim** by weaker models — put a worked answer for a
+  common question in the prompt and that becomes the answer, word for word. If
+  you add examples back, expect that.
+- **Markdown is stripped in code**, not just discouraged in the prompt. The panel
+  renders plain text, so a stray `**SUBA**` reaches the reader as asterisks and
+  looks like broken software. That judgement does not need a model.
 
 ---
 

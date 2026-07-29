@@ -37,7 +37,7 @@ PROVIDER = "gemini"
 # $1.50/$9.00 it costs about $9.45/month here, MORE than Claude Haiku 4.5, and
 # Haiku is the better instruction-follower. Flash-Lite or Haiku — the middle is
 # the worst of both.
-MODEL = "gemini-3.5-flash"
+MODEL = "gemini-3.6-flash"
 
 # Documentation sections sent per question. 0 = the whole corpus (~28k tokens),
 # which Gemini has room for and which removes retrieval — and therefore every
