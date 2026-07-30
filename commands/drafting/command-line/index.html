@@ -161,11 +161,16 @@
         ordinary selection of text is never mistaken for curve data.</div>
 
 <h2 id="easeleg"><code class="cmd">EASELEG</code></h2>
-    <p>Places a schedule of the easements a chosen viewport can actually show — e.g.
+    <p>Places a schedule of the easements the chosen viewport(s) can actually show — e.g.
     <em>(A1) EASEMENT TO DRAIN WATER 3 WIDE</em>, one line per designation.</p>
     <h4>How to use it</h4>
     <p>Run it on a <strong>layout tab</strong> (on Model it tells you to switch — the schedule
-    belongs on the sheet). <code>Select viewport for the schedule:</code> → a dialog lists every
+    belongs on the sheet). <code>Select viewport(s) for the schedule:</code> — pick one, or as
+    many as you like by picking them in turn, dragging a window over the sheet, or selecting them
+    before you run the command. Either the viewport or its clip boundary works. One viewport
+    scopes the schedule to that viewport, which is usually what a detail wants; several give one
+    combined schedule for the sheet, and an easement showing in two of them is listed once.
+    Then → a dialog lists every
     designation found and you word each one: pick a standard description, take the suggestion the
     code letters offer (label an easement <em>(A1)</em> and it proposes <em>EASEMENT TO DRAIN
     WATER</em> — one click, then type the width), or type your own. <strong>Create</strong> stays
@@ -190,6 +195,9 @@
     <p>No prompts — it refreshes all schedules and reports how many changed.</p>
     <div class="note"><strong>Note</strong> — with EASELEGAUTO on (the default) you'll rarely need
     it; it's the manual catch-up for when tracking has been turned off.</div>
+    <div class="note"><strong>Note</strong> — a schedule built from several viewports refreshes
+    from all of them. Delete one of those viewports later and the schedule simply shrinks on the
+    next refresh; it only stops tracking when every viewport it was built from is gone.</div>
 
 <h2 id="easelegauto"><code class="cmd">EASELEGAUTO</code></h2>
     <p>Turns live easement-schedule tracking on or off.</p>
