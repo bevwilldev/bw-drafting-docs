@@ -275,21 +275,27 @@ export default {
     const query = prev ? prev.text + ' ' + question : question;
 
     const limit = Number(env.SECTIONS ?? DEFAULT_SECTIONS);
-    let picked = limit > 0 ? await retrieve(query, corpus, limit, env) : corpus;
+    const got = limit > 0 ? await retrieve(query, corpus, limit, env, page)
+                          : { docs: corpus, limit: 0, here: true };
+    let picked = got.docs;
 
     /* WHERE THEY ARE STANDING. Someone reading the EASELEG page and asking
        "how do I change the wording" is asking about easements, and nothing in
-       those words says so. The sections of the current page are moved to the
-       front of the list, and the page is named in the prompt, so a question
-       that only makes sense in context has the context.
+       those words says so — so the current page counts for something, and it is
+       named in the prompt too.
 
-       Moved rather than added: retrieval already chose `limit` sections, and
-       promoting the ones they are literally looking at costs nothing. Anything
-       displaced was, by definition, ranked below them. */
-    const here = page ? corpus.filter(d => samePage(d.u, page)) : [];
+       The SEMANTIC path already applied it, as a score bonus inside the
+       ranking. This handles the keyword fallback only, where it is still a
+       prepend — safe there because that path runs at 40 sections, not 12.
+
+       Prepending at 12 was a real bug, found by testing: the cadastre page has
+       exactly 12 sections, so it consumed the whole budget and displaced every
+       retrieval result, ALAB included. Do not reinstate it on the semantic
+       path. */
+    const here = got.here ? [] : (page ? corpus.filter(d => samePage(d.u, page)) : []);
     if (here.length) {
       const seen = new Set(here.map(d => d.u));
-      picked = here.concat(picked.filter(d => !seen.has(d.u))).slice(0, limit || undefined);
+      picked = here.concat(picked.filter(d => !seen.has(d.u))).slice(0, got.limit || undefined);
     }
 
     /* Nothing matched the words they used — which is a statement about the
@@ -1022,30 +1028,78 @@ async function embedQuery(text, dims, env) {
    normalised before quantising and the query is normalised above, so the
    magnitudes are already gone. The int8 values are never divided by 127 —
    that is the same constant on every row and ranking does not care. */
-function rankBySimilarity(qv, rows, corpus, limit) {
+function rankBySimilarity(qv, rows, corpus, limit, page) {
+  /* Being on the reader's current page is a NUDGE, not a free pass. It used to
+     be a hard prepend of every section of that page, which was harmless while
+     SECTIONS was 40 and actively broken at 12: the cadastre page has exactly 12
+     sections, so it filled the entire budget and displaced every retrieval
+     result — ALAB never reached the model at all. The command-line page has 39,
+     which would have been worse.
+
+     As a bonus instead, a relevant section of the current page rises and an
+     irrelevant one does not crowd out the section that actually answers the
+     question. The size is chosen to break ties and lose arguments: cosine
+     scores here separate by much more than 0.04 when a section genuinely
+     matches. */
+  const HERE_BONUS = 0.04;
+  const HERE_MAX = 4;         // how many of the page's sections may be boosted
+  const scale = 1 / 127;      // int8 -> unit, so the bonus is in cosine units
+
   const scored = new Array(rows.length);
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
     let s = 0;
     for (let j = 0; j < qv.length; j++) s += qv[j] * r[j];
-    scored[i] = { d: corpus[i], s };
+    scored[i] = { d: corpus[i], s: s * scale, here: !!page && samePage(corpus[i].u, page) };
   }
+
+  /* Only the page's BEST few get the nudge, and this cap is the whole reason
+     the fix works. A bonus on every section of the current page is fine on a
+     small page and ruinous on a big one: the cadastre page has exactly 12
+     sections against a budget of 12, so boosting all of them pushed ALAB —
+     living on another page, and the actual answer — out of the list entirely.
+     Measured, not theorised: with the cap it comes back. */
+  scored.filter(x => x.here)
+        .sort((a, b) => b.s - a.s)
+        .slice(0, HERE_MAX)
+        .forEach(x => { x.s += HERE_BONUS; });
+
   scored.sort((a, b) => b.s - a.s);
   return scored.slice(0, limit).map(x => x.d);
 }
 
+/* How many sections keyword search needs to be trusted. SECTIONS is 12 because
+   SEMANTIC ranks the answering section worst-case 3rd; keyword ranks it
+   worst-case 18th, so running the fallback at 12 would starve it in exactly
+   the mode it is worst at. Falling back widens the net back to what keyword
+   always needed. */
+const KEYWORD_SECTIONS = 40;
+
 /* Semantic first, keyword if anything at all goes wrong. Every failure here is
    recoverable — stale vectors, a 429 on the embedding call, the file missing
-   entirely — and none of them should cost the reader an answer. */
-async function retrieve(query, corpus, limit, env) {
+   entirely — and none of them should cost the reader an answer.
+
+   Returns the limit it actually used as well as the sections, because the
+   caller trims the list again after promoting the current page and would
+   otherwise cut the widened fallback straight back down to 12.
+
+   NOTE there is deliberately no second embedding model here. gemini-embedding-1
+   exists with its own 1,000/day, but the corpus vectors were built with
+   embedding-2 and the two live in unrelated coordinate spaces — comparing a
+   query from one against documents from the other returns essentially random
+   sections while looking like it worked. A real embedding fallback needs a
+   second corpus vector file, not a second model name. Keyword is the honest
+   fallback. */
+async function retrieve(query, corpus, limit, env, page) {
   try {
     const vecs = await getVectors(corpus);
     const qv = await embedQuery(query, vecs.dims, env);
-    return rankBySimilarity(qv, vecs.rows, corpus, limit);
+    return { docs: rankBySimilarity(qv, vecs.rows, corpus, limit, page), limit, here: true };
   } catch (e) {
     console.error('semantic retrieval unavailable, falling back to keyword:',
                   e && (e.message || e));
-    return search(query, corpus, limit);
+    const wide = Math.max(limit, KEYWORD_SECTIONS);
+    return { docs: search(query, corpus, wide), limit: wide };
   }
 }
 
