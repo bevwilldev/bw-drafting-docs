@@ -971,7 +971,12 @@
        question, and a type=button inside a form does nothing at all when
        clicked. Enter still worked (implicit submission), so the button looked
        fine and was dead to anyone who reached for the mouse. */
-    var send = el('button', { class: 'ai-send', type: 'submit', text: 'Ask' });
+    var send = el('button', {
+      class: 'ai-send', type: 'submit', 'aria-label': 'Send',
+      html: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5"/></svg>'
+    });
     var close = el('button', {
       class: 'ai-close', type: 'button', 'aria-label': 'Close', html: '&times;'
     });
@@ -979,7 +984,17 @@
 
     var panel = el('div', { class: 'ai-panel', 'data-assistant': '', hidden: 'hidden' }, [
       el('div', { class: 'ai-head' }, [
-        el('div', {}, [
+        /* A flag on a green: the name made literal, and the panel now has a
+           face. Inline SVG rather than an image so it follows the theme and
+           costs no extra request. */
+        el('div', {
+          class: 'ai-avatar', 'aria-hidden': 'true',
+          html: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" ' +
+                'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+                '<path d="M5 14V2.5"/><path d="M5 3h6.5L9.8 5.2 11.5 7.4H5z" fill="currentColor" ' +
+                'stroke="none"/><path d="M3 14h5"/></svg>'
+        }),
+        el('div', { class: 'ai-headtext' }, [
           el('div', { class: 'ai-title', text: 'Caddie' }),
           el('div', { class: 'ai-sub', text: 'Knows the course. Not your drawing.' })
         ]),
@@ -1124,7 +1139,15 @@
 
     function ask(q) {
       say('you', el('p', { text: q }));
-      var thinking = say('bot', el('p', { class: 'ai-wait', text: 'Thinking...' }));
+      /* Three animated dots rather than the word. Same information, and it
+         reads as something happening instead of the panel having stopped —
+         which matters here, because an answer takes six to ten seconds.
+         aria-label carries the meaning for a screen reader, since three
+         decorative dots say nothing at all. */
+      var thinking = say('bot', el('p', {
+        class: 'ai-wait', role: 'status', 'aria-label': 'Thinking',
+        html: '<i></i><i></i><i></i>'
+      }));
       var sent = turns.slice();          // this question's context, before it joins it
       remember('user', q);
 
