@@ -950,13 +950,16 @@
   function initAssistant() {
     if (document.querySelector('[data-assistant]')) return;
 
+    /* Named, not just an icon. "Ask" was accurate and forgettable; a name is
+       what people repeat to each other, and "go ask Caddie" is the only form of
+       marketing this thing will ever get. */
     var launcher = el('button', {
       class: 'ai-launch', type: 'button', 'aria-expanded': 'false',
-      'aria-label': 'Ask about the tools',
+      'aria-label': 'Ask Caddie about the tools',
       html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
             '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.3-.6L3 21l1.9-4.7A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/>' +
-            '</svg><span>Ask</span>'
+            '</svg><span>Ask Caddie</span>'
     });
 
     var log = el('div', { class: 'ai-log' });
@@ -977,8 +980,8 @@
     var panel = el('div', { class: 'ai-panel', 'data-assistant': '', hidden: 'hidden' }, [
       el('div', { class: 'ai-head' }, [
         el('div', {}, [
-          el('div', { class: 'ai-title', text: 'Ask about the tools' }),
-          el('div', { class: 'ai-sub', text: 'Answers from this documentation only' })
+          el('div', { class: 'ai-title', text: 'Caddie' }),
+          el('div', { class: 'ai-sub', text: 'Knows the course. Not your drawing.' })
         ]),
         close
       ]),
@@ -988,6 +991,44 @@
 
     document.body.appendChild(launcher);
     document.body.appendChild(panel);
+
+    /* Any button on any page can open Caddie by carrying data-ask-caddie —
+       the home page introduction uses it. Wired here rather than in each page
+       so the panel stays the only thing that knows how to open itself. */
+    Array.prototype.forEach.call(
+      document.querySelectorAll('[data-ask-caddie]'), function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (panel.hidden) open();
+          input.focus();
+        });
+      });
+
+    /* A second way in, at the bottom of the page. The corner launcher is fine
+       until somebody starts reading, at which point it becomes furniture — and
+       the moment a person is most likely to still be stuck is when they have
+       just finished a page and it did not answer them. So the offer goes there
+       too, where they already are.
+
+       Skipped on the home page, which introduces Caddie properly, and on any
+       page too short to have got lost in. */
+    (function inlinePrompt() {
+      var main = document.querySelector('main');
+      if (!main) return;
+      if (herePath().replace(/#.*$/, '') === '/') return;
+      if (main.textContent.trim().length < 600) return;
+
+      var btn = el('button', { class: 'ai-cta-go', type: 'button', text: 'Ask Caddie' });
+      btn.addEventListener('click', function () {
+        if (panel.hidden) open();
+        input.focus();
+      });
+
+      main.appendChild(el('aside', { class: 'ai-cta' }, [
+        el('p', { text: 'Still stuck on this one?' }),
+        btn
+      ]));
+    })();
 
     function say(who, node) {
       var row = el('div', { class: 'ai-msg ai-' + who });
@@ -1135,13 +1176,13 @@
              sets the register before the model says a word. Keep it the way
              someone actually talks — the lingo is fine, the performance is
              not; note there is no exclamation mark after it. */
-          html: 'Gday. Ask away &mdash; what a command does, what it prompts for, or ' +
-                'why something has stopped working. Follow-ups are fine, I keep up.'
+          html: 'Gday, I\'m Caddie. Ask away &mdash; what a command does, what it prompts ' +
+                'for, or why something has stopped working. Follow-ups are fine, I keep up.'
         }));
         say('bot', el('p', {
           class: 'ai-fineprint',
-          html: 'I only know what is on this site, so your drawings, jobs and files ' +
-                'are a mystery to me.'
+          html: 'I know every page of this site and nothing else, so your drawings, jobs ' +
+                'and files are a mystery to me.'
         }));
       }
       setTimeout(function () { input.focus(); }, 40);
