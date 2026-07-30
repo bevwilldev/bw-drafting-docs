@@ -57,9 +57,17 @@
   /* Brand — used sparingly and deliberately. --brand is the ACCENT red (tuned
      per theme for AA against the page background); --brand-fill is the FILLED
      red for buttons/pills/badges, brand-constant across themes with white ink. */
-  --brand: #f2555a;
+  /* SAME HUE AND SATURATION AS --brand-fill, lifted only as far as contrast
+     demands. The old #f2555a was both lighter (64%) AND more saturated (86%)
+     than the fill's 48%/75%, and that combination is what made it read as a
+     second, pinker red rather than the same red on a dark background — deep red
+     buttons beside pink red links. #e5484a holds hue 359.4 and saturation 75%
+     at lightness 59%: 5.02:1 on --bg and 4.73:1 on --bg-raised, so it still
+     clears AA with room. Do not simply set this to --brand-fill; #d81f21 is
+     3.8:1 here and fails. */
+  --brand: #e5484a;
   --brand-ink: #ffffff;
-  --brand-hover: #f7787c;
+  --brand-hover: #ea6c6d;
   --brand-fill: #d81f21;
   --brand-fill-hover: #be1b1d;
   /* The logo's script mark. Deliberately the artwork's own red and NOT --brand,
@@ -81,8 +89,8 @@
   --line-strong: #33333a;
   --line-accent: #3d3d46;      /* section rules — one step up from --line */
   --code-bg: #17171a;
-  --select: rgba(242, 85, 90, .16);
-  --brand-wash: rgba(242, 85, 90, .09);
+  --select: rgba(229, 72, 74, .16);
+  --brand-wash: rgba(229, 72, 74, .09);
 
   /* Type */
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -1616,27 +1624,58 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
    a caveat and not the greeting. */
 .ai-fineprint { font-size: .8rem; color: var(--ink-faint); }
 
-/* Caddie's introduction on the home page. Sits above the numbered bands and is
-   allowed to be louder than the end-of-page offer — it is announcing something
-   that did not exist last week, and it only gets one chance to be noticed. */
+/* Caddie's introduction on the home page.
+
+   Uses the BAND geometry (1040px, --band-pad) rather than its own numbers —
+   it sits directly above the numbered bands, and a different measure or gutter
+   made the whole page look misaligned by a few pixels for no reason.
+
+   Louder than the end-of-page offer on purpose: it announces something that did
+   not exist last week and only gets one chance to be noticed. The brand wash
+   and the rule above it do that without a photo, so it reads as part of the
+   page rather than an advert dropped into it. */
 .meet {
+  position: relative;
+  padding: 56px 0 52px;
+  --band-pad: 28px;
   border-bottom: 1px solid var(--line);
-  background: var(--bg-raised);
+  background:
+    radial-gradient(120% 140% at 12% 0%, var(--brand-wash), transparent 62%),
+    var(--bg-raised);
 }
-.meet-inner {
-  max-width: var(--measure-wide, 74rem);
-  margin: 0 auto; padding: 36px 24px 34px;
+/* A brand hairline along the top, which is what makes it read as a banner
+   rather than just another section with a tint. */
+.meet::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: linear-gradient(90deg, var(--brand-fill), transparent 72%);
 }
+.meet-inner { max-width: 1040px; margin: 0 auto; padding: 0 var(--band-pad); }
+
 .meet-tag {
-  display: inline-block; margin: 0 0 10px; padding: 3px 10px;
+  display: inline-flex; align-items: center; gap: 7px;
+  margin: 0 0 14px; padding: 4px 12px 4px 9px;
   border-radius: 999px; background: var(--brand-fill); color: #fff;
-  font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
 }
-.meet-h { margin: 0 0 10px; font-size: clamp(1.45rem, 3vw, 1.9rem); }
-.meet-d { margin: 0 0 10px; max-width: 60ch; color: var(--ink-muted); line-height: 1.6; }
+/* The dot is doing the "this is new" work, so the word can stay small. */
+.meet-tag::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; opacity: .9;
+}
+
+.meet-h {
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 4.2vw, 2.5rem);
+  line-height: 1.12; letter-spacing: -.015em;
+}
+.meet-d { margin: 0 0 12px; max-width: 62ch; color: var(--ink-muted); line-height: 1.65; }
 .meet-fine { font-size: .88rem; color: var(--ink-faint); }
-.meet-go { margin: 18px 0 0; }
+.meet-go { margin: 22px 0 0; }
 .meet-go .btn { border: 0; cursor: pointer; font: inherit; }
+
+@media (max-width: 720px) {
+  .meet { padding: 40px 0 38px; --band-pad: 20px; }
+}
 
 /* The end-of-page offer. Deliberately quiet: it is the last thing on a page
    somebody has just read, so it should read as a hand up rather than an advert
