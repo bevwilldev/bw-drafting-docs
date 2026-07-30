@@ -165,14 +165,17 @@ called. No redeploy, no rollback, about thirty seconds.
 
 Nothing in this folder. The corpus is fetched from the live site, so:
 
-```
-python scripts/gen_corpus.py     # rebuild the text
-python scripts/gen_vectors.py    # rebuild the embeddings  <- do not skip
-git commit && git push
+```powershell
+$env:GEMINI_API_KEY = "..."      # once per terminal
+.\scripts\rebuild.ps1 -Commit
+git push
 ```
 
-**Both steps, every time.** `gen_vectors.py` needs a Gemini key in the
-environment (`$env:GEMINI_API_KEY = "..."`) and takes a couple of minutes.
+**One command, because it is two steps and skipping the second is silent.**
+`gen_corpus.py` writes the text and `gen_vectors.py` embeds it; if the corpus
+moves and the vectors do not, the Worker spots the mismatch and drops to keyword
+retrieval — nothing breaks, answers just quietly get worse. Takes a couple of
+minutes, most of it waiting out the embedding rate limit.
 
 The Worker picks both up within about fifteen minutes (its cache TTL), or
 immediately on a cold start.
