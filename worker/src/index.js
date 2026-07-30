@@ -24,12 +24,19 @@
 const CORPUS_URL =
   'https://agabanto.github.io/bw-drafting-docs/assets/data/corpus.json';
 
-/* Origins allowed to call this. The docs site, plus localhost for previewing
-   changes before they are published. */
+/* Origins allowed to call this. The docs site, localhost for previewing changes
+   before they are published, and the BricsCAD panel.
+
+   THIS IS NOT A SECURITY BOUNDARY and should not be mistaken for one. CORS is a
+   browser mechanism: it stops another WEBSITE embedding this endpoint, and does
+   nothing whatever about a script, which can send any Origin it likes. The
+   plugin sets "bricscad-plugin" for exactly that reason — it is identification,
+   so the log can tell where a question came from, not a claim to be trusted. */
 const ALLOWED = [
   'https://agabanto.github.io',
   'http://localhost:8000',
-  'http://127.0.0.1:8000'
+  'http://127.0.0.1:8000',
+  'bricscad-plugin'
 ];
 
 /* How many documentation sections to send. 0 sends the whole corpus.
