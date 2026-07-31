@@ -1709,16 +1709,26 @@ figcaption { font-size: .82rem; color: var(--ink-faint); margin-top: .7em; }
   content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
   background: linear-gradient(90deg, var(--brand-fill), transparent 72%);
 }
-.meet-inner { max-width: 1040px; margin: 0 auto; padding: 0 var(--band-pad); }
+/* Copy on the left, portrait in the banner's otherwise-empty right half. */
+.meet-inner {
+  max-width: 1040px; margin: 0 auto; padding: 0 var(--band-pad);
+  display: flex; align-items: center; justify-content: space-between; gap: 48px;
+}
+.meet-copy { flex: 1 1 auto; min-width: 0; }
 
 /* His face on the announcement — the same artwork as the chat avatar, the
    ribbon button and the BricsCAD panel, because an introduction should show
-   the person being introduced. */
+   the person being introduced. The glow does the "he's new here" work the
+   photo bands do with imagery. */
 .meet-face {
-  display: block; width: 72px; height: 72px; border-radius: 50%;
-  margin: 0 0 14px;
-  box-shadow: 0 10px 26px -12px rgba(216, 31, 33, .55);
+  flex: none; display: block; width: 128px; height: 128px; border-radius: 50%;
+  box-shadow: 0 22px 60px -20px rgba(216, 31, 33, .65);
 }
+/* Below ~900px the empty right half stops existing, and a portrait squeezed
+   against wrapping text is the shoehorn this layout replaces — so he steps
+   aside and the chat avatar carries the face on small screens. */
+@media (max-width: 900px) { .meet-face { width: 96px; height: 96px; } }
+@media (max-width: 680px) { .meet-face { display: none; } }
 
 .meet-tag {
   display: inline-flex; align-items: center; gap: 7px;
