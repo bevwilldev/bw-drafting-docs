@@ -987,13 +987,13 @@
         /* A flag on a green: the name made literal, and the panel now has a
            face. Inline SVG rather than an image so it follows the theme and
            costs no extra request. */
-        el('div', {
-          class: 'ai-avatar', 'aria-hidden': 'true',
-          html: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" ' +
-                'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
-                '<path d="M5 14V2.5"/><path d="M5 3h6.5L9.8 5.2 11.5 7.4H5z" fill="currentColor" ' +
-                'stroke="none"/><path d="M3 14h5"/></svg>'
-        }),
+        /* His actual face — the same artwork as the ribbon icon and the
+           BricsCAD panel header, so he is one bloke everywhere. An image
+           rather than the old inline flag SVG; alt is empty because the name
+           sits in text right beside it. */
+        el('div', { class: 'ai-avatar', 'aria-hidden': 'true' }, [
+          el('img', { src: url('/assets/img/caddie.png'), alt: '' })
+        ]),
         el('div', { class: 'ai-headtext' }, [
           el('div', { class: 'ai-title', text: 'Caddie' }),
           el('div', { class: 'ai-sub', text: 'Knows the course. Not your drawing.' })
