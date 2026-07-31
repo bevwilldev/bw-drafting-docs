@@ -74,6 +74,7 @@
         <tr><td>ADJ DP</td><td>Adjoining labels</td></tr>
         <tr><td>ROAD NAME</td><td>Road name text, rotated along the centreline</td></tr>
         <tr><td>ROAD CL</td><td>Road centrelines</td></tr>
+        <tr><td>ATTRIBUTION</td><td>The data attribution stamp (see below)</td></tr>
       </tbody>
     </table></div>
     <p>The <em>By Lot ID</em> search separates the lots you asked for (SUB layers) from their
@@ -92,6 +93,26 @@
     <div class="note warn"><strong>Watch out</strong> — the tool works out the MGA zone from the
     data it fetches. If it can't determine the zone it assumes Zone 56 and says so in the status
     bar. On a Zone 55 job that warning matters, so check the result lands where you expect.</div>
+
+    <h2 id="updating-and-removing">Updating and removing fetched data</h2>
+    <p><code class="cmd">NSWLOTSUPDATE</code> refreshes the cadastre: it removes everything the
+    tool has drawn in the current drawing, then re-runs your last saved lot search so the
+    geometry matches what NSW Spatial holds today.</p>
+    <p><code class="cmd">NSWLOTSDELETE</code> removes everything the tool has drawn — boundaries,
+    labels, road names, centrelines and the attribution stamp — and reports what it took out.
+    Your own linework on the same layers is never touched: the tool only removes entities it
+    tagged when it drew them. Undo brings it all back.</p>
+
+    <div class="note warn"><strong>Watch out</strong> — lot labels placed by versions before
+    v2.3 carry no tag, so <code class="cmd">NSWLOTSDELETE</code> leaves them behind. Delete
+    those by hand if they turn up.</div>
+
+    <h2 id="data-attribution">Data attribution</h2>
+    <p>The cadastre comes from NSW Spatial Services under the <strong>CC BY 4.0</strong>
+    licence, which makes attribution in the drawing a licence condition — so each fetch places
+    (or refreshes) one attribution stamp on the <strong>ATTRIBUTION</strong> layer. Move it to
+    wherever suits the sheet; a later fetch updates its wording in place without moving it back.
+    Just leave it in the drawing.</p>
 
     <h2 id="if-it-fails">If it fails</h2>
     <p>The tool needs internet access to the NSW Spatial service. Transient errors are retried

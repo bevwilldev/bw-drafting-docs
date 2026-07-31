@@ -37,6 +37,25 @@
     <p>One MText per lot at an interior point of the boundary, middle-centre at 1.0 height, holding the lot number, section number and plan label on separate lines. Boundaries on <strong>SUB BDY</strong> are labelled onto <strong>SUB DP</strong> (yellow); everything else goes onto <strong>ADJ DP</strong> (white). The layers are created if they don't exist.</p>
     <div class="note"><strong>Note</strong> — It only works on polylines carrying <code>NSW_PARCEL</code> xdata — boundaries drawn by hand or brought in another way are silently skipped. It doesn't check whether a lot is already labelled, so running it twice on the same selection doubles the labels up. There is no ribbon button; type the command.</div>
 
+    <h2 id="nswlotsupdate"><code class="cmd">NSWLOTSUPDATE</code></h2>
+    <p>Refreshes the loaded cadastre. It removes everything the lot loader has drawn in the
+    current drawing, then re-runs your last saved lot search — so the boundaries, labels and
+    road data match what NSW Spatial holds today instead of the day you fetched them.</p>
+    <h4>How to use it</h4>
+    <p>Type the command. The panel opens with your last search restored and fetches
+    automatically; if there's no saved search it says so and waits for you to enter lots.</p>
+    <div class="note"><strong>Note</strong> — the clear-out happens before the re-fetch, so if
+    the fetch fails (offline, service down) the drawing is left without its cadastre — one undo
+    brings the old data back.</div>
+
+    <h2 id="nswlotsdelete"><code class="cmd">NSWLOTSDELETE</code></h2>
+    <p>Removes everything the lot loader has drawn in the current drawing — boundaries, labels,
+    road names, centrelines and the attribution stamp — and reports the breakdown. It finds its
+    own work by the xdata tags it attaches when drawing, so your own linework on the same layers
+    is never touched. Undo restores the lot.</p>
+    <div class="note warn"><strong>Watch out</strong> — lot labels placed by versions before
+    v2.3 carry no tag and are left behind; delete those by hand if present.</div>
+
     <nav class="page-nav">
       <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
     </nav>
