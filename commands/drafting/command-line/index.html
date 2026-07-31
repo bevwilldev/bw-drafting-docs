@@ -160,6 +160,40 @@
     <div class="note"><strong>Note</strong> — Anything it cannot read stops it rather than letting it guess, so an
         ordinary selection of text is never mistaken for curve data.</div>
 
+<h2 id="treedata"><code class="cmd">TREEDATA</code></h2>
+    <p>Joins a tree's scattered annotation — spread, diameter, height and tree number, each its
+    own piece of text — into one mtext, leaving the spot level exactly where it is.</p>
+    <h4>How to use it</h4>
+    <p>Pre-select, or <code>Select the tree annotation text (window the lot of it):</code> —
+    window whole clusters, as many trees as you like in one go. Each tree becomes one label,
+    starting on the point its first text started:</p>
+    <pre><code>S:4 D:0.2 H:5
+No:3</code></pre>
+    <h4>What it reads</h4>
+    <ul>
+        <li><code>S</code>, <code>D</code> and <code>H</code> with a value, however punctuated —
+            <code>S: 4</code>, <code>S4</code>, <code>s 4</code> all read. Measurements must be
+            numbers.</li>
+        <li>The tree number as <code>No</code>, <code>No.</code> or <code>N</code> — and it may be
+            <code>3a</code> or <code>12B</code>, since split trees happen.</li>
+        <li>Values are kept exactly as the surveyor wrote them — <code>0.20</code> stays
+            <code>0.20</code>, because the trailing zero is a statement about precision.</li>
+        <li><strong>The order is whatever the drawing has.</strong> <code>H D S</code> is written
+            back as <code>H D S</code>, judged along the line of text so rotated annotation reads
+            correctly too.</li>
+    </ul>
+    <h4>What it produces</h4>
+    <p>One mtext per tree — measurements on the first line, the number below — matching the text
+    it replaces for layer, style, height, colour and rotation. The source text is erased in the
+    same step, so one undo takes the whole change back.</p>
+    <div class="note"><strong>Note</strong> — Spot levels are never touched. They carry no tag,
+    so the command simply cannot pick them up.</div>
+    <div class="note"><strong>Note</strong> — A tree needs its three measurements; the
+    <strong>number is optional</strong> — unnumbered trees are joined the same and just have no
+    second line, and one never borrows its neighbour's number. Where two trees' text has run
+    together (the same tag twice in one cluster) it says so and leaves them alone — do those few
+    one tree at a time.</div>
+
 <h2 id="easeleg"><code class="cmd">EASELEG</code></h2>
     <p>Places a schedule of the easements the chosen viewport(s) can actually show — e.g.
     <em>(A1) EASEMENT TO DRAIN WATER 3 WIDE</em>, one line per designation.</p>
