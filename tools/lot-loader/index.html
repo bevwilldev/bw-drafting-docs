@@ -107,6 +107,29 @@
     v2.3 carry no tag, so <code class="cmd">NSWLOTSDELETE</code> leaves them behind. Delete
     those by hand if they turn up.</div>
 
+    <h2 id="when-a-fetch-half-works">When a fetch only half works</h2>
+    <p>If some features can't be drawn, the panel says so — <em>Drew 47 of 50 feature(s)</em>, with
+    the first reason — and asks whether to <strong>keep</strong> what was drawn or
+    <strong>discard</strong> it. <strong>Discard is the default</strong>: a drawing missing cadastre
+    it appears to have is worse than no cadastre at all, and the fetch can just be run again.
+    Discard removes only what that fetch added — anything already in the drawing is untouched.</p>
+    <p>Lots skipped because they were already loaded aren't failures and are never reported as
+    such.</p>
+
+    <div class="note warn"><strong>Watch out</strong> — occasionally an entity draws but its
+    ownership tag won't attach. Those are counted and reported, because an untagged entity is
+    invisible to <code class="cmd">NSWLOTSDELETE</code>, to the duplicate check on the next fetch,
+    and to <code class="cmd">NSWLABELLOTS</code>.</div>
+
+    <h2 id="activity-log">Activity log</h2>
+    <p>Each fetch, delete and label run writes one line — the command, the drawing and the counts —
+    to <code>%LOCALAPPDATA%\BW BricsCAD Tools\drawing-audit.log</code>, so "what did that command
+    do to my drawing?" can be answered days later when the question actually gets asked. The same
+    log covers <code class="cmd">TREEDATA</code>, <code class="cmd">CURVETABLE</code>,
+    <code class="cmd">EASELEG</code>, <code class="cmd">SETLAYOUT</code> and
+    <code class="cmd">IMPORTSHEET</code>. Counts only: nothing about the drawing's content is
+    recorded, and nothing leaves your machine.</p>
+
     <h2 id="data-attribution">Data attribution</h2>
     <p>The cadastre comes from NSW Spatial Services under the <strong>CC BY 4.0</strong>
     licence, which makes attribution in the drawing a licence condition — so each fetch places
