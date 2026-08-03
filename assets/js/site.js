@@ -1248,6 +1248,29 @@
     initCommandSearch();
     initScrollCue();
     initAssistant();
+    initLatestVersion();
+  }
+
+  /* The download page's version badge. It was hand-typed, so it went stale the
+     moment a release shipped (it still read v2.1.2 two releases later, telling
+     people the wrong thing on the one page they visit to install).
+
+     The downloads repo is PUBLIC, so this needs no token: ask it what the
+     latest release is and say that instead. Failure is silent and the markup's
+     value stands — GitHub's unauthenticated API allows 60 requests an hour per
+     IP and the whole office shares one, so being rate-limited is a normal
+     outcome, not an error. Keep the hardcoded value in the HTML correct at
+     release time as the fallback; this just means a forgotten one self-heals. */
+  function initLatestVersion() {
+    var el = document.getElementById('dl-version');
+    if (!el || !window.fetch) return;
+    fetch('https://api.github.com/repos/agabanto/bw-bricscad-releases/releases/latest',
+          { headers: { 'Accept': 'application/vnd.github+json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && j.tag_name) el.textContent = j.tag_name;
+      })
+      .catch(function () { /* offline or rate-limited — keep the static value */ });
   }
 
   if (document.readyState === 'loading') {
