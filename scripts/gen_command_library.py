@@ -141,6 +141,14 @@ def main():
     src = INDEX.read_text(encoding="utf-8")
     head, rest = src.split(START, 1)
     _, tail = rest.split(END, 1)
+    # START/END deliberately exclude the closing "-->", so the marker text can be
+    # matched without depending on the spacing around it. That means `tail`
+    # begins with the END marker's OWN "-->", which has to be dropped before we
+    # write a fresh one — otherwise every run appends another, and they pile up
+    # ("<!-- ALPHA_END --> --> --> -->"). Harmless to render, but it grew by one
+    # on each rebuild and would grow on every push once this runs in CI. The
+    # repeat in the pattern also tidies up the ones already accumulated.
+    tail = re.sub(r"^(\s*-->)+", "", tail)
     INDEX.write_text(
         head + START + " — generated, do not hand-edit -->\n"
         + render_table(rows) + "\n    " + END + " -->" + tail,
