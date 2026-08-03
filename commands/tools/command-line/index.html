@@ -56,6 +56,44 @@
     <div class="note warn"><strong>Watch out</strong> — lot labels placed by versions before
     v2.3 carry no tag and are left behind; delete those by hand if present.</div>
 
+    <h2 id="nswfetch"><code class="cmd">NSWFETCH</code></h2>
+    <p>The NSW pipeline of <a href="../tools/#geofetch">GeoFetch</a>, opened directly instead of
+    through the manager. Same dialog, same result — useful when NSW is all you ever fetch.
+    <code class="cmd">GEOFETCHNSW</code> is a kept alias for it.</p>
+    <p>The companions are <code class="cmd">NSWFETCHUPDATE</code>, which re-fetches everything
+    the drawing already holds so the data is current, and <code class="cmd">NSWFETCHDELETE</code>,
+    which removes it. Both work from the fetch record kept in the drawing, so they only touch what
+    GeoFetch drew. <code class="cmd">GEOFETCHUPDATE</code> and <code class="cmd">GEOFETCHDELETE</code>
+    are kept aliases for the same two.</p>
+    <div class="note"><strong>Note</strong> — update is all-or-nothing: it refreshes every dataset
+    in the record, not just the one that's gone stale, so it costs a full fetch. There's no undo
+    step beyond BricsCAD's own <kbd>U</kbd>.</div>
+
+    <h2 id="aklfetch"><code class="cmd">AKLFETCH</code></h2>
+    <p>The Auckland pipeline — landbase, addresses, the Unitary Plan, contours, flood and
+    stormwater layers from Auckland Council. <code class="cmd">AKLFETCHUPDATE</code> and
+    <code class="cmd">AKLFETCHDELETE</code> refresh and remove it the same way as the NSW pair.</p>
+    <p>Auckland's contours come from the council's 2024 LiDAR survey, at intervals from 0.25&nbsp;m
+    to 10&nbsp;m — the dialog labels them so, and they're better quality than the NSW terrain
+    options.</p>
+
+    <h2 id="vicfetch"><code class="cmd">VICFETCH</code> &nbsp;/&nbsp; <code class="cmd">QLDFETCH</code></h2>
+    <p>Victoria and Queensland — cadastre, addresses, roads and planning zones from each state's
+    open data service. <code class="cmd">VICFETCHUPDATE</code>, <code class="cmd">VICFETCHDELETE</code>,
+    <code class="cmd">QLDFETCHUPDATE</code> and <code class="cmd">QLDFETCHDELETE</code> complete the
+    set.</p>
+    <div class="note"><strong>Note</strong> — Victoria is locked to MGA2020 Zone 55 and refuses
+    anything else rather than projecting a job into the wrong zone. Western Victoria (Zone 54) is
+    not covered.</div>
+
+    <h2 id="aklconvert"><code class="cmd">AKLCONVERT</code></h2>
+    <p>Converts existing drawing geometry between <strong>NZTM2000</strong> and
+    <strong>Mount Eden Circuit 2000</strong> — the two grids an Auckland job moves between. It
+    transforms what you select in place, keeping arcs as arcs rather than chording them.</p>
+    <div class="note"><strong>Note</strong> — the selection is capped at 500&nbsp;m across. That
+    limit is deliberate: the transformation is exact enough to be invisible within it (well under a
+    millimetre), and beyond it the error would start to matter. Convert in pieces if you need more.</div>
+
     <nav class="page-nav">
       <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
     </nav>

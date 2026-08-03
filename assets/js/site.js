@@ -141,7 +141,8 @@
       items: [
         { href: '/tools/', text: 'Overview' },
         { href: '/tools/lot-loader/', text: 'NSW Lot Loader' },
-        { href: '/tools/point-cloud/', text: 'Point Cloud Digitizer' }
+        { href: '/tools/point-cloud/', text: 'Point Cloud Digitizer' },
+        { href: '/tools/geofetch/', text: 'GeoFetch' }
       ]
     },
     engineering: {

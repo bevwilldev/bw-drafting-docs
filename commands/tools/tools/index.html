@@ -27,7 +27,7 @@
 
   <main class="content" id="main">
     <h1>Tools</h1>
-    <p class="lede">The NSW Lot Loader and Point Cloud Digitizer.</p>
+    <p class="lede">The NSW Lot Loader, Point Cloud Digitizer and GeoFetch.</p>
 
     <h2 id="nswlots"><code class="cmd">NSWLOTS</code></h2>
     <p>Opens the lot loader, which pulls cadastral boundaries, lot labels, road names and road centrelines straight from the NSW Spatial service into model space. Lots can be found by lot and plan number, by picking a point, or by an extent.</p><p>The panel is modeless, so it stays open while you work in the drawing. The <strong>?</strong> button in its title bar opens offline help.</p>
@@ -44,6 +44,17 @@
     <h4>What it produces</h4>
     <p>3D polylines and, optionally, survey points on the feature's layer — Civil points where the Civil module is available, otherwise standard points with the number and code attached. The layer is created from the feature library's colour if it doesn't exist. <strong>Export to 12da…</strong> writes the digitised strings and points to a 12d Model ASCII file.</p>
     <div class="note"><strong>Note</strong> — While digitising, 2D object snaps are turned off and point-cloud nearest snapping is turned on, and <code>PDMODE</code>/<code>PDSIZE</code> are set for point visibility if they were at their defaults — all restored when the run ends. A locked target layer stops the run before it starts. The export can't run while a digitising run is active.</div>
+
+    <h2 id="geofetch"><code class="cmd">GEOFETCH</code></h2>
+    <p>Opens the GeoFetch manager, which pulls published government spatial data straight into the drawing — cadastre, addresses, roads, zoning, planning overlays, hazards, utilities and terrain. Four regions are covered: <strong>NSW</strong>, <strong>Victoria</strong>, <strong>Queensland</strong> and <strong>Auckland</strong>, each with its own dialog and its own datasets.</p>
+    <h4>How to use it</h4>
+    <p>The command has no prompts — it opens the manager, and you pick the region. Each region's dialog asks for a centre point (type the coordinates or use <strong>Pick &lt;</strong>), a window size, and which datasets you want; then <strong>Fetch</strong>. Settings can be saved as named profiles for next time.</p>
+    <h4>What it produces</h4>
+    <p>Ordinary polylines, text, hatches and points on layers prefixed for the region (<code>GEO-</code>, <code>VIC-</code> and so on), plus an attribution stamp. Nothing is a custom object — the drawing looks the same on a machine without the plugins.</p>
+
+    <div class="note warn"><strong>Terrain is context, not survey</strong> — the Elevation options are built from a 5&nbsp;m source. See <a href="../../../tools/geofetch/#elevation">Elevation data</a> before using them on a job. Contours and surfaces from GeoFetch are for extent, fall and feasibility; design levels need a real survey.</div>
+
+    <div class="note"><strong>Note</strong> — A fetch holds BricsCAD until it finishes and <kbd>Esc</kbd> will not interrupt it. A large multi-dataset fetch can take minutes and looks like a freeze; it isn't, and it always comes back. Utilities and easements are <strong>indicative only</strong> — a Before You Dig enquiry is still mandatory. Full guide: <a href="../../../tools/geofetch/">GeoFetch</a>.</div>
 
     <nav class="page-nav">
       <a href="../../"><div class="dir">Previous</div><div class="ttl">Command Reference</div></a>
