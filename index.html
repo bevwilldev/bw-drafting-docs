@@ -85,10 +85,14 @@
 
     <!-- Counts belong to the opening statement, not a band of their own — as a
          standalone strip they were three small numbers stranded in empty space.
-         Factual, not invented: commands and panels come from the generated
-         index. -->
+         Factual, not invented — and now enforced: the command count carries
+         data-cmd-count and is filled from commands.js at load, so it cannot
+         drift from the generated index the way the typed "140" did (it was ten
+         short by the time anyone noticed). The value here is only the
+         before-scripts fallback. Ribbon tabs and installer are genuinely fixed
+         numbers. -->
     <div class="stat-strip">
-      <div class="stat"><span class="n">140</span><span class="l">Commands</span></div>
+      <div class="stat"><span class="n" data-cmd-count>150</span><span class="l">Commands</span></div>
       <div class="stat"><span class="n">4</span><span class="l">Ribbon tabs</span></div>
       <div class="stat"><span class="n">1</span><span class="l">Installer</span></div>
     </div>
@@ -169,7 +173,7 @@
           <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5 2 8l2.5 2.5"/><path d="M11.5 5.5 14 8l-2.5 2.5"/><path d="M9.4 3.4 6.6 12.6"/></svg></span>
           <span class="t">Command Reference</span>
           <span class="d">Every command in the suite, across all four ribbon tabs — searchable.</span>
-          <span class="m">140 commands</span>
+          <span class="m" data-cmd-count="{n} commands">150 commands</span>
         </a>
         <a href="drafting/">
           <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12.5 12.5 2l1.5 1.5L3.5 14H2z"/><path d="M10.5 4 12 5.5"/></svg></span>

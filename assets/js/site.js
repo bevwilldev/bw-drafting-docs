@@ -1249,6 +1249,36 @@
     initScrollCue();
     initAssistant();
     initLatestVersion();
+    initCommandCount();
+  }
+
+  /* "140 commands" was typed into three places by hand — the home hero stat,
+     the Command Reference card, and the search placeholder — directly beneath a
+     comment claiming the number came from the generated index. It didn't, and
+     it was ten short.
+
+     commands.js already carries the real list, so take the count from there:
+     anything marked data-cmd-count gets the number, and the search box gets its
+     placeholder rebuilt around it. The markup keeps a static value so the page
+     reads correctly before scripts run (and if they never do) — but it can no
+     longer drift, because the data is the source. */
+  function initCommandCount() {
+    var list = window.WSY_COMMANDS;
+    if (!list || !list.length) return;
+    var n = String(list.length);
+
+    var nodes = document.querySelectorAll('[data-cmd-count]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var tmpl = el.getAttribute('data-cmd-count');   // e.g. "{n} commands"
+      el.textContent = tmpl ? tmpl.replace('{n}', n) : n;
+    }
+
+    var search = document.getElementById('cmdSearch');
+    if (search) {
+      search.setAttribute('placeholder',
+        'Search all ' + n + ' commands — try "curve" or AUTODIM');
+    }
   }
 
   /* The download page's version badge. It was hand-typed, so it went stale the
