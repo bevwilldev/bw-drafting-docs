@@ -33,7 +33,12 @@
 param(
     [int]    $Days = 30,
     [switch] $All,
-    [switch] $Chatter
+    [switch] $Chatter,
+    # Write a self-contained HTML report and open it. Nicer to read than a
+    # console dump, and it can be sent to someone who was not going to run a
+    # PowerShell script.
+    [switch] $Html,
+    [string] $OutFile
 )
 
 $ErrorActionPreference = 'Stop'
@@ -195,3 +200,179 @@ if ($smallTalk.Count) {
 }
 
 Write-Host ""
+
+# ---- HTML report -----------------------------------------------------------
+# Self-contained on purpose: no stylesheet, no font CDN, no script. It gets
+# emailed, dropped on a share and opened months later, and every one of those
+# breaks an external reference. Colours are the docs site's own tokens so it
+# reads as part of the family, and it follows the reader's light/dark setting.
+if ($Html) {
+
+    function HtmlEnc([string]$s) {
+        if ($null -eq $s) { return '' }
+        return [System.Net.WebUtility]::HtmlEncode($s)
+    }
+
+    # A logged page is a path on the docs site; make it clickable, and show a
+    # readable label rather than a raw path.
+    function PageCell([string]$p) {
+        if (-not $p) { return '<span class="dim">-</span>' }
+        $clean = $p -replace '^/bw-drafting-docs', ''
+        if (-not $clean) { $clean = '/' }
+        $label = if ($clean -eq '/') { 'home' } else { $clean.Trim('/') }
+        $href  = 'https://agabanto.github.io/bw-drafting-docs' + $clean
+        return ('<a href="{0}" class="page">{1}</a>' -f (HtmlEnc $href), (HtmlEnc $label))
+    }
+
+    $windowText = if ($All) { 'all logged questions (90-day retention)' }
+                  else      { "the last $Days days" }
+
+    $sb = New-Object System.Text.StringBuilder
+    [void]$sb.Append(@"
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caddie - what the documentation is missing</title>
+<style>
+  :root{
+    --bg:#ffffff; --raised:#fafafa; --ink:#18181b; --strong:#09090b; --muted:#52525b;
+    --faint:#71717a; --line:#e7e7ea; --brand:#d81f21; --wash:rgba(216,31,33,.06);
+    --good:#15803d; --warn:#a16207;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b0b0d; --raised:#131316; --ink:#ededf0; --strong:#ffffff; --muted:#9b9ba4;
+      --faint:#8a8a96; --line:#232327; --brand:#e5484a; --wash:rgba(229,72,74,.09);
+      --good:#4ade80; --warn:#fbbf24;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:48px 24px 80px;background:var(--bg);color:var(--ink);
+       font:15px/1.6 "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto}
+  h1{font-size:26px;line-height:1.25;margin:0 0 6px;color:var(--strong);letter-spacing:-.02em}
+  .sub{color:var(--muted);margin:0 0 32px;font-size:14px}
+  h2{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);
+     margin:40px 0 4px;font-weight:600}
+  h2 + .note{color:var(--faint);font-size:13px;margin:0 0 14px}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px}
+  .stat{flex:1 1 150px;background:var(--raised);border:1px solid var(--line);
+        border-radius:10px;padding:14px 16px}
+  .stat .n{display:block;font-size:26px;font-weight:650;color:var(--strong);letter-spacing:-.02em}
+  .stat .l{display:block;font-size:12px;color:var(--faint);margin-top:2px}
+  .stat.hot .n{color:var(--brand)}
+  table{width:100%;border-collapse:collapse;margin:0}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  .count{width:56px;font-weight:650;color:var(--brand);white-space:nowrap;
+         font-variant-numeric:tabular-nums}
+  .date{width:96px;color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pagecol{width:190px}
+  a.page{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);
+         font-size:13px;word-break:break-word}
+  a.page:hover{color:var(--brand);border-bottom-color:var(--brand)}
+  .q{color:var(--ink)}
+  .card{background:var(--raised);border:1px solid var(--line);border-radius:10px;
+        padding:14px 16px;margin:0 0 10px}
+  .card .q{font-weight:550;color:var(--strong)}
+  .card .said{color:var(--muted);font-size:13.5px;margin-top:7px;
+              border-left:2px solid var(--line);padding-left:12px}
+  .dim{color:var(--faint)}
+  details{margin-top:8px;border:1px solid var(--line);border-radius:10px;background:var(--raised)}
+  summary{cursor:pointer;padding:12px 16px;color:var(--muted);font-size:14px;
+          list-style:none;user-select:none}
+  summary::-webkit-details-marker{display:none}
+  summary:before{content:"> ";color:var(--faint)}
+  details[open] summary:before{content:"v "}
+  details .inner{padding:0 16px 8px}
+  .empty{color:var(--faint);font-style:italic;padding:6px 0}
+  footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);
+         color:var(--faint);font-size:12.5px}
+</style></head><body><div class="wrap">
+"@)
+
+    [void]$sb.Append("<h1>What the documentation is missing</h1>")
+    [void]$sb.Append(("<p class=""sub"">From Caddie's question log, covering {0}. Generated {1}.</p>" -f `
+        (HtmlEnc $windowText), (Get-Date -Format 'd MMMM yyyy, HH:mm')))
+
+    # Stats
+    [void]$sb.Append('<div class="stats">')
+    [void]$sb.Append(("<div class=""stat""><span class=""n"">{0}</span><span class=""l"">questions asked</span></div>" -f $asks.Count))
+    $hot = if ($repeat) { ' hot' } else { '' }
+    [void]$sb.Append(("<div class=""stat{0}""><span class=""n"">{1}</span><span class=""l"">asked more than once</span></div>" -f $hot, @($repeat).Count))
+    [void]$sb.Append(("<div class=""stat""><span class=""n"">{0}</span><span class=""l"">unanswered, about the work</span></div>" -f $gaps.Count))
+    [void]$sb.Append(("<div class=""stat""><span class=""n"">{0}</span><span class=""l"">marked wrong</span></div>" -f $wrong.Count))
+    [void]$sb.Append('</div>')
+
+    # 1. repeats
+    [void]$sb.Append('<h2>Asked more than once</h2>')
+    [void]$sb.Append('<p class="note">The office telling you which pages it expects to exist. Start here.</p>')
+    if ($repeat) {
+        [void]$sb.Append('<table>')
+        foreach ($g in $repeat) {
+            [void]$sb.Append(("<tr><td class=""count"">{0}x</td><td class=""q"">{1}</td></tr>" -f `
+                $g.Count, (HtmlEnc $g.Name)))
+        }
+        [void]$sb.Append('</table>')
+    } else { [void]$sb.Append('<p class="empty">Nothing asked twice in this window.</p>') }
+
+    # 2. gaps
+    [void]$sb.Append('<h2>Asked about the work, answered with no source</h2>')
+    [void]$sb.Append('<p class="note">Either the page does not exist, or retrieval cannot find it.</p>')
+    if ($gaps.Count) {
+        [void]$sb.Append('<table>')
+        foreach ($r in ($gaps | Sort-Object t -Descending)) {
+            [void]$sb.Append(("<tr><td class=""date"">{0:yyyy-MM-dd}</td><td class=""pagecol"">{1}</td><td class=""q"">{2}</td></tr>" -f `
+                [datetime]$r.t, (PageCell $r.page), (HtmlEnc $r.q)))
+        }
+        [void]$sb.Append('</table>')
+    } else { [void]$sb.Append('<p class="empty">None - every work question found a source.</p>') }
+
+    # 3. marked wrong
+    [void]$sb.Append('<h2>Marked wrong by a reader</h2>')
+    if ($wrong.Count) {
+        foreach ($r in ($wrong | Sort-Object t -Descending)) {
+            $said = ($r.a -replace '\s+', ' ')
+            if ($said.Length -gt 320) { $said = $said.Substring(0, 320) + '...' }
+            [void]$sb.Append(("<div class=""card""><div class=""q"">{0}</div>" -f (HtmlEnc $r.q)))
+            [void]$sb.Append(("<div class=""dim"" style=""font-size:13px;margin-top:3px"">{0:yyyy-MM-dd} on {1}</div>" -f `
+                [datetime]$r.t, (PageCell $r.page)))
+            [void]$sb.Append(("<div class=""said"">{0}</div></div>" -f (HtmlEnc $said)))
+        }
+    } else { [void]$sb.Append('<p class="empty">Nothing flagged in this window.</p>') }
+
+    # outages
+    if ($outages.Count) {
+        [void]$sb.Append('<h2>Flagged, but these were outages</h2>')
+        [void]$sb.Append('<p class="note">The model call failed at the time - a reader reporting downtime, not a documentation error.</p>')
+        [void]$sb.Append('<table>')
+        foreach ($r in ($outages | Sort-Object t -Descending)) {
+            [void]$sb.Append(("<tr><td class=""date"">{0:yyyy-MM-dd}</td><td class=""q"">{1}</td></tr>" -f `
+                [datetime]$r.t, (HtmlEnc $r.q)))
+        }
+        [void]$sb.Append('</table>')
+    }
+
+    # chatter, collapsed
+    if ($smallTalk.Count) {
+        [void]$sb.Append(("<details><summary>{0} chatter questions, filtered out - open to check the filter is not eating real ones</summary><div class=""inner""><table>" -f $smallTalk.Count))
+        foreach ($r in ($smallTalk | Sort-Object t -Descending)) {
+            [void]$sb.Append(("<tr><td class=""date"">{0:yyyy-MM-dd}</td><td class=""q dim"">{1}</td></tr>" -f `
+                [datetime]$r.t, (HtmlEnc $r.q)))
+        }
+        [void]$sb.Append('</table></div></details>')
+    }
+
+    [void]$sb.Append('<footer>Generated by worker/gaps.ps1 from the ASK_LOG KV namespace. Questions are logged without any identifier - there is no way to tell who asked what, by design.</footer>')
+    [void]$sb.Append('</div></body></html>')
+
+    if (-not $OutFile) {
+        $stamp   = Get-Date -Format 'yyyy-MM-dd'
+        $OutFile = Join-Path $PSScriptRoot "gaps-$stamp.html"
+    }
+    [System.IO.File]::WriteAllText($OutFile, $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+    Write-Host ("Report written: {0}" -f $OutFile) -ForegroundColor Green
+    try { Start-Process $OutFile } catch { Write-Host "  (open it yourself - $($_.Exception.Message))" -ForegroundColor DarkGray }
+    Write-Host ""
+}

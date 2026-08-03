@@ -22,3 +22,6 @@ __pycache__/
 worker/.dev.vars
 worker/.wrangler/
 worker/node_modules/
+
+# Generated gap reports (worker/gaps.ps1 -Html)
+worker/gaps-*.html
