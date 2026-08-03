@@ -15,7 +15,12 @@
 #   1. Questions asked MORE THAN ONCE          - a page people expect to exist
 #   2. Unanswered questions that look like WORK - the actual gaps
 #   3. Answers a reader marked wrong           - excluding outages, see below
-#   4. Chatter                                  - counted, not listed (-Chatter shows it)
+#   4. Chatter                                  - filtered out, still inspectable
+#
+# It writes an HTML report by default rather than printing. The report is the
+# artefact worth having: it can be handed to whoever writes the page, it does
+# not vanish with the scrollback, and the counts read better as a page than as
+# a wall of terminal text. -Console restores the printed version.
 #
 # A question counts as work if it names a command the suite actually has (read
 # from the generated command library, so it can never drift) or uses drafting
@@ -23,21 +28,24 @@
 # generous towards "work": a false positive costs one line of reading, a false
 # negative hides a real gap.
 #
-#   .\gaps.ps1              last 30 days
+#   .\gaps.ps1              last 30 days -> writes and opens the HTML report
 #   .\gaps.ps1 -Days 7      last week
 #   .\gaps.ps1 -All         everything still in the log (90-day expiry)
-#   .\gaps.ps1 -Chatter     also list what was filtered out, to check the filter
+#   .\gaps.ps1 -Console     print to the terminal instead of writing a report
+#   .\gaps.ps1 -Console -Chatter   also list what the filter removed
 #
 # Reads only. Nothing here deletes or edits an entry.
 
 param(
     [int]    $Days = 30,
     [switch] $All,
+    # Terminal output instead of the report. The report is the default because
+    # it is the thing worth keeping: it can be sent to someone who was never
+    # going to run a PowerShell script, and it survives the scrollback.
+    [switch] $Console,
+    # Only meaningful with -Console; the report always includes the filtered
+    # questions behind a collapsed section.
     [switch] $Chatter,
-    # Write a self-contained HTML report and open it. Nicer to read than a
-    # console dump, and it can be sent to someone who was not going to run a
-    # PowerShell script.
-    [switch] $Html,
     [string] $OutFile
 )
 
@@ -147,14 +155,14 @@ Write-Host ("{0} questions | {1} unanswered and about the work | {2} chatter | {
 $repeat = $asks | Group-Object { $_.q.ToLower().Trim() } |
           Where-Object { $_.Count -gt 1 -and (Test-IsWork $_.Name) } |
           Sort-Object Count -Descending
-if ($repeat) {
+if ($Console -and $repeat) {
     Write-Host ""
     Write-Host "=== ASKED MORE THAN ONCE -- write these pages first ===" -ForegroundColor Green
     $repeat | ForEach-Object { "{0,3}x  {1}" -f $_.Count, $_.Name }
 }
 
 # ---- 2. unanswered work questions ------------------------------------------
-if ($gaps.Count) {
+if ($Console -and $gaps.Count) {
     Write-Host ""
     Write-Host "=== ASKED ABOUT THE WORK, ANSWERED WITH NO SOURCE ===" -ForegroundColor Yellow
     Write-Host "    (either the page does not exist, or retrieval cannot find it)" -ForegroundColor DarkGray
@@ -164,7 +172,7 @@ if ($gaps.Count) {
 }
 
 # ---- 3. answers a reader flagged -------------------------------------------
-if ($wrong.Count) {
+if ($Console -and $wrong.Count) {
     Write-Host ""
     Write-Host "=== MARKED WRONG BY A READER ===" -ForegroundColor Red
     $wrong | Sort-Object t -Descending | ForEach-Object {
@@ -175,7 +183,7 @@ if ($wrong.Count) {
     }
 }
 
-if ($outages.Count) {
+if ($Console -and $outages.Count) {
     Write-Host ""
     Write-Host ("=== {0} flagged answer(s) were the OUTAGE message, not a wrong answer ===" -f $outages.Count) -ForegroundColor DarkYellow
     Write-Host "    The model call failed at the time. Nothing to fix in the docs; check" -ForegroundColor DarkGray
@@ -186,7 +194,7 @@ if ($outages.Count) {
 }
 
 # ---- 4. chatter ------------------------------------------------------------
-if ($smallTalk.Count) {
+if ($Console -and $smallTalk.Count) {
     Write-Host ""
     if ($Chatter) {
         Write-Host "=== FILTERED OUT AS CHATTER (check the filter is not eating real questions) ===" -ForegroundColor DarkGray
@@ -206,7 +214,7 @@ Write-Host ""
 # emailed, dropped on a share and opened months later, and every one of those
 # breaks an external reference. Colours are the docs site's own tokens so it
 # reads as part of the family, and it follows the reader's light/dark setting.
-if ($Html) {
+if (-not $Console) {
 
     function HtmlEnc([string]$s) {
         if ($null -eq $s) { return '' }
