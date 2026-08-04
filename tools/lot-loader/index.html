@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NSW Lot Loader — BW CAD Hub</title>
-<meta name="description" content="Fetching NSW cadastral lot boundaries, labels and road names into a drawing.">
+<title>Map Data — BW CAD Hub</title>
+<meta name="description" content="One panel for site data: NSW lot boundaries, labels, road names — and aerial imagery — fetched into the drawing in one pass.">
 <link rel="icon" href="../../assets/img/bw-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,61 +26,67 @@
   <aside data-sidenav="tools"></aside>
 
   <main class="content" id="main">
-    <h1>NSW Cadastral Lot Loader</h1>
-    <p class="lede">Pulls lot boundaries, labels and road names straight from NSW Spatial into
-    model space — by lot and plan number, by a point, or by an extent.</p>
+    <h1>Map Data</h1>
+    <p class="lede">One panel for the site: choose the area once, tick the data you want —
+    lot boundaries, labels, road names — and fetch it all in one pass. Replaces the old
+    three-tab NSW Lot Loader panel; every <code class="cmd">NSWLOTS</code> command still works.</p>
 
     <h2 id="opening-it">Opening it</h2>
-    <p>Run <code class="cmd">NSWLOTS</code>, or use the button on the <strong>WSY Tools</strong>
-    ribbon tab. The panel stays open while you work. The <strong>?</strong> button in its title bar
-    opens offline help.</p>
+    <p>Run <code class="cmd">MAPDATA</code> (or the older <code class="cmd">NSWLOTS</code>), or use
+    the <strong>Map Data</strong> button on the <strong>WSY Tools</strong> ribbon tab. The panel
+    stays open while you work. The <strong>?</strong> button in its title bar opens offline
+    help.</p>
 
-    <h2 id="import-options">Import options</h2>
-    <p>These control what gets labelled and whether road data comes in:</p>
+    <h2 id="choosing-the-area">Choosing the area — once</h2>
+    <p>The area at the top of the panel applies to every ticked layer, so a rectangle is only
+    ever picked once:</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Option</th><th>Effect</th></tr></thead>
+      <thead><tr><th>Mode</th><th>What it does</th></tr></thead>
       <tbody>
-        <tr><td>Subject Lot Labels</td><td>Labels the lots you asked for (the <em>By Lot ID</em>
-          search only).</td></tr>
-        <tr><td>Adjoining Lot Labels</td><td>Labels neighbouring lots. <em>Adjacent only</em> labels
-          just those sharing a boundary; <em>All</em> also labels the surrounding buffer. On the
-          <em>By Point</em> and <em>By Extent</em> searches this labels everything returned.</td></tr>
-        <tr><td>Road Names</td><td>Places road name text along each centreline.</td></tr>
-        <tr><td>Road Centrelines</td><td>Also draws the centreline geometry.</td></tr>
+        <tr><td>Subject lots</td><td>Find lots by plan number — up to ten rows of DP/SP plan
+          (required) with optional lot and section. This is the site itself; neighbours come along
+          per the Lot boundaries options. Unmatched entries are flagged on the command line.</td></tr>
+        <tr><td>Around a point</td><td>Pick a location in the drawing; everything within the
+          buffer radius is fetched (up to 5000&nbsp;m).</td></tr>
+        <tr><td>Rectangle</td><td>You pick the two corners when you press Fetch — the panel gets
+          out of the way first.</td></tr>
+        <tr><td>Current view</td><td>Uses whatever the drawing window currently shows.</td></tr>
       </tbody>
     </table></div>
 
-    <h2 id="three-ways-to-search">Three ways to search</h2>
-    <h3>By Lot ID</h3>
-    <p>Enter the plan number (required) and optionally the lot and section, choosing DP or SP. Add
-    more rows with <strong>+</strong> for multiple lots (up to ten), then click <strong>Fetch
-    Lots</strong>. The <strong>Buffer</strong> is how far around each lot to fetch surrounding lots —
-    set 0 for adjoining only (up to 5000&nbsp;m). If an entry matches nothing, it's flagged on the
-    command line so you can check the lot and plan.</p>
-    <h3>By Point</h3>
-    <p>Click <strong>Pick Point</strong>, pick in the drawing, set the buffer radius, then
-    <strong>Fetch Lots</strong> — every lot within that radius is fetched.</p>
-    <h3>By Extent</h3>
-    <p>Choose <strong>Current View</strong> or <strong>Draw Rectangle</strong>, then <strong>Fetch
-    Lots</strong>.</p>
-
-    <h2 id="what-you-get">What you get</h2>
+    <h2 id="data-layers">Data layers — pick and choose</h2>
+    <p>Each row fetches independently and reports its own result on the row itself —
+    <em>12 subject, 34 adjoining lot(s)</em>, <em>No roads found.</em> — so a half-empty fetch can
+    never pass for a full one. Options grey out while their row is unticked.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Layer</th><th>Contents</th></tr></thead>
+      <thead><tr><th>Layer row</th><th>What you get</th></tr></thead>
       <tbody>
-        <tr><td>SUB BDY</td><td>Subject lot boundaries</td></tr>
-        <tr><td>SUB DP</td><td>Subject lot labels</td></tr>
-        <tr><td>ADJ BDY</td><td>Adjoining and surrounding boundaries</td></tr>
-        <tr><td>ADJ DP</td><td>Adjoining labels</td></tr>
-        <tr><td>ROAD NAME</td><td>Road name text, rotated along the centreline</td></tr>
-        <tr><td>ROAD CL</td><td>Road centrelines</td></tr>
-        <tr><td>ATTRIBUTION</td><td>The data attribution stamp (see below)</td></tr>
+        <tr><td>Lot boundaries</td><td>Boundary polylines — subject lots on <strong>SUB BDY</strong>,
+          adjoining/surrounding on <strong>ADJ BDY</strong>. In Subject lots mode,
+          <em>Adjoining lots</em> fetches the neighbours and <em>Surrounding within</em> extends to
+          a radius (0&nbsp;=&nbsp;adjoining only).</td></tr>
+        <tr><td>Lot labels</td><td>Lot/plan text inside each fetched lot — subject labels on
+          <strong>SUB DP</strong>, adjoining on <strong>ADJ DP</strong>. <em>Adjacent only</em>
+          labels lots sharing a boundary with a subject lot; <em>All</em> labels everything
+          fetched.</td></tr>
+        <tr><td>Road names</td><td>Road name text on <strong>ROAD NAME</strong>, oriented along the
+          centreline; optionally the centreline geometry on <strong>ROAD CL</strong>.</td></tr>
+        <tr><td>Aerial imagery</td><td>A georeferenced site photo over the same area, attached
+          <em>behind</em> the linework on the non-plotting <strong>AERIAL IMAGE</strong> layer —
+          with source choice, Nearmap survey-date picking and a preview.
+          <strong>This row only exists on machines with the Aerial Imagery plugin</strong>; it is
+          not part of the standard install.</td></tr>
       </tbody>
     </table></div>
-    <p>The <em>By Lot ID</em> search separates the lots you asked for (SUB layers) from their
-    neighbours (ADJ layers); the <em>By Point</em> and <em>By Extent</em> searches load everything
-    onto the ADJ layers. Re-running never doubles up — lots already loaded are skipped. Your entries
-    and settings are remembered for next time.</p>
+
+    <div class="note warn"><strong>Watch out</strong> — aerial imagery is licensed for
+    <strong>internal reference only</strong>. It attaches on a non-plotting layer and must not
+    appear on issued sheets. The drawing must be saved first — the image file is stored beside it
+    in an <code>Aerial</code> folder.</div>
+
+    <div class="note warn"><strong>Watch out</strong> — the tool works out the MGA zone from the
+    data it fetches. If it can't determine the zone it assumes Zone 56 and says so. On a Zone 55
+    job that warning matters, so check the result lands where you expect.</div>
 
     <h2 id="labelling-loaded-lots">Labelling loaded lots</h2>
     <p><code class="cmd">NSWLABELLOTS</code> labels lots that were loaded earlier — select the
@@ -90,21 +96,22 @@
     labelled. Running it twice over the same selection stacks a second set of labels on top of the
     first, which is easy to miss on screen. Undo rather than trying to pick the duplicates out.</div>
 
-    <div class="note warn"><strong>Watch out</strong> — the tool works out the MGA zone from the
-    data it fetches. If it can't determine the zone it assumes Zone 56 and says so in the status
-    bar. On a Zone 55 job that warning matters, so check the result lands where you expect.</div>
-
     <h2 id="updating-and-removing">Updating and removing fetched data</h2>
-    <p><code class="cmd">NSWLOTSUPDATE</code> refreshes the cadastre: it removes everything the
-    tool has drawn in the current drawing, then re-runs your last saved lot search so the
-    geometry matches what NSW Spatial holds today.</p>
-    <p><code class="cmd">NSWLOTSDELETE</code> removes everything the tool has drawn — boundaries,
-    labels, road names, centrelines and the attribution stamp — and reports what it took out.
-    Your own linework on the same layers is never touched: the tool only removes entities it
-    tagged when it drew them. Undo brings it all back.</p>
+    <p><code class="cmd">MAPDATAUPDATE</code> refreshes the cadastre: it removes every vector
+    entity the tool has drawn, then re-runs your last saved search so the geometry matches what
+    NSW Spatial holds today. The aerial image is deliberately <strong>not</strong> re-fetched —
+    cadastre goes stale, a dated capture doesn't — tick Aerial imagery and press Fetch when you
+    want a fresh photo.</p>
+    <p><code class="cmd">MAPDATADELETE</code> removes everything the tool put in the drawing —
+    boundaries, labels, road names, centrelines, the attribution stamp <strong>and aerial
+    images</strong> — and reports what it took out. Your own work on the same layers is never
+    touched: removal goes by the tags the tool wrote, never by layer. The imagery JPG files beside
+    the drawing stay on disk. Undo brings it all back.</p>
+    <p><code class="cmd">NSWLOTSUPDATE</code> and <code class="cmd">NSWLOTSDELETE</code> keep
+    working as before (vectors only).</p>
 
-    <div class="note warn"><strong>Watch out</strong> — lot labels placed by versions before
-    v2.3 carry no tag, so <code class="cmd">NSWLOTSDELETE</code> leaves them behind. Delete
+    <div class="note warn"><strong>Watch out</strong> — lot labels placed by versions before v2.3,
+    and aerial images attached before tagging existed, carry no tag and are left behind. Delete
     those by hand if they turn up.</div>
 
     <h2 id="when-a-fetch-half-works">When a fetch only half works</h2>
@@ -112,14 +119,11 @@
     the first reason — and asks whether to <strong>keep</strong> what was drawn or
     <strong>discard</strong> it. <strong>Discard is the default</strong>: a drawing missing cadastre
     it appears to have is worse than no cadastre at all, and the fetch can just be run again.
-    Discard removes only what that fetch added — anything already in the drawing is untouched.</p>
+    Discard removes only what that fetch added — anything already in the drawing is untouched.
+    Imagery fetches only after the review passes, so a discarded fetch never leaves a photo
+    behind.</p>
     <p>Lots skipped because they were already loaded aren't failures and are never reported as
     such.</p>
-
-    <div class="note warn"><strong>Watch out</strong> — occasionally an entity draws but its
-    ownership tag won't attach. Those are counted and reported, because an untagged entity is
-    invisible to <code class="cmd">NSWLOTSDELETE</code>, to the duplicate check on the next fetch,
-    and to <code class="cmd">NSWLABELLOTS</code>.</div>
 
     <h2 id="activity-log">Activity log</h2>
     <p>Each fetch, delete and label run writes one line — the command, the drawing and the counts —

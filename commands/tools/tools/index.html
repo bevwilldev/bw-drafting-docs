@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tools — BW CAD Hub</title>
-<meta name="description" content="The NSW Lot Loader and Point Cloud Digitizer.">
+<meta name="description" content="Map Data, Point Cloud Digitizer and GeoFetch.">
 <link rel="icon" href="../../../assets/img/bw-logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,15 +27,24 @@
 
   <main class="content" id="main">
     <h1>Tools</h1>
-    <p class="lede">The NSW Lot Loader, Point Cloud Digitizer and GeoFetch.</p>
+    <p class="lede">Map Data, Point Cloud Digitizer and GeoFetch.</p>
+
+    <h2 id="mapdata"><code class="cmd">MAPDATA</code></h2>
+    <p>Opens the Map Data panel — one panel for the site. Choose the <strong>area</strong> once (subject lots by plan number, around a point, a rectangle, or the current view), tick the <strong>data layers</strong> you want (lot boundaries with adjoining/surrounding, lot labels, road names), and press <strong>Fetch site data</strong>. Cadastre comes from the NSW Spatial service. On machines with the Aerial Imagery plugin loaded, an imagery row appears too.</p><p>The panel is modeless, so it stays open while you work in the drawing. The <strong>?</strong> button in its title bar opens offline help.</p>
+    <h4>How to use it</h4>
+    <p>The command itself has no prompts — it just shows the panel. Every layer row reports its own result on the row — <em>12 subject, 34 adjoining lot(s)</em>, <em>No roads found.</em> — and settings are remembered for next time. Full guide: <a href="../../../tools/lot-loader/">Map Data</a>.</p>
+    <h4>What it produces</h4>
+    <p>Polylines and MText on the office cadastral layers: <strong>SUB BDY</strong> and <strong>SUB DP</strong> for the lots you asked for, <strong>ADJ BDY</strong> and <strong>ADJ DP</strong> for neighbours and the surrounding buffer, <strong>ROAD NAME</strong> and <strong>ROAD CL</strong> for roads. The point and extent modes put everything on the ADJ layers. Lots already loaded are skipped rather than duplicated. Each boundary carries the parcel details as <code>NSW_PARCEL</code> xdata.</p>
+    <div class="note"><strong>Note</strong> — It needs internet access to the NSW Spatial service. The MGA zone is worked out from the fetched data; if it can't be determined the tool assumes Zone 56 and says so in the status bar — worth checking on a Zone 55 job.</div>
+
+    <h2 id="mapdataupdate"><code class="cmd">MAPDATAUPDATE</code></h2>
+    <p>Refreshes the cadastre: removes every vector entity Map Data has drawn in the current drawing, then re-runs the last saved search so the geometry matches what NSW Spatial holds today. An attached aerial image is deliberately left alone — tick Aerial imagery and press Fetch when a fresh photo is wanted.</p>
+
+    <h2 id="mapdatadelete"><code class="cmd">MAPDATADELETE</code></h2>
+    <p>Removes everything Map Data put in the drawing — boundaries, labels, road names, centrelines, the attribution stamp and aerial images — and reports what it took out. Removal goes by the tags the tool wrote, never by layer, so your own work is safe. Imagery JPG files beside the drawing stay on disk. Undo brings it all back.</p>
 
     <h2 id="nswlots"><code class="cmd">NSWLOTS</code></h2>
-    <p>Opens the lot loader, which pulls cadastral boundaries, lot labels, road names and road centrelines straight from the NSW Spatial service into model space. Lots can be found by lot and plan number, by picking a point, or by an extent.</p><p>The panel is modeless, so it stays open while you work in the drawing. The <strong>?</strong> button in its title bar opens offline help.</p>
-    <h4>How to use it</h4>
-    <p>The command itself has no prompts — it just shows the panel, and everything happens in the form. Set the import options (subject and adjoining lot labels, road names, road centrelines), choose one of the three searches, and click <strong>Fetch Lots</strong>. Entries and settings are remembered for next time.</p>
-    <h4>What it produces</h4>
-    <p>Polylines and MText on the office cadastral layers: <strong>SUB BDY</strong> and <strong>SUB DP</strong> for the lots you asked for, <strong>ADJ BDY</strong> and <strong>ADJ DP</strong> for neighbours and the surrounding buffer, <strong>ROAD NAME</strong> and <strong>ROAD CL</strong> for roads. The <em>By Point</em> and <em>By Extent</em> searches put everything on the ADJ layers. Lots already loaded are skipped rather than duplicated. Each boundary carries the parcel details as <code>NSW_PARCEL</code> xdata.</p>
-    <div class="note"><strong>Note</strong> — It needs internet access to the NSW Spatial service. The MGA zone is worked out from the fetched data; if it can't be determined the tool assumes Zone 56 and says so in the status bar — worth checking on a Zone 55 job.</div>
+    <p>The original name for <code class="cmd">MAPDATA</code> — it opens the same panel, and <code class="cmd">NSWLOTSUPDATE</code> / <code class="cmd">NSWLOTSDELETE</code> remain the vector-only versions of the update and delete commands above. Kept working for muscle memory and scripts.</p>
 
     <h2 id="pcdig"><code class="cmd">PCDIG</code></h2>
     <p>Shows or hides the digitizer panel, which traces features off a point cloud — stepping along at a fixed distance per vertex, or tracing freely — with every vertex snapped to the cloud, numbered and coded as it goes. Each drawing gets its own panel.</p><p>The panel's buttons run the companion commands: <code>PCDIG_LINE</code> (Add Line), <code>PCDIG_POINT</code> (Add Point), <code>PCDIG_EXTEND</code> (Extend an existing 3D polyline) and <code>PCDIG_EXPORT</code> (Export to 12da).</p>
