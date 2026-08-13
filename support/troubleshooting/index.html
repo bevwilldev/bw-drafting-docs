@@ -59,6 +59,50 @@
     you close BricsCAD. Reinstall only to fix something that's broken. To force an update now,
     type <code class="cmd">WSYUPDATE</code>.</div>
 
+    <h2 id="demandload-failed">Errors at startup: &ldquo;DemandLoad failed due to dependencies problems&rdquo;</h2>
+    <p>BricsCAD starts with a block of red errors, one per installed tool, like this:</p>
+    <pre><code>Error loading "C:\Users\&hellip;\AppData\Local\Programs\BW Drafting\NSWLotLoader.Loader.dll": .
+
+DemandLoad failed due to dependencies problems!
+Application : NSWLotLoader
+Description : NSW Cadastral Lot Loader</code></pre>
+    <p>This means Windows couldn't load the plugin files <em>at all</em> &mdash; none of the
+    suite's code ever ran. <strong>The first thing to check, before anything else: does the
+    machine have the Microsoft .NET 8 Desktop Runtime?</strong></p>
+    <p>BricsCAD <strong>V26</strong> changed how it runs plugins: it now needs the
+    <strong>.NET&nbsp;8 Desktop Runtime (x64)</strong>, which Windows does <em>not</em> include
+    and BricsCAD's installer does not reliably bring. Machines upgraded from V25 usually have
+    it already (something else installed it along the way); a <strong>fresh machine or a fresh
+    V26 install</strong> usually doesn't &mdash; and every tool in the suite fails with exactly
+    this error until it's there.</p>
+    <ol>
+      <li>Open <strong>Windows Settings &rsaquo; Apps &rsaquo; Installed apps</strong> and search
+        <strong>&ldquo;desktop runtime&rdquo;</strong> (searching &ldquo;.NET&rdquo; will
+        <em>miss it</em> &mdash; the entry's name doesn't contain it).</li>
+      <li>Look for <strong>Microsoft Windows Desktop Runtime &ndash; 8.0.x (x64)</strong>. The
+        6.x and 10.x entries don't count &mdash; it must be the <strong>8.0.x, x64</strong> one.</li>
+      <li>If it's missing, install it from
+        <a href="https://dotnet.microsoft.com/en-us/download/dotnet/8.0">Microsoft's .NET 8.0
+        download page</a> &mdash; the <strong>.NET Desktop Runtime</strong> section, Windows
+        <strong>x64</strong> installer. It installs machine-wide, so it will ask for
+        <strong>admin</strong> approval &mdash; if you don't have it, this is a one-line IT
+        request. Then restart BricsCAD.</li>
+    </ol>
+    <div class="note warn"><strong>Why this one fools everybody</strong> &mdash; the machine's
+    other CAD tools keep working perfectly, which makes the suite look like the problem. It
+    isn't: AutoLISP tools (including the old shared-drive toolset the suite replaced) and
+    native C++ plugins don't use .NET at all, so they're immune. Only .NET plugins fail &mdash;
+    and <em>every</em> version of the suite is .NET, so an old installer fails the same way.
+    Even testing the DLL in PowerShell misleads: Windows PowerShell runs on the <em>old</em>
+    .NET Framework, which every Windows machine has &mdash; the DLL loads fine there while
+    BricsCAD V26, needing .NET&nbsp;8, still can't touch it.</div>
+    <p>If the 8.0.x (x64) runtime <em>is</em> installed and the errors persist, work down:
+    check the install folder still contains the DLLs (<a href="#reinstall">reinstall</a> if
+    not); check <strong>Windows Security &rsaquo; Protection history</strong> for blocked
+    files; and compare <code class="cmd">SECURELOAD</code> and
+    <code class="cmd">TRUSTEDPATHS</code> (typed at the BricsCAD command line) against a
+    working machine.</p>
+
     <h2 id="a-ribbon-tab-is-missing">A ribbon tab is missing</h2>
     <p>Restart BricsCAD first — ribbons load at startup, and a tab can be missed if BricsCAD
     was busy. If it is still missing, the usual cause is that the component isn't installed:
