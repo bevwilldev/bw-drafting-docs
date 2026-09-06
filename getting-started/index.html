@@ -70,20 +70,20 @@
              Analytics' file_download would fire here too (on the modal opening) and
              double-count downloads. No-JS visitors still land on the releases page. -->
         <a class="btn btn-primary btn-lg" id="dl-btn"
-           href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">
+           href="https://github.com/bevwilldev/bw-bricscad-releases/releases/latest">
           Download the installer
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M8 2.5v7M5 7l3 3 3-3M3 13h10"/>
           </svg>
         </a>
-        <a class="btn btn-quiet" href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">
+        <a class="btn btn-quiet" href="https://github.com/bevwilldev/bw-bricscad-releases/releases/latest">
           All releases &amp; notes
         </a>
       </div>
       <p class="dl-hero-meta"><span id="dl-released"></span>Direct link to the latest build. If the
       download doesn't start, use the
-      <a href="https://github.com/agabanto/bw-bricscad-releases/releases/latest">releases page</a>.</p>
+      <a href="https://github.com/bevwilldev/bw-bricscad-releases/releases/latest">releases page</a>.</p>
     </section>
 
     <h2 id="running-the-installer">Running the installer</h2>
@@ -195,7 +195,7 @@
     <div class="modal-actions">
       <button class="btn btn-quiet" id="wm-cancel" type="button">Cancel</button>
       <a class="btn btn-primary" id="wm-download"
-         href="https://github.com/agabanto/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">Download now</a>
+         href="https://github.com/bevwilldev/bw-bricscad-releases/releases/latest/download/BWBricsCADToolsSetup.exe">Download now</a>
     </div>
   </div>
 </div>
@@ -205,7 +205,7 @@
 (function () {
   // Live version badge + release date from the public downloads repo.
   try {
-    fetch('https://api.github.com/repos/agabanto/bw-bricscad-releases/releases/latest',
+    fetch('https://api.github.com/repos/bevwilldev/bw-bricscad-releases/releases/latest',
           { headers: { 'Accept': 'application/vnd.github+json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
