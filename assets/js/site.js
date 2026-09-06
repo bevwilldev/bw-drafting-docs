@@ -1294,7 +1294,7 @@
   function initLatestVersion() {
     var el = document.getElementById('dl-version');
     if (!el || !window.fetch) return;
-    fetch('https://api.github.com/repos/bevwilldev/bw-bricscad-releases/releases/latest',
+    fetch('https://api.github.com/repos/bwcaddev/bw-bricscad-releases/releases/latest',
           { headers: { 'Accept': 'application/vnd.github+json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {

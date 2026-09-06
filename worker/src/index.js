@@ -22,7 +22,7 @@
    ========================================================================= */
 
 const CORPUS_URL =
-  'https://bevwilldev.github.io/bw-drafting-docs/assets/data/corpus.json';
+  'https://bwcaddev.github.io/bw-drafting-docs/assets/data/corpus.json';
 
 /* Origins allowed to call this. The docs site, localhost for previewing changes
    before they are published, and the BricsCAD panel.
@@ -33,7 +33,7 @@ const CORPUS_URL =
    plugin sets "bricscad-plugin" for exactly that reason — it is identification,
    so the log can tell where a question came from, not a claim to be trusted. */
 const ALLOWED = [
-  'https://bevwilldev.github.io',
+  'https://bwcaddev.github.io',
   'http://localhost:8000',
   'http://127.0.0.1:8000',
   'bricscad-plugin'
@@ -948,7 +948,7 @@ async function getCorpus() {
    Keyword survives only as the FALLBACK below, for when the vectors are stale
    or the embedding call fails. */
 const VECTORS_URL =
-  'https://bevwilldev.github.io/bw-drafting-docs/assets/data/corpus-vectors.json';
+  'https://bwcaddev.github.io/bw-drafting-docs/assets/data/corpus-vectors.json';
 
 let vecCache = null;
 let vecFetchedAt = 0;

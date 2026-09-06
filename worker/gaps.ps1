@@ -228,7 +228,7 @@ if (-not $Console) {
         $clean = $p -replace '^/bw-drafting-docs', ''
         if (-not $clean) { $clean = '/' }
         $label = if ($clean -eq '/') { 'home' } else { $clean.Trim('/') }
-        $href  = 'https://bevwilldev.github.io/bw-drafting-docs' + $clean
+        $href  = 'https://bwcaddev.github.io/bw-drafting-docs' + $clean
         return ('<a href="{0}" class="page">{1}</a>' -f (HtmlEnc $href), (HtmlEnc $label))
     }
 
